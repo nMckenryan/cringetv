@@ -30,7 +30,7 @@ export default function EmblaCarousel() {
     />
   ) : (
     <div className="embla mx-auto text-4xl">
-      <h1 className="text-4xl">Popular Shows</h1>
+      <h1 className="pb-4 text-4xl">Popular Shows</h1>
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
           {newTV.map((tv: TVDBShow, index: number) => (

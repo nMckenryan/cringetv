@@ -4,44 +4,25 @@ TO DO MVP
 - [x] Find Movie DB and do basic imports
 - [x] Launch on vercel 
 - [x] Set up zustand for state
-- [] Load TV show details 
+- [x] Load TV show details 
+- [/] Load most recent shows
 - [] Set up basic auth
 
-- [] Set up DB 
-- [] seed with TVDB details (omit news shows, non-english etc)
+- [x] Set up DB 
+    - [] seed with TVDB details
+        - [] Omit news shows
+    - [] Seed Genres
+    - [] Seed Content Ratings 
+    - [] Finish the links to above
 
-
-MYSQL
-
-TABLE TV_SHOWS
-tvdb_id: number
-tv_show_name: string
-description: string
-content_rating: string
-aggregate_cringe_rating: number
-number_of_reviews: number
-first_air_date: Date
-final_air_date: Date | null
-series_status: string
-poster_link: string | null
-genre: string
-original_country: string 
-
-
-TABLE REVIEWS: 
-tvdb_id: number
-cringe_rating: number 
-member_id: number 
-review_content: string 
-date_reviewed: date
-
-
+    - [] Figure out cringe rating system
+    - [] Set default Cringe Rating depending on content rating
 
 - [] Fix carousel so it works under mobile
 
 - [] - Rig up routing for: 
-    - [] homepage 
-    - [] Top nav with search
+    - [x] homepage 
+    - [x] Top nav with search
     - [] Profile page
     - [] Individual series search 
 
@@ -50,17 +31,17 @@ date_reviewed: date
     - [] search functions
     - [x] List of latest tv shows
         - [] Intuit contents via rating
+    - [] - List of latest reviews
 
 - [ ] PROFILE PAGE 
-    - Name, description, account age etc
-    - List of reviews
+    - [] Name, description, account age etc
+    - [] List of reviews
 
 - [ ] FILM SELECT PAGE 
     - [] Route by ID
+    - [] Review insert section
+        - [] Show current review left by user
     - [] Show latest reviews
     - [] Show general consensus review weighing
     - [] Film synopsis
-    - [] AU classification rating
-
-- [] Set up MySQL DB with ratings (ID, userId, SeriesID, Rating (float) )
-
+    - [] classification ratings
