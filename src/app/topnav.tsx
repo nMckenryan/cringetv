@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { auth } from "~/server/auth";
 import { api } from "~/trpc/server";
+import Image from "next/image";
+import cringeLogo from "../../public/favicon-32x32.png";
 
 export default async function TopNav() {
   const hello = await api.post.hello({ text: "from tRPC" });
@@ -13,7 +15,10 @@ export default async function TopNav() {
   return (
     <div className="navbar bg-primary-blue">
       <div className="flex-1">
-        <a className="btn btn-ghost text-xl">Binge Cringe</a>
+        <a className="btn btn-ghost text-xl">
+          Binge Cringe{" "}
+          <Image src={cringeLogo} alt="logo" width={30} height={30}></Image>
+        </a>
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">

@@ -44,15 +44,17 @@ export interface TVDB_Response {
         total_items: number,
         page_size: number
     }
-
 }
 
 interface Store {
     tv_data: TVDBShow[]
+    loading: boolean
     populate_tv_data: (newTVData: TVDBShow[]) => void
 }
 
-export const useTVStore = create<Store>()((set) => ({
+export const useTVStore = create((set) => ({
     tv_data: [],
-    populate_tv_data: (newTVData: TVDBShow[]) => set(() => ({ tv_data: newTVData })),
-}));
+    loading: true,
+    populate_tv_data: (tv: TVDBShow[]) => set({ tv_data: tv }),
+    set_loading: (loading: boolean) => set({ loading: loading }),
+}))

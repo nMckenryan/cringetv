@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { useTVStore } from "../../zustand/store";
+import { TVDBShow, useTVStore } from "../../zustand/store";
 import Image from "next/image";
+import CircleLoader from "react-spinners/CircleLoader";
 
 export default function EmblaCarousel() {
   const store = useTVStore();
@@ -11,19 +12,28 @@ export default function EmblaCarousel() {
   const options: EmblaOptionsType = { dragFree: true, loop: true };
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
 
-  const newTV = store.tv_data
+  const newTV: TVDBShow[] = store.tv_data
     .sort(
-      (a, b) =>
-        new Date(b.firstAired).getTime() - new Date(a.firstAired).getTime(),
+      (
+        a: { firstAired: string | number | Date },
+        b: { firstAired: string | number | Date },
+      ) => new Date(b.firstAired).getTime() - new Date(a.firstAired).getTime(),
     )
     .slice(0, 10);
 
-  return (
+  return store.loading == true ? (
+    <CircleLoader
+      color={"#FFD700"}
+      size={100}
+      aria-label="Loading Spinner"
+      data-testid="loader"
+    />
+  ) : (
     <div className="embla mx-auto text-4xl">
       <h1 className="text-4xl">Popular Shows</h1>
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
-          {newTV.map((tv, index) => (
+          {newTV.map((tv: TVDBShow, index: number) => (
             <div key={index}>
               <div
                 className="card bg-base-100 shadow-xl"
