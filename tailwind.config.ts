@@ -15,7 +15,13 @@ export default {
         'background-black': '#20211A',
         'accent-gold': '#FFD700',
         'text-white': "#FFFFFF",
-        'secondary-purple': "#4A314D"
+        'secondary-purple': "#4A314D",
+        'primary-blue-light': '#2C4257',
+        'primary-blue-dark': '#0E1319',
+        'secondary-purple-light': '#6A4565',
+        'secondary-purple-dark': '#2A1C2D',
+        'accent-gold-muted': '#DAA520',    // Slightly desaturated gold
+        'accent-gold-light': '#FFE87C',    // Brighter gold variant
       }
     },
   },

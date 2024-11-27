@@ -1,50 +1,72 @@
-import React, { useState } from "react";
-import { EmblaOptionsType } from "embla-carousel";
+import React from "react";
+import { type EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
-import { TVDBShow, useTVStore } from "../../zustand/store";
+import Autoplay, { AutoplayOptionsType } from "embla-carousel-autoplay";
 import Image from "next/image";
-import CircleLoader from "react-spinners/CircleLoader";
+import { type TVDBShow } from "~/types";
+import { type TVStore, useTVStore } from "~/zustand/store";
+import noPoster from "../../../public/noPoster.png";
+import {
+  NextButton,
+  PrevButton,
+  usePrevNextButtons,
+} from "./Embla-Carousel-Buttons";
+import Link from "next/link";
 
-export default function EmblaCarousel() {
-  const store = useTVStore();
-
+export default function EmblaCarousel({
+  collection,
+}: {
+  collection: TVDBShow[];
+}) {
+  const store = useTVStore() as TVStore;
   const options: EmblaOptionsType = { dragFree: true, loop: true };
-  const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
+  const autoplayOptions: AutoplayOptionsType = {
+    stopOnInteraction: true,
+    stopOnMouseEnter: true,
+  };
+  const [emblaRef, emblaApi] = useEmblaCarousel(options, [
+    Autoplay(autoplayOptions),
+  ]);
 
-  const newTV: TVDBShow[] = store.tv_data
-    .sort(
-      (
-        a: { firstAired: string | number | Date },
-        b: { firstAired: string | number | Date },
-      ) => new Date(b.firstAired).getTime() - new Date(a.firstAired).getTime(),
-    )
-    .slice(0, 10);
+  const {
+    prevBtnDisabled,
+    nextBtnDisabled,
+    onPrevButtonClick,
+    onNextButtonClick,
+  } = usePrevNextButtons(emblaApi);
 
   return store.loading == true ? (
-    <CircleLoader
-      color={"#FFD700"}
-      size={100}
-      aria-label="Loading Spinner"
-      data-testid="loader"
-    />
-  ) : (
-    <div className="embla mx-auto text-4xl">
-      <h1 className="pb-4 text-4xl">Popular Shows</h1>
-      <div className="embla__viewport" ref={emblaRef}>
-        <div className="embla__container">
-          {newTV.map((tv: TVDBShow, index: number) => (
-            <div key={index}>
-              <div
-                className="card bg-base-100 shadow-xl"
-                style={{ margin: "2px", minWidth: "200px", minHeight: "550px" }}
+    <div className="embla skeleton mx-auto h-36 w-1/2">
+      {/* <CircleLoader
+        color={"#FFD700"}
+        style={{ backgroundColor: "transparent" }}
+        size={100}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      /> */}
+    </div>
+  ) : collection.length > 0 ? (
+    <div className="flex">
+      <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
+      <div className="embla mx-auto text-4xl">
+        <div className="embla__viewport" ref={emblaRef}>
+          <div className="embla__container">
+            {collection.map((tv: TVDBShow, index: number) => (
+              <Link
+                className="0 bg-primary-blue-light card py-3 font-semibold no-underline shadow-xl transition hover:bg-secondary-purple/50"
+                // className="bg-primary-blue-light hover:bg-blue-light/50 card shadow-xl"
+                key={index}
+                style={{ margin: "2px", minWidth: "300px", minHeight: "550px" }}
+                href={""}
               >
                 <figure>
                   <Image
-                    src={"https://thetvdb.com" + tv.image}
+                    className="rounded-lg pt-3"
+                    src={tv.image ? tv.image : noPoster}
+                    // src={tv.image ? `https://thetvdb.com${tv.image}` : noPoster}
                     width={200}
                     height={300}
-                    alt={tv.name + "_poster"}
+                    alt={`${tv.name}_poster`}
                   />
                 </figure>
                 <div className="card-body">
@@ -61,11 +83,14 @@ export default function EmblaCarousel() {
                     <div className="badge badge-secondary">{tv.year}</div>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
+      <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
     </div>
+  ) : (
+    <div className="text-center text-xl">No records found</div>
   );
 }
