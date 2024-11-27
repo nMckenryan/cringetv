@@ -1,71 +1,83 @@
-import React, { useState } from "react";
-import { EmblaOptionsType } from "embla-carousel";
+import React from "react";
+import { type EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
-import { TVDBShow, useTVStore } from "../../zustand/store";
+import Autoplay, { AutoplayOptionsType } from "embla-carousel-autoplay";
 import Image from "next/image";
-import CircleLoader from "react-spinners/CircleLoader";
+import { type TVDBShow } from "~/types";
+import { type TVStore, useTVStore } from "~/zustand/store";
+import noPoster from "../../../public/noPoster.png";
+import {
+  NextButton,
+  PrevButton,
+  usePrevNextButtons,
+} from "./Embla-Carousel-Buttons";
+import Link from "next/link";
 
-export default function EmblaCarousel() {
-  const store = useTVStore();
-
+export default function EmblaCarousel({
+  collection,
+}: {
+  collection: TVDBShow[];
+}) {
+  const store = useTVStore() as TVStore;
   const options: EmblaOptionsType = { dragFree: true, loop: true };
-  const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
+  const autoplayOptions: AutoplayOptionsType = {
+    stopOnInteraction: true,
+    stopOnMouseEnter: true,
+  };
+  const [emblaRef, emblaApi] = useEmblaCarousel(options, [
+    Autoplay(autoplayOptions),
+  ]);
 
-  const newTV: TVDBShow[] = store.tv_data
-    .sort(
-      (
-        a: { firstAired: string | number | Date },
-        b: { firstAired: string | number | Date },
-      ) => new Date(b.firstAired).getTime() - new Date(a.firstAired).getTime(),
-    )
-    .slice(0, 10);
+  const {
+    prevBtnDisabled,
+    nextBtnDisabled,
+    onPrevButtonClick,
+    onNextButtonClick,
+  } = usePrevNextButtons(emblaApi);
 
   return store.loading == true ? (
-    <CircleLoader
-      color={"#FFD700"}
-      size={100}
-      aria-label="Loading Spinner"
-      data-testid="loader"
-    />
-  ) : (
-    <div className="embla mx-auto text-4xl">
-      <h1 className="pb-4 text-4xl">Popular Shows</h1>
-      <div className="embla__viewport" ref={emblaRef}>
-        <div className="embla__container">
-          {newTV.map((tv: TVDBShow, index: number) => (
-            <div key={index}>
-              <div
-                className="card bg-base-100 shadow-xl"
-                style={{ margin: "2px", minWidth: "200px", minHeight: "550px" }}
-              >
-                <figure>
-                  <Image
-                    src={"https://thetvdb.com" + tv.image}
-                    width={200}
-                    height={300}
-                    alt={tv.name + "_poster"}
-                  />
-                </figure>
-                <div className="card-body">
-                  <h2 className="card-title text-white">
-                    {tv.name}
-                    <div className="badge badge-secondary">
-                      {tv.originalLanguage}
+    <div className="embla skeleton mx-auto h-72 w-screen"></div>
+  ) : collection.length > 0 ? (
+    <div className="flex items-center">
+      <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
+      <div className="embla mx-auto text-4xl">
+        <div className="embla__viewport" ref={emblaRef}>
+          <div className="embla__container">
+            {collection.map((tv: TVDBShow, index: number) => (
+              <div className="flex flex-col" key={index}>
+                <Link
+                  className="card flex justify-end font-semibold no-underline shadow-xl transition hover:bg-secondary-purple/50"
+                  style={{
+                    backgroundImage: `url(${tv.image ? tv.image : noPoster.src})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    margin: "2px",
+                    minWidth: window.screen.width > 768 ? 200 : 125,
+                    minHeight: window.screen.width > 768 ? 400 : 250,
+                  }}
+                  href={""}
+                >
+                  <div className="flex flex-col bg-primary-blue/60 align-bottom">
+                    <h2 className="card-title text-sm text-white">{tv.name}</h2>
+                    <p className="line-clamp-3 hidden text-sm font-normal text-white">
+                      {tv.overview ? tv.overview : "No Description Available"}
+                    </p>
+                    <div className="card-actions justify-end">
+                      <div className="badge badge-secondary">
+                        {tv.originalLanguage}
+                      </div>
+                      <div className="badge badge-secondary">{tv.year}</div>
                     </div>
-                  </h2>
-                  <p className="line-clamp-3 text-sm text-white">
-                    {tv.overview ? tv.overview : "No Description Available"}
-                  </p>
-                  <div className="card-actions justify-end">
-                    <div className="badge badge-secondary">{tv.year}</div>
                   </div>
-                </div>
+                </Link>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
+      <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
     </div>
+  ) : (
+    <div className="text-center text-xl">No records found</div>
   );
 }

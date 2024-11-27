@@ -18,7 +18,7 @@ TO DO MVP
     - [] Figure out cringe rating system
     - [] Set default Cringe Rating depending on content rating
 
-- [] Fix carousel so it works under mobile
+- [x] Fix carousel so it works under mobile
 
 - [] - Rig up routing for: 
     - [x] homepage 
