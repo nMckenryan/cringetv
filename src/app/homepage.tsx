@@ -52,7 +52,7 @@ export default function Homepage() {
         </UICard>
 
         <UICard>
-          <h4 className="text-xl font-bold text-white">Most Rated Shows</h4>
+          <h4 className="text-xl font-bold text-white">Most Dangerous Shows</h4>
           <EmblaCarousel collection={store.tv_data} />
         </UICard>
 

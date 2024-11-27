@@ -12,29 +12,33 @@ export default async function TopNav() {
   }
 
   return (
-    <div className="max-w-screen bg-primary-blue-light navbar">
-      <div className="flex-1">
-        <a className="flex flex-row items-end gap-1 text-xl">
-          <Image src={cringeLogo} height={30} width={30} alt="logo"></Image>
+    <div className="max-w-screen bg-primary-blue-light navbar sticky top-0 z-50 flex max-h-10 flex-row justify-around">
+      <a className="flex flex-row items-end gap-1 text-xl">
+        <Image src={cringeLogo} height={30} width={30} alt="logo"></Image>
 
-          <h1 className="text2xl font-bold text-accent-gold">Binge Cringe</h1>
-        </a>
-      </div>
-      <div className="flex-none">
-        <ul className="menu menu-horizontal px-1">
+        <h1 className="text2xl font-bold text-accent-gold">Binge Cringe</h1>
+      </a>
+
+      <ul className="menu menu-horizontal">
+        {session ? (
           <li>
-            <p className="text-center text-2xl text-white">
-              {session && <span>Logged in as {session.user?.name}</span>}
-            </p>
             <Link
-              href={session ? "/api/auth/signout" : "/api/auth/signin"}
-              className="0 rounded-full bg-secondary-purple px-10 py-3 font-semibold no-underline transition hover:bg-secondary-purple/50"
+              href={"profile"}
+              className="0 rounded-full bg-secondary-purple px-10 font-semibold text-white no-underline transition hover:bg-secondary-purple/50"
             >
-              {session ? "Sign out" : "Sign in"}
+              Profile
             </Link>
           </li>
-        </ul>
-      </div>
+        ) : null}
+        <li>
+          <Link
+            href={session ? "/api/auth/signout" : "/api/auth/signin"}
+            className="0 border-1 rounded-full bg-secondary-purple px-10 py-3 font-semibold text-white no-underline transition hover:bg-secondary-purple/50"
+          >
+            {session ? "Sign out" : "Sign in"}
+          </Link>
+        </li>
+      </ul>
     </div>
   );
 }

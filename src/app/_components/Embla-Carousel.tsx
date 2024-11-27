@@ -36,7 +36,7 @@ export default function EmblaCarousel({
   } = usePrevNextButtons(emblaApi);
 
   return store.loading == true ? (
-    <div className="embla skeleton mx-auto h-72 w-screen"></div>
+    <div className="embla skeleton mx-auto h-72 w-screen" />
   ) : collection.length > 0 ? (
     <div className="flex items-center">
       <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
