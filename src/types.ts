@@ -1,10 +1,4 @@
 
-
-export type ContentRatingResponse = {
-    data: ContentRating[]
-    status: string
-}
-
 export type Review = {
     review_id: number
     review_content: string
@@ -71,14 +65,26 @@ export type Genre = {
 }
 
 export type ContentRating = {
+    content_rating_id: number;
     description: string;
-    id: number;
     name: string;
     country: string;
     contentType: string;
     order: number;
     fullName: string;
 }
+
+export type ContentRatingResponse = {
+    data: ContentRating[]
+    status: string
+}
+
+
+export type GenreResponse = {
+    data: Genre[]
+    status: string
+}
+
 
 export interface TVDB_Response {
     status: string
