@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 
-const Profile = () => {
+const Profile = ({ params }: { params: { id: string } }) => {
   return (
     <>
       <Head>

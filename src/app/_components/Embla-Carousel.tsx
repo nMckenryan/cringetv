@@ -55,7 +55,7 @@ export default function EmblaCarousel({
                     minWidth: window.screen.width > 768 ? 200 : 125,
                     minHeight: window.screen.width > 768 ? 400 : 250,
                   }}
-                  href={""}
+                  href={`tv_show/${tv.id}`}
                 >
                   <div className="flex flex-col bg-primary-blue/60 align-bottom">
                     <h2 className="card-title text-sm text-white">{tv.name}</h2>

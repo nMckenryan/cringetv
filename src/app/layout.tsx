@@ -3,6 +3,9 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "~/trpc/react";
+import TopNav from "./topnav";
+import { HydrateClient } from "~/trpc/server";
+import "../styles/embla.css";
 
 export const metadata: Metadata = {
   title: "BingeCringe",
@@ -16,7 +19,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <HydrateClient>
+            <TopNav />
+            <main className="justify-top flex min-h-screen flex-col items-center bg-background-black text-white">
+              {children}
+            </main>
+          </HydrateClient>
+        </TRPCReactProvider>
       </body>
     </html>
   );

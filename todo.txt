@@ -11,10 +11,9 @@ TO DO MVP
 - [x] Set up DB 
     - [] seed with TVDB details
         - [] Omit news shows
-    - [] Seed Genres
-    - [] Seed Content Ratings 
+    - [x] Seed Genres
+    - [x] Seed Content Ratings 
     - [] Finish the links to above
-
     - [] Figure out cringe rating system
     - [] Set default Cringe Rating depending on content rating
 

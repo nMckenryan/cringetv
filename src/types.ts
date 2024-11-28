@@ -26,7 +26,7 @@ export type TV_Show = {
 
 
 export type TVDBShow = {
-    id: number;
+    tvdb_id: number;
     name: string;
     slug: string;
     image: string;
@@ -83,6 +83,7 @@ export type ContentRatingResponse = {
 export type GenreResponse = {
     data: Genre[]
     status: string
+    slug: string
 }
 
 
@@ -96,5 +97,117 @@ export interface TVDB_Response {
         total_items: number,
         page_size: number
     }
+}
+
+export interface TVDB_Extended {
+
+    aliases: Array<{
+        name: string;
+        slug: string;
+    }>;
+
+    artworks: Array<unknown>;
+
+    audioLanguages: Array<string>;
+
+    awards: Array<unknown>;
+
+    boxOffice: string;
+
+    boxOfficeUS: string;
+
+    budget: string;
+
+    characters: Array<unknown>;
+
+    companies: {
+        id: number;
+        name: string;
+        slug: string;
+    };
+
+    contentRatings: Array<ContentRating>;
+
+    first_release: {
+        id: number;
+        release_date: string;
+        country: {
+            id: number;
+            name: string;
+            slug: string;
+        };
+    };
+
+    genres: Array<Genre>;
+
+    id: number;
+
+    image: string;
+
+    inspirations: Array<unknown>;
+
+    lastUpdated: string;
+
+    lists: Array<unknown>;
+
+    name: string;
+
+    nameTranslations: Array<unknown>;
+
+    originalCountry: string;
+
+    originalLanguage: string;
+
+    overviewTranslations: Array<unknown>;
+
+    production_countries: Array<string>;
+
+    releases: Array<unknown>;
+
+    remoteIds: Array<unknown>;
+
+    runtime: number | null;
+
+    score: number;
+
+    slug: string;
+
+    spoken_languages: Array<string>;
+
+    status: {
+        id: number;
+        name: string;
+    };
+
+    studios: Array<unknown>;
+
+    subtitleLanguages: Array<string>;
+
+    tagOptions: Array<unknown>;
+
+    trailers: Array<unknown>;
+
+    translations: {
+        id: number;
+        name: string;
+        slug: string;
+        overview: string;
+        first_release: {
+            id: number;
+            release_date: string;
+            country: {
+                id: number;
+                name: string;
+                slug: string;
+            };
+        };
+    };
+
+    year: string;
+}
+
+export interface Extended_Response {
+    status: string,
+    data: TVDB_Extended
 }
 
