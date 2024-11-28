@@ -12,7 +12,7 @@ export default async function TopNav() {
   }
 
   return (
-    <div className="max-w-screen bg-primary-blue-light navbar sticky top-0 z-50 flex max-h-10 flex-row justify-around">
+    <div className="max-w-screen navbar sticky top-0 z-50 flex max-h-10 flex-row justify-around bg-primary-blue-light">
       <a className="flex flex-row items-end gap-1 text-xl">
         <Image src={cringeLogo} height={30} width={30} alt="logo"></Image>
 
