@@ -14,6 +14,7 @@ export const useTVStore = create((set) => ({
     tv_data: [],
     loading: true,
     error: "",
+    // populate_tv_data: (tv: TVDBShow[] | null) => set({ tv_data: tv ?? [] }),
     populate_tv_data: (tv: TVDBShow[] | null) => set({ tv_data: tv ?? [] }),
     set_loading: () => set({ loading: false }),
     set_error: (error: string) => set({ error: error }),

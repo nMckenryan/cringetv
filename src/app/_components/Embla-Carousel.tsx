@@ -1,10 +1,8 @@
 import React from "react";
 import { type EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
-import Autoplay, { AutoplayOptionsType } from "embla-carousel-autoplay";
-import Image from "next/image";
-import { type TVDBShow } from "~/types";
-import { type TVStore, useTVStore } from "~/zustand/store";
+import Autoplay, { type AutoplayOptionsType } from "embla-carousel-autoplay";
+import { type TV_Show } from "~/types";
 import noPoster from "../../../public/noPoster.png";
 import {
   NextButton,
@@ -16,9 +14,8 @@ import Link from "next/link";
 export default function EmblaCarousel({
   collection,
 }: {
-  collection: TVDBShow[];
+  collection: TV_Show[];
 }) {
-  const store = useTVStore() as TVStore;
   const options: EmblaOptionsType = { dragFree: true, loop: true };
   const autoplayOptions: AutoplayOptionsType = {
     stopOnInteraction: true,
@@ -35,7 +32,7 @@ export default function EmblaCarousel({
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi);
 
-  return store.loading == true ? (
+  return collection === undefined ? (
     <div className="embla skeleton mx-auto h-72 w-screen" />
   ) : collection.length > 0 ? (
     <div className="flex items-center">
@@ -43,30 +40,34 @@ export default function EmblaCarousel({
       <div className="embla mx-auto text-4xl">
         <div className="embla__viewport" ref={emblaRef}>
           <div className="embla__container">
-            {collection.map((tv: TVDBShow, index: number) => (
-              <div className="flex flex-col" key={index}>
+            {collection.map((tv: TV_Show) => (
+              <div className="flex flex-col" key={tv.tvdb_id}>
                 <Link
                   className="card flex justify-end font-semibold no-underline shadow-xl transition hover:bg-secondary-purple/50"
                   style={{
-                    backgroundImage: `url(${tv.image ? tv.image : noPoster.src})`,
+                    backgroundImage: `url(${tv.poster_link ? tv.poster_link : noPoster.src})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     margin: "2px",
                     minWidth: window.screen.width > 768 ? 200 : 125,
                     minHeight: window.screen.width > 768 ? 400 : 250,
                   }}
-                  href={`tv_show/${tv.id}`}
+                  href={`tv_show/${tv.tvdb_id}`}
                 >
                   <div className="flex flex-col bg-primary-blue/60 align-bottom">
                     <h2 className="card-title text-sm text-white">{tv.name}</h2>
                     <p className="line-clamp-3 hidden text-sm font-normal text-white">
-                      {tv.overview ? tv.overview : "No Description Available"}
+                      {tv.description
+                        ? tv.description
+                        : "No Description Available"}
                     </p>
                     <div className="card-actions justify-end">
                       <div className="badge badge-secondary">
-                        {tv.originalLanguage}
+                        {tv.original_country}
                       </div>
-                      <div className="badge badge-secondary">{tv.year}</div>
+                      <div className="badge badge-secondary">
+                        {tv.first_air_date.getFullYear()}
+                      </div>
                     </div>
                   </div>
                 </Link>
