@@ -7,11 +7,23 @@ import "./src/env.js";
 /** @type {import("next").NextConfig} */
 const config = {
   images: {
-    domains: [
-      "thetvdb.com",
-      "artworks.thetvdb.com",
-      "cdn.discordapp.com",
-      "s.gravatar.com",
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "thetvdb.com",
+      },
+      {
+        protocol: "https",
+        hostname: "artworks.thetvdb.com",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.discordapp.com",
+      },
+      {
+        protocol: "https",
+        hostname: "s.gravatar.com",
+      },
     ],
   },
 };
