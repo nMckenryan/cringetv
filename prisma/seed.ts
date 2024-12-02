@@ -1,4 +1,4 @@
-import { ContentRating, Extended_Response } from './../src/types';
+import { ContentRating, Extended_Response } from '../src/types';
 import { db } from "~/server/db";
 import { type GenreResponse, type TVDB_Extended, type ContentRatingResponse, type Genre, type TVDB_Response, type TVDBShow } from "~/types";
 

@@ -6,7 +6,7 @@ TO DO MVP
 - [x] Set up zustand for state
 - [x] Load TV show details 
 - [/] Load most recent shows
-- [] Set up basic auth
+- [x] Set up basic auth
 
 - [x] Set up DB 
     - [] seed with TVDB details

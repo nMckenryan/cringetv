@@ -1,19 +1,21 @@
 import React from "react";
 import Head from "next/head";
+import { auth } from "~/server/auth";
 
-const Profile = () => {
+export async function Profile() {
+  const session = await auth();
+
   return (
     <>
       <Head>
-        <title>Page Title</title>
-        <meta name="description" content="Page description" />
+        <title>{session?.user?.name} - BingeCringe</title>
       </Head>
       <main>
-        <h1>Welcome to the Page</h1>
-        <p>Reviews:</p>
+        <h1>{session?.user?.name}</h1>
+        <p>{session?.user?.id}:</p>
       </main>
     </>
   );
-};
+}
 
 export default Profile;
