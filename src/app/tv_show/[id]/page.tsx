@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 
-const Profile = ({ params }: { params: { id: string } }) => {
+const TVShowPage = () => {
   return (
     <>
       <Head>
@@ -16,4 +16,4 @@ const Profile = ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default Profile;
+export default TVShowPage;
