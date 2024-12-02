@@ -7,7 +7,12 @@ import "./src/env.js";
 /** @type {import("next").NextConfig} */
 const config = {
   images: {
-    domains: ["thetvdb.com", "artworks.thetvdb.com", "cdn.discordapp.com"],
+    domains: [
+      "thetvdb.com",
+      "artworks.thetvdb.com",
+      "cdn.discordapp.com",
+      "s.gravatar.com",
+    ],
   },
 };
 

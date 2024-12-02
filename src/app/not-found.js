@@ -7,7 +7,9 @@ export default function NotFound() {
     <div className="flex min-h-screen items-center justify-center">
       <Link className="flex flex-col items-center gap-1 text-xl" href={"/"}>
         <Image src={cringeLogo} width={200} height={200} alt="logo"></Image>
-        <h1 className="text-6xl font-bold text-accent-gold">Page not found</h1>
+        <h1 className="text-6xl font-bold text-accent-gold">
+          404 - Page not found
+        </h1>
       </Link>
     </div>
   );
