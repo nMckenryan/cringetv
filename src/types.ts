@@ -25,7 +25,7 @@ export type TV_Show = {
 
 
 export type TVDBShow = {
-    id: any
+    id: number
     tvdb_id: number;
     name: string;
     slug: string;

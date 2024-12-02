@@ -4,8 +4,6 @@ import EmblaCarousel from "./_components/Embla-Carousel";
 import { type TV_Show } from "~/types";
 import { Suspense } from "react";
 
-import { api } from "~/trpc/react";
-
 export default function App() {
   const getAllTvShowsQuery: TV_Show[] = [];
 

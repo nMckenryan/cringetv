@@ -1,16 +1,10 @@
 import Link from "next/link";
 import { auth } from "~/server/auth";
-import { api } from "~/trpc/server";
 import Image from "next/image";
 import cringeLogo from "../../../public/android-chrome-192x192.png";
 
 export default async function TopNav() {
   const session = await auth();
-
-  // if (session?.user) {
-  //   void api.post.getLatest.prefetch();
-  // }
-
   return (
     <div className="max-w-screen navbar sticky top-0 z-50 flex max-h-10 flex-row justify-around bg-primary-blue-light">
       <Link className="flex flex-row items-end gap-1 text-xl" href={"/"}>

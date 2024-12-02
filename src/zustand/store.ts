@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { TVDBShow } from '~/types'
+import { type TVDBShow } from '~/types'
 
 export type TVStore = {
     tv_data: [],
