@@ -1,8 +1,8 @@
 import React from "react";
-import Head from "next/head";
 import { db } from "~/server/db";
 import UICard from "~/app/_components/UICard";
 import NotFound from "~/app/not-found";
+import Image from "next/image";
 
 export default async function ProfilePage({
   params,
@@ -21,13 +21,16 @@ export default async function ProfilePage({
         <div className="avatar">
           <div className="w-24 rounded-full">
             <picture>
-              <img src={user.image} alt="profile_pic" />
+              <img src={user.image ? user.image : "none"} alt="profile_pic" />
             </picture>
           </div>
         </div>
         <p>{user?.name}</p>
         <p>Member since: </p>
-        <p>Reviews: {user?.reviews}</p>
+        <p>
+          Reviews:
+          {/* {user?.reviews} */}
+        </p>
       </UICard>
 
       <UICard>
@@ -38,18 +41,18 @@ export default async function ProfilePage({
           className="input input-bordered w-24 md:w-auto"
         />
         <div className="card w-96 bg-base-100 shadow-xl">
-          <figure className="px-10 pt-10">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-              alt="Shoes"
-              className="rounded-xl"
-            />
-          </figure>
-          <div className="card-body items-center text-center">
-            <h2 className="card-title">Shoes!</h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className="card-actions">
-              <button className="btn btn-primary">Buy Now</button>
+          <div className="flex flex-row">
+            <figure className="px-10 pt-10">
+              <Image
+                src={"/profile.png"}
+                width={125}
+                height={250}
+                alt="placeholder"
+              />
+            </figure>
+            <div className="card-body items-center text-center">
+              <h2 className="card-title">Shoes!</h2>
+              <p>If a dog chews shoes whose shoes does he choose?</p>
             </div>
           </div>
         </div>
