@@ -24,6 +24,10 @@ const config = {
         protocol: "https",
         hostname: "s.gravatar.com",
       },
+      {
+        protocol: "https",
+        hostname: "m.media-amazon.com",
+      },
     ],
   },
 };

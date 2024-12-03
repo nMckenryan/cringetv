@@ -47,6 +47,7 @@ TO DO MVP
     - [] List of reviews
 
 - [ ] FILM SELECT PAGE 
+    - [] Build UI
     - [x] Route by ID
     - [] Review insert section
         - [] Show current review left by user
