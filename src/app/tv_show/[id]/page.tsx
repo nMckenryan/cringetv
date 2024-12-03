@@ -6,7 +6,11 @@ import ReviewList from "~/app/_components/reviews/ReviewList";
 
 import ReviewForm from "~/app/_components/reviews/Review-Form";
 
-export default function TVShowPage({ params }: { params: { id: string } }) {
+export default function TVShowPage({
+  params: { id },
+}: {
+  params: { id: string };
+}) {
   return (
     <>
       <Head>

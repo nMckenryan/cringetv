@@ -2,11 +2,10 @@ import UICard from "./_components/UICard";
 import EmblaCarousel from "./_components/carousel/Embla-Carousel";
 
 import { type TV_Show } from "~/types";
-import { api } from "../trpc/react";
 import { Suspense } from "react";
 
 export default function App() {
-  const tv_data = []; // api.tvShows.getAllTvShows.useQuery() || [];
+  const tv_data: TV_Show[] = []; // api.tvShows.getAllTvShows.useQuery() || [];
 
   function sortNewTV(tv_data: TV_Show[]): TV_Show[] {
     if (tv_data == undefined) return [];
