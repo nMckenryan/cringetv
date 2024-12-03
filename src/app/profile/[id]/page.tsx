@@ -2,7 +2,7 @@ import React from "react";
 import { db } from "~/server/db";
 import UICard from "~/app/_components/UICard";
 import NotFound from "~/app/not-found";
-import Image from "next/image";
+import ReviewList from "~/app/_components/reviews/ReviewList";
 
 export default async function ProfilePage({
   params,
@@ -33,30 +33,7 @@ export default async function ProfilePage({
         </p>
       </UICard>
 
-      <UICard>
-        <h4 className="text-xl font-bold text-white">Reviews</h4>
-        <input
-          type="text"
-          placeholder="Search"
-          className="input input-bordered w-24 md:w-auto"
-        />
-        <div className="card w-96 bg-base-100 shadow-xl">
-          <div className="flex flex-row">
-            <figure className="px-10 pt-10">
-              <Image
-                src={"/profile.png"}
-                width={125}
-                height={250}
-                alt="placeholder"
-              />
-            </figure>
-            <div className="card-body items-center text-center">
-              <h2 className="card-title">Shoes!</h2>
-              <p>If a dog chews shoes whose shoes does he choose?</p>
-            </div>
-          </div>
-        </div>
-      </UICard>
+      <ReviewList />
     </main>
   );
 }

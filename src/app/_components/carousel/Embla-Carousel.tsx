@@ -5,7 +5,7 @@ import { type EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay, { type AutoplayOptionsType } from "embla-carousel-autoplay";
 import { type TV_Show } from "~/types";
-import noPoster from "../../../public/noPoster.png";
+import noPoster from "../../../../public/noPoster.png";
 import {
   NextButton,
   PrevButton,
@@ -45,6 +45,8 @@ export default function EmblaCarousel({
             {collection.map((tv: TV_Show) => (
               <div className="flex flex-col" key={tv.tvdb_id}>
                 <Link
+                  href="/tv_show/[id]"
+                  as={`/tv_show/${tv.tvdb_id}`}
                   className="card flex justify-end font-semibold no-underline shadow-xl transition hover:bg-secondary-purple/50"
                   style={{
                     backgroundImage: `url(${tv.poster_link ? tv.poster_link : noPoster.src})`,
@@ -54,7 +56,6 @@ export default function EmblaCarousel({
                     minWidth: window.screen.width > 768 ? 200 : 125,
                     minHeight: window.screen.width > 768 ? 400 : 250,
                   }}
-                  href={`tv_show/${tv.tvdb_id}`}
                 >
                   <div className="flex flex-col bg-primary-blue/60 align-bottom">
                     <h2 className="card-title text-sm text-white">{tv.name}</h2>

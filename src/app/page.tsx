@@ -1,14 +1,15 @@
 import UICard from "./_components/UICard";
-import EmblaCarousel from "./_components/Embla-Carousel";
+import EmblaCarousel from "./_components/carousel/Embla-Carousel";
 
 import { type TV_Show } from "~/types";
+import { api } from "../trpc/react";
 import { Suspense } from "react";
 
 export default function App() {
-  const getAllTvShowsQuery: TV_Show[] = [];
+  const tv_data = []; // api.tvShows.getAllTvShows.useQuery() || [];
 
   function sortNewTV(tv_data: TV_Show[]): TV_Show[] {
-    if (tv_data === undefined) return [];
+    if (tv_data == undefined) return [];
     const newTV: TV_Show[] = tv_data.sort(
       (
         a: { first_air_date: string | number | Date },
@@ -25,19 +26,19 @@ export default function App() {
       <Suspense fallback={<div>Loading...</div>}>
         <UICard>
           <h4 className="text-xl font-bold text-white">Popular Shows</h4>
-          <EmblaCarousel collection={sortNewTV(getAllTvShowsQuery)} />
+          <EmblaCarousel collection={sortNewTV(tv_data)} />
         </UICard>
       </Suspense>
 
-      <UICard>
+      {/* <UICard>
         <h4 className="text-xl font-bold text-white">Most Dangerous Shows</h4>
-        <EmblaCarousel collection={getAllTvShowsQuery} />
+        <EmblaCarousel collection={tv_data} />
       </UICard>
 
       <UICard>
         <h4 className="text-xl font-bold text-white">Recent Reviewed Shows</h4>
-        <EmblaCarousel collection={getAllTvShowsQuery} />
-      </UICard>
+        <EmblaCarousel collection={tv_data} />
+      </UICard> */}
     </div>
   );
 }
