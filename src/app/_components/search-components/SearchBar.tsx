@@ -1,12 +1,15 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { type TV_Show } from "~/types";
-import Image from "next/image";
 import { Search, X } from "lucide-react";
+import SearchResult from "./SearchMenuResult";
+import Link from "next/link";
+import { useTVStore } from "~/zustand/store";
 
-export default function SearchBar({ tvList }: { tvList: TV_Show[] }) {
+export default function SearchBar() {
+  const tvList: TV_Show[] = useTVStore((state) => state.tv_data) as TV_Show[];
+
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<TV_Show[]>(tvList);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -68,32 +71,21 @@ export default function SearchBar({ tvList }: { tvList: TV_Show[] }) {
       </div>
 
       {isDropdownOpen && searchResults.length > 0 && (
-        <div className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded-md border bg-primary-blue shadow-lg">
+        <div className="absolute z-10 mt-1 max-h-80 w-full overflow-y-auto rounded-md border bg-primary-blue shadow-lg">
           {searchResults.map((tv: TV_Show) => (
-            <Link
-              key={tv.tvdb_id}
-              className="flex flex-row items-center p-4 align-middle text-sm text-neutral-200 hover:bg-primary-blue-dark"
-              href="/tv_show/[id]"
-              as={`/tv_show/${tv.tvdb_id}`}
-              onClick={() => {
-                clearSearch();
-              }}
-            >
-              <Image
-                className="size-5 shrink-0 rounded-full"
-                src={tv.poster_link}
-                alt={tv.name}
-                width={40}
-                height={40}
-              />
-              <p className="text-sm text-gray-800 dark:text-neutral-200">
-                {tv.name}
-              </p>
-              <small className="ms-auto text-xs text-gray-400 dark:text-neutral-500">
-                {tv.first_air_date.getFullYear()}
-              </small>
-            </Link>
+            <SearchResult key={tv.tvdb_id} tv={tv} clearSearch={clearSearch} />
           ))}
+          <Link
+            className="flex h-10 w-full flex-row items-center justify-center p-4 align-middle text-sm text-neutral-200 hover:bg-primary-blue-dark"
+            href={`/search?q=${encodeURIComponent(searchTerm)}`}
+            onClick={() => {
+              clearSearch();
+            }}
+          >
+            <p className="text-md text-gray-800 dark:text-neutral-200">
+              See all results
+            </p>
+          </Link>
         </div>
       )}
     </div>

@@ -3,9 +3,10 @@ import { auth } from "~/server/auth";
 import { type Review } from "~/types";
 import RatingIcon from "../RatingIcon";
 import Image from "next/image";
+import { CircleHelp } from "lucide-react";
 
-export default async function ReviewView({ review }: { review: Review }) {
-  const user = await auth();
+export default function ReviewView({ review }: { review: Review }) {
+  const user = null;
 
   //   TODO: GET USER INFOR FROM TRPC
   return (
@@ -18,16 +19,22 @@ export default async function ReviewView({ review }: { review: Review }) {
           <div className="flex flex-col gap-1">
             <div className="flex flex-row items-center justify-between gap-2">
               <div className="rounded-full shadow-lg">
-                <Image
-                  src={user?.user.image ? user?.user.image : "none"}
-                  alt="profile_pic"
-                  className="rounded-full shadow-md"
-                  width={40}
-                  height={40}
-                />
+                {user?.user?.image ? (
+                  <Image
+                    src={user.user.image ?? ""}
+                    alt="profile_pic"
+                    className="rounded-full shadow-md"
+                    width={40}
+                    height={40}
+                  />
+                ) : (
+                  <CircleHelp size={40} />
+                )}
               </div>
 
-              <h2 className="card-title text-sm">{user?.user.name}</h2>
+              <h2 className="card-title text-sm">
+                {(user?.user.name as string) || "No User"}
+              </h2>
 
               <RatingIcon reviewScore={review.cringe_score_vote} />
             </div>

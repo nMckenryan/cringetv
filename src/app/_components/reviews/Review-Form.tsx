@@ -9,7 +9,7 @@ type Inputs = {
   cringeScore: number;
 };
 
-export default function ReviewForm({ tvId }: { tvId: string }) {
+export default function ReviewForm({ tvdb_id }: { tvdb_id: string }) {
   const [reviewScore, setReviewScore] = React.useState(0);
   const {
     register,
