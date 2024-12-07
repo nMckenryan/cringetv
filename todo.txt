@@ -29,8 +29,8 @@ TO DO MVP
     - [x] Profile page
     - [] Individual series search 
 
-- [] Auth set up
- - Auth09
+- [x] Auth set up
+ - Auth0
 
 - [ ] HOMEPAGE COMPONENTS: 
     - [] search functions

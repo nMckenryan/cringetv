@@ -29,7 +29,7 @@ export default async function ReviewView({ review }: { review: Review }) {
 
               <h2 className="card-title text-sm">{user?.user.name}</h2>
 
-              <RatingIcon reviewScore={5.0} />
+              <RatingIcon reviewScore={review.cringe_score_vote} />
             </div>
 
             <p className="text-left text-sm">{review.review_content}</p>

@@ -1,34 +1,26 @@
-import { AiFillSafetyCertificate } from "react-icons/ai";
-import { IoIosWarning } from "react-icons/io";
-import { MdDangerous } from "react-icons/md";
-import { FaRadiation } from "react-icons/fa";
-import { FaSkull } from "react-icons/fa";
+import { ShieldCheck, OctagonAlert, Radiation, Skull } from "lucide-react";
 
 export default function RatingIcon({ reviewScore }: { reviewScore: number }) {
   const size = 30;
 
   const getRatingIcon = (): JSX.Element => {
     if (reviewScore >= 0.1 && reviewScore <= 0.9) {
-      return <AiFillSafetyCertificate size={size} style={{ color: "green" }} />;
+      return <ShieldCheck size={size} className="text-green-500" />;
     }
 
     if (reviewScore >= 1.0 && reviewScore <= 1.9) {
-      return <IoIosWarning size={size} style={{ color: "yellow" }} />;
+      return <OctagonAlert size={size} className="text-yellow-500" />;
     }
 
     if (reviewScore >= 2.0 && reviewScore <= 2.9) {
-      return <MdDangerous size={size} style={{ color: "orange" }} />;
+      return <Radiation size={size} className="text-orange-500" />;
     }
 
     if (reviewScore >= 3.0 && reviewScore <= 4.0) {
-      return <FaRadiation size={size} style={{ color: "red" }} />;
+      return <Skull size={size} className="text-red-600" />;
     }
 
-    if (reviewScore >= 4.1 && reviewScore <= 5.0) {
-      return <FaSkull size={size} style={{ color: "white" }} />;
-    }
-
-    throw new Error("Invalid review score");
+    throw new Error("Invalid review score: " + reviewScore);
   };
 
   return (
@@ -53,11 +45,7 @@ const getRatingText = (reviewScore: number): string => {
   }
 
   if (reviewScore >= 3.0 && reviewScore <= 4.0) {
-    return "Cringe";
-  }
-
-  if (reviewScore >= 4.1 && reviewScore <= 5.0) {
-    return "Dead";
+    return "Brutal";
   }
 
   throw new Error("Invalid review score");
