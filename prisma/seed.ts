@@ -81,7 +81,6 @@ async function main() {
     if (!retrieved_tv) return;
 
     for (const show of retrieved_tv) {
-
         try {
             const extended_response = await fetch(`https://api4.thetvdb.com/v4/series/${show.id}/extended?short=true`, tvdb_options);
             if (!extended_response.ok) {
@@ -92,32 +91,42 @@ async function main() {
 
             const extended_tv_data: TVDB_Extended = res.data;
 
-            // console.log(JSON.stringify(extended_tv_data))
-
             const genres: Genre[] = extended_tv_data.genres;
 
             if (show !== undefined) {
                 await db.televisionShow.upsert({
-                    where: { tvdb_id: show.id as number },
+                    where: { tvdb_id: show.id },
                     update: {},
                     create: {
-                        tvdb_id: show.id as number,
+                        tvdb_id: show.id,
                         name: show.name,
                         description: show.overview,
                         aggregate_cringe_rating: 0.0,
-                        reviews: { create: [] },
                         first_air_date: new Date(show.firstAired),
                         last_air_date: new Date(show.lastAired),
-                        series_status: show.status.name,
+                        series_status: extended_tv_data.status.name,
                         poster_link: show.image,
-                        // genres: {
-                        //     createMany: {
-                        //         data: genres.map((genre) => ({
-                        //             genreId: genre.id,
-                        //             genreName: genre.name,
-                        //         })),
-                        //     },
-                        // },
+                        genres: {
+                            connectOrCreate: genres.map((genre: Genre) => ({
+                                where: { genre_id: genre.id },
+                                create: {
+                                    genre_id: genre.id,
+                                    genre_name: genre.name,
+                                },
+                            })),
+                        },
+                        content_rating: {
+                            connectOrCreate: extended_tv_data.contentRatings.map((cr: ContentRating) => ({
+                                where: { content_rating_id: cr.id },
+                                create: {
+                                    content_rating_id: cr.id,
+                                    content_rating: cr.name,
+                                    rating_country: cr.country,
+                                    content_rating_description: cr.description ?? "No description available",
+                                }
+                            })),
+                        },
+
                         original_country: show.originalCountry ?? "Unknown",
 
                     }

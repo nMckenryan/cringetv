@@ -1,11 +1,13 @@
+"use client";
 import UICard from "./_components/UICard";
 import EmblaCarousel from "./_components/carousel/Embla-Carousel";
 
 import { type TV_Show } from "~/types";
-import { Suspense } from "react";
+import { Suspense, use } from "react";
+import { useTVStore } from "~/zustand/store";
 
 export default function App() {
-  const tv_data: TV_Show[] = []; // api.tvShows.getAllTvShows.useQuery() || [];
+  const tv_data: TV_Show[] = useTVStore((state) => state.tv_data); // api.tvShows.getAllTvShows.useQuery() || [];
 
   function sortNewTV(tv_data: TV_Show[]): TV_Show[] {
     if (tv_data == undefined) return [];
@@ -29,7 +31,7 @@ export default function App() {
         </UICard>
       </Suspense>
 
-      {/* <UICard>
+      <UICard>
         <h4 className="text-xl font-bold text-white">Most Dangerous Shows</h4>
         <EmblaCarousel collection={tv_data} />
       </UICard>
@@ -37,7 +39,7 @@ export default function App() {
       <UICard>
         <h4 className="text-xl font-bold text-white">Recent Reviewed Shows</h4>
         <EmblaCarousel collection={tv_data} />
-      </UICard> */}
+      </UICard>
     </div>
   );
 }

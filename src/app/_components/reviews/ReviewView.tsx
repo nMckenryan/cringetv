@@ -11,7 +11,7 @@ export default function ReviewView({ review }: { review: Review }) {
   //   TODO: GET USER INFOR FROM TRPC
   return (
     <div
-      className="card w-96 bg-primary-blue-light shadow-xl"
+      className="card w-full bg-primary-blue-light shadow-xl"
       key={review.review_id}
     >
       <div className="flex flex-row">

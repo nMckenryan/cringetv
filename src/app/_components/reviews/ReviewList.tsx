@@ -12,10 +12,10 @@ export default function ReviewList({ tvId }: { tvId: number }) {
 
   return (
     <UICard>
-      <h4 className="text-xl font-bold text-white">Reviews</h4>
-      <ReviewForm tvdb_id={tvId} />
       {/* TODO: Paginate */}
-      <div className="flex- my-10 flex gap-2">
+      <div className="my-10 flex max-w-96 flex-col gap-2">
+        <ReviewForm tvdb_id={tvId} />
+
         {reviewList.length === 0 ? (
           <p className="p-10 text-center text-lg">
             No Reviews Yet. <br /> Be the first!
