@@ -6,6 +6,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay, { type AutoplayOptionsType } from "embla-carousel-autoplay";
 import { type TV_Show } from "~/types";
 import noPoster from "../../../../public/noPoster.png";
+import Image from "next/image";
 import {
   NextButton,
   PrevButton,
@@ -42,40 +43,44 @@ export default function EmblaCarousel({
       <div className="embla mx-auto text-4xl">
         <div className="embla__viewport" ref={emblaRef}>
           <div className="embla__container">
-            {collection.map((tv: TV_Show) => (
-              <div className="flex flex-col" key={tv.tvdb_id}>
-                <Link
-                  href="/tv_show/[id]"
-                  as={`/tv_show/${tv.tvdb_id}`}
-                  className="card flex justify-end font-semibold no-underline shadow-xl transition hover:bg-secondary-purple/50"
-                  style={{
-                    backgroundImage: `url(${tv.poster_link ? tv.poster_link : noPoster.src})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    margin: "2px",
-                    minWidth: window.screen.width > 768 ? 200 : 125,
-                    minHeight: window.screen.width > 768 ? 400 : 250,
-                  }}
-                >
-                  <div className="flex flex-col bg-primary-blue/60 align-bottom">
-                    <h2 className="card-title text-sm text-white">{tv.name}</h2>
-                    <p className="line-clamp-3 hidden text-sm font-normal text-white">
-                      {tv.description
-                        ? tv.description
-                        : "No Description Available"}
-                    </p>
-                    <div className="card-actions justify-end">
-                      <div className="badge badge-secondary">
-                        {tv.original_country}
-                      </div>
-                      <div className="badge badge-secondary">
-                        {tv.first_air_date.getFullYear()}
+            {collection.map((tv: TV_Show) => {
+              return (
+                <div className="flex flex-col" key={tv.tvdb_id}>
+                  <Link
+                    rel="preload"
+                    href="/tv_show/[id]"
+                    as={`/tv_show/${tv.tvdb_id}`}
+                    className={`card m-2 flex min-h-[250px] min-w-[125px] justify-end bg-cover bg-center font-semibold no-underline shadow-xl transition hover:bg-secondary-purple/50 md:min-h-[400px] md:min-w-[200px]`}
+                    style={{
+                      backgroundImage: `url(${
+                        tv.poster_link
+                          ? `https://www.thetvdb.com${tv.poster_link}`
+                          : noPoster.src
+                      })`,
+                    }}
+                  >
+                    <div className="flex flex-col bg-primary-blue/60 align-bottom">
+                      <h2 className="card-title text-sm text-white">
+                        {tv.name}
+                      </h2>
+                      <p className="line-clamp-3 hidden text-sm font-normal text-white">
+                        {tv.description
+                          ? tv.description
+                          : "No Description Available"}
+                      </p>
+                      <div className="card-actions justify-end">
+                        <div className="badge badge-secondary">
+                          {tv.original_country}
+                        </div>
+                        <div className="badge badge-secondary">
+                          {tv.first_air_date.getFullYear()}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
-              </div>
-            ))}
+                  </Link>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

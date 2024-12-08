@@ -14,6 +14,10 @@ const config = {
       },
       {
         protocol: "https",
+        hostname: "www.thetvdb.com",
+      },
+      {
+        protocol: "https",
         hostname: "artworks.thetvdb.com",
       },
       {
