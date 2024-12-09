@@ -3,6 +3,8 @@ import Image from "next/image";
 import { type TV_Show } from "~/types";
 import Link from "next/link";
 
+import noPoster from "../../../../public/noPoster.png";
+
 export default function SearchResult({
   tv,
   clearSearch,
@@ -22,7 +24,7 @@ export default function SearchResult({
     >
       <Image
         className="size-5 shrink-0 rounded-full"
-        src={tv.poster_link}
+        src={tv.poster_link || noPoster.src}
         alt={tv.name}
         width={40}
         height={40}

@@ -1,22 +1,29 @@
 import { ShieldCheck, OctagonAlert, Radiation, Skull } from "lucide-react";
+import { RatingCode } from "~/types";
 
 export default function RatingIcon({ reviewScore }: { reviewScore: number }) {
   const size = 30;
 
   const getRatingIcon = (): JSX.Element => {
-    if (reviewScore >= 0.1 && reviewScore <= 0.9) {
+    if (reviewScore >= 0 && reviewScore < RatingCode.BaseSafeLimit.valueOf()) {
       return <ShieldCheck size={size} className="text-green-500" />;
     }
 
-    if (reviewScore >= 1.0 && reviewScore <= 1.9) {
+    if (
+      reviewScore > RatingCode.BaseSafeLimit.valueOf() &&
+      reviewScore <= RatingCode.BaseCautionLimit.valueOf()
+    ) {
       return <OctagonAlert size={size} className="text-yellow-500" />;
     }
 
-    if (reviewScore >= 2.0 && reviewScore <= 2.9) {
+    if (
+      reviewScore > RatingCode.BaseCautionLimit.valueOf() &&
+      reviewScore <= RatingCode.BaseUnsafeLimit.valueOf()
+    ) {
       return <Radiation size={size} className="text-orange-500" />;
     }
 
-    if (reviewScore >= 3.0 && reviewScore <= 4.0) {
+    if (reviewScore >= RatingCode.BaseUnsafeLimit.valueOf()) {
       return <Skull size={size} className="text-red-600" />;
     }
 
@@ -32,20 +39,26 @@ export default function RatingIcon({ reviewScore }: { reviewScore: number }) {
 }
 
 const getRatingText = (reviewScore: number): string => {
-  if (reviewScore >= 0.1 && reviewScore <= 0.9) {
+  if (reviewScore >= 0 && reviewScore < RatingCode.BaseSafeLimit.valueOf()) {
     return "Safe";
   }
 
-  if (reviewScore >= 1.0 && reviewScore <= 1.9) {
+  if (
+    reviewScore > RatingCode.BaseSafeLimit.valueOf() &&
+    reviewScore <= RatingCode.BaseCautionLimit.valueOf()
+  ) {
     return "Caution";
   }
 
-  if (reviewScore >= 2.0 && reviewScore <= 2.9) {
-    return "Unsafe";
+  if (
+    reviewScore > RatingCode.BaseCautionLimit.valueOf() &&
+    reviewScore <= RatingCode.BaseUnsafeLimit.valueOf()
+  ) {
+    return "Danger";
   }
 
-  if (reviewScore >= 3.0 && reviewScore <= 4.0) {
-    return "Brutal";
+  if (reviewScore >= RatingCode.BaseUnsafeLimit.valueOf()) {
+    return "RIP";
   }
 
   throw new Error("Invalid review score");

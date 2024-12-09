@@ -1,8 +1,17 @@
-import { ContentRating, Extended_Response } from '../src/types';
+
+import { RatingCode, type ContentRating, type Extended_Response } from '../src/types';
 import { db } from "~/server/db";
 import { type GenreResponse, type TVDB_Extended, type ContentRatingResponse, type Genre, type TVDB_Response, type TVDBShow } from "~/types";
+import {
+    RegExpMatcher,
+    englishDataset,
+    englishRecommendedTransformers,
+} from 'obscenity';
 
-
+const matcher = new RegExpMatcher({
+    ...englishDataset.build(),
+    ...englishRecommendedTransformers,
+});
 
 const tvdb_options = {
     method: "GET",
@@ -11,6 +20,55 @@ const tvdb_options = {
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_TVDB_TOKEN}`,
     },
 };
+
+export function calculateBaseCringeRating(showDetails: TVDB_Extended): number | null {
+
+    const showName = showDetails.name;
+    const contentRatings = showDetails.contentRatings[0];
+    const year = showDetails.year;
+
+    if (contentRatings === undefined) {
+        if (Number(year) <= 1965) {
+            return 0.20;
+        }
+        else {
+            return null
+        }
+
+    }
+
+    if (Number(year) <= 1965) {
+        return 0.20;
+    }
+
+    const ratingName = contentRatings.name;
+    const ratingNumber = Number((/\d+/.exec(ratingName))?.[0]);
+
+    if (!isNaN(ratingNumber)) {
+        return null;
+    }
+    if (ratingNumber <= 13 || ratingName.toLowerCase().includes("pg") || ratingName.toLowerCase().includes("M")) {
+        return RatingCode.BaseSafeLimit.valueOf()
+    }
+    else if (ratingNumber <= 16) {
+        return RatingCode.BaseCautionLimit.valueOf()
+    }
+    else if (ratingNumber <= 17) {
+        return RatingCode.BaseUnsafeLimit.valueOf()
+    }
+    else if (ratingNumber >= 18) {
+        return RatingCode.BaseDangerLimit.valueOf()
+    }
+
+    if (matcher.hasMatch(showName)) {
+        console.log(showName);
+        return RatingCode.BaseUnsafeLimit.valueOf()
+    }
+    else {
+        return null;
+    }
+}
+
 
 async function seed_genre_and_content_ratings() {
     const genre: Genre[] = []
@@ -93,19 +151,53 @@ async function main() {
 
             const genres: Genre[] = extended_tv_data.genres;
 
+            const firstContentRating: ContentRating | undefined = extended_tv_data.contentRatings[0] ?? undefined;
+
+            const poster = show.image ? `https://www.thetvdb.com${show.image}` : undefined;
+
             if (show !== undefined) {
                 await db.televisionShow.upsert({
                     where: { tvdb_id: show.id },
-                    update: {},
+                    update: {
+                        tvdb_id: show.id,
+                        name: show.name,
+                        description: show.overview,
+                        aggregate_cringe_rating: calculateBaseCringeRating(extended_tv_data),
+                        first_air_date: new Date(show.firstAired),
+                        last_air_date: new Date(show.lastAired),
+                        series_status: extended_tv_data.status.name,
+                        poster_link: poster,
+                        genres: {
+                            connectOrCreate: genres.map((genre: Genre) => ({
+                                where: { genre_id: genre.id },
+                                create: {
+                                    genre_id: genre.id,
+                                    genre_name: genre.name,
+                                },
+                            })),
+                        },
+                        content_rating: {
+                            connectOrCreate: extended_tv_data.contentRatings.map((cr: ContentRating) => ({
+                                where: { content_rating_id: cr.id },
+                                create: {
+                                    content_rating_id: cr.id,
+                                    content_rating: cr.name,
+                                    rating_country: cr.country,
+                                    content_rating_description: cr.description ?? "No description available",
+                                }
+                            })),
+                        },
+                        original_country: show.originalCountry ?? "Unknown",
+                    },
                     create: {
                         tvdb_id: show.id,
                         name: show.name,
                         description: show.overview,
-                        aggregate_cringe_rating: 0.0,
+                        aggregate_cringe_rating: calculateBaseCringeRating(extended_tv_data),
                         first_air_date: new Date(show.firstAired),
                         last_air_date: new Date(show.lastAired),
                         series_status: extended_tv_data.status.name,
-                        poster_link: show.image,
+                        poster_link: poster,
                         genres: {
                             connectOrCreate: genres.map((genre: Genre) => ({
                                 where: { genre_id: genre.id },
@@ -140,7 +232,6 @@ async function main() {
 }
 
 
-
 main()
     .then(async () => {
         await db.$disconnect();
@@ -150,7 +241,3 @@ main()
         await db.$disconnect();
         process.exit(1);
     });
-
-
-
-

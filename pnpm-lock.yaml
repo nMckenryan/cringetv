@@ -53,6 +53,9 @@ importers:
       next-auth:
         specifier: 5.0.0-beta.25
         version: 5.0.0-beta.25(next@15.0.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      obscenity:
+        specifier: ^0.4.1
+        version: 0.4.1
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -1710,6 +1713,10 @@ packages:
   object.values@1.2.0:
     resolution: {integrity: sha512-yBYjY9QX2hnRmZHAjG/f13MzmBzxzYgQhFrke06TTyKY5zSTEqkOeukBzIdVA3j3ulu8Qa3MbVFShV7T2RmGtQ==}
     engines: {node: '>= 0.4'}
+
+  obscenity@0.4.1:
+    resolution: {integrity: sha512-hzkBkFsoiOVB1tYCnC3dqh/Y/S+iis0hC6mqexVfg+LRCcVS7GLTcbW14+BuKMNDqPwNJsM7+tCVki7gWq73lw==}
+    engines: {node: '>=14.0.0'}
 
   obuf@1.1.2:
     resolution: {integrity: sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==}
@@ -3972,6 +3979,8 @@ snapshots:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-object-atoms: 1.0.0
+
+  obscenity@0.4.1: {}
 
   obuf@1.1.2: {}
 

@@ -1,5 +1,4 @@
 import React from "react";
-import { auth } from "~/server/auth";
 import { type Review } from "~/types";
 import RatingIcon from "../RatingIcon";
 import Image from "next/image";
@@ -21,7 +20,7 @@ export default function ReviewView({ review }: { review: Review }) {
               <div className="rounded-full shadow-lg">
                 {user?.user?.image ? (
                   <Image
-                    src={user.user.image ?? ""}
+                    src={(user.user.image as string) ?? ""}
                     alt="profile_pic"
                     className="rounded-full shadow-md"
                     width={40}
@@ -33,7 +32,7 @@ export default function ReviewView({ review }: { review: Review }) {
               </div>
 
               <h2 className="card-title text-sm">
-                {(user?.user.name as string) || "No User"}
+                {user?.user.name as string}
               </h2>
 
               <RatingIcon reviewScore={review.cringe_score_vote} />

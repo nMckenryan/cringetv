@@ -8,6 +8,17 @@ export type Review = {
     review_rating: number
 }
 
+// 0.0 - 0.25 Safe 
+// 0.26 - 0.5 Caution
+// 0.51 - 0.75 Unsafe
+// 0.76 - 1.0 Danger
+export enum RatingCode {
+    BaseSafeLimit = 0.25,
+    BaseCautionLimit = 0.5,
+    BaseUnsafeLimit = 0.75,
+    BaseDangerLimit = 1
+}
+
 export type TV_Show = {
     tvdb_id: number
     name: string,

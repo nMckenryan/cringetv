@@ -9,19 +9,18 @@ TO DO MVP
 - [x] Set up basic auth
 
 - [x] Set up DB
-  - [] seed with TVDB details
+  - [x] seed with TVDB details
   - [] Omit news shows
   - [x] Seed Genres
   - [x] Seed Content Ratings
-  - [] Finish the links to above
-  - [] Figure out cringe rating system
+  - [x] Finish the links to above
+  - [x] Figure out cringe rating system
   - [] Set default Cringe Rating depending on content rating
   - [] Set up regular content update
 
 - [x] Fix carousel so it works under mobile
-  - Sort by newest release
-  - Sort by most reviewed
-  - Sort by popular
+  - [] Sort by newest release
+  - [] Sort by most reviewed
 
 - [x] - Rig up routing for:
   - [x] homepage
@@ -37,7 +36,6 @@ TO DO MVP
   - [x] search functions
     - [x] search bar ui
   - [x] List of latest tv shows
-    - [] Intuit contents via rating
   - [] - List of latest reviews
 
 - [ ] PROFILE PAGE
@@ -55,4 +53,4 @@ TO DO MVP
   - [x] Show latest reviews
   - [x] Show general consensus review weighing
   - [x] Film synopsis
-  - [] classification ratings
+  - [x] classification ratings

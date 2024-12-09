@@ -5,11 +5,8 @@ import { type TV_Show } from "~/types";
 import { Search, X } from "lucide-react";
 import SearchResult from "./SearchMenuResult";
 import Link from "next/link";
-import { useTVStore } from "~/zustand/store";
 
-export default function SearchBar() {
-  const tvList: TV_Show[] = useTVStore((state) => state.tv_data) as TV_Show[];
-
+export default function SearchBar({ tvList }: { tvList: TV_Show[] }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<TV_Show[]>(tvList);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);

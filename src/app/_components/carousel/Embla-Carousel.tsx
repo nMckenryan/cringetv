@@ -6,7 +6,6 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay, { type AutoplayOptionsType } from "embla-carousel-autoplay";
 import { type TV_Show } from "~/types";
 import noPoster from "../../../../public/noPoster.png";
-import Image from "next/image";
 import {
   NextButton,
   PrevButton,

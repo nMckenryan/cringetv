@@ -73,7 +73,7 @@ model TelevisionShow {
   tvdb_id                 Int             @id @unique
   name                    String
   description             String?
-  aggregate_cringe_rating Float
+  aggregate_cringe_rating Float?
   first_air_date          DateTime
   last_air_date           DateTime?       @db.Date
   series_status           String?
@@ -100,5 +100,6 @@ model Review {
   tvdb_id           Int
   televisionShow    TelevisionShow @relation(fields: [tvdb_id], references: [tvdb_id], onDelete: Cascade)
   cringe_score_vote Int
-  review_rating     Int
+  date_created      DateTime
+  date_updated      DateTime?
 }
