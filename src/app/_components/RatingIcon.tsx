@@ -5,29 +5,23 @@ export default function RatingIcon({ reviewScore }: { reviewScore: number }) {
   const size = 30;
 
   const getRatingIcon = (): JSX.Element => {
-    if (reviewScore >= 0 && reviewScore < RatingCode.BaseSafeLimit.valueOf()) {
+    if (reviewScore >= 0 && reviewScore <= RatingCode.BaseSafeLimit.valueOf()) {
       return <ShieldCheck size={size} className="text-green-500" />;
-    }
-
-    if (
+    } else if (
       reviewScore > RatingCode.BaseSafeLimit.valueOf() &&
       reviewScore <= RatingCode.BaseCautionLimit.valueOf()
     ) {
       return <OctagonAlert size={size} className="text-yellow-500" />;
-    }
-
-    if (
+    } else if (
       reviewScore > RatingCode.BaseCautionLimit.valueOf() &&
       reviewScore <= RatingCode.BaseUnsafeLimit.valueOf()
     ) {
       return <Radiation size={size} className="text-orange-500" />;
-    }
-
-    if (reviewScore >= RatingCode.BaseUnsafeLimit.valueOf()) {
+    } else if (reviewScore >= RatingCode.BaseUnsafeLimit.valueOf()) {
       return <Skull size={size} className="text-red-600" />;
+    } else {
+      return <p>{reviewScore}</p>;
     }
-
-    throw new Error("Invalid review score: " + reviewScore);
   };
 
   return (
@@ -39,27 +33,21 @@ export default function RatingIcon({ reviewScore }: { reviewScore: number }) {
 }
 
 const getRatingText = (reviewScore: number): string => {
-  if (reviewScore >= 0 && reviewScore < RatingCode.BaseSafeLimit.valueOf()) {
+  if (reviewScore >= 0 && reviewScore <= RatingCode.BaseSafeLimit.valueOf()) {
     return "Safe";
-  }
-
-  if (
+  } else if (
     reviewScore > RatingCode.BaseSafeLimit.valueOf() &&
     reviewScore <= RatingCode.BaseCautionLimit.valueOf()
   ) {
     return "Caution";
-  }
-
-  if (
+  } else if (
     reviewScore > RatingCode.BaseCautionLimit.valueOf() &&
     reviewScore <= RatingCode.BaseUnsafeLimit.valueOf()
   ) {
     return "Danger";
-  }
-
-  if (reviewScore >= RatingCode.BaseUnsafeLimit.valueOf()) {
+  } else if (reviewScore >= RatingCode.BaseUnsafeLimit.valueOf()) {
     return "RIP";
+  } else {
+    return reviewScore.toString();
   }
-
-  throw new Error("Invalid review score");
 };

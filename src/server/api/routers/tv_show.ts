@@ -24,15 +24,21 @@ export const tvShowRouter = createTRPCRouter({
         series_status: {
           not: 'Ended',
         }
-      }
+      },
+
     });
   }),
 
   getTVShowById: publicProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.televisionShow.findFirst({
       where: {
-        tvdb_id: input,
+        tvdb_id: Number(input),
       },
+      include: {
+        genres: true,
+        content_ratings: true,
+        reviews: true
+      }
     });
   }),
 });

@@ -23,14 +23,14 @@ export type TV_Show = {
     tvdb_id: number
     name: string,
     description: string,
-    content_rating: ContentRating[],
+    content_ratings: ContentRating[],
     aggregate_cringe_rating: number,
     reviews: Review[],
     first_air_date: Date,
     final_air_date: Date,
     series_status: string,
     poster_link: string,
-    genre: Genre[],
+    genres: Genre[],
     original_country: string,
 }
 
@@ -72,12 +72,12 @@ export type TVDBShow = {
 
 export type Genre = {
     id: number;
-    name: string;
+    genre_name: string;
 }
 
 export type ContentRating = {
     id: number;
-    name: string;
+    content_rating: string;
     country: string;
     description: string;
     contentType: string | null;

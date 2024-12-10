@@ -28,7 +28,6 @@ export default function ReviewForm({ tvdb_id }: { tvdb_id: string }) {
   });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
     createReview.mutate({
       tvdb_id: Number(tvdb_id),
       cringe_score_vote: Number(reviewScore),

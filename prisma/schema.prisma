@@ -60,9 +60,9 @@ model VerificationToken {
 }
 
 model Genre {
-  genre_id       Int              @id @unique
-  genre_name     String           @unique
-  TelevisionShow TelevisionShow[]
+  genre_id        Int              @id @unique
+  genre_name      String           @unique
+  TelevisionShows TelevisionShow[]
 }
 
 model TelevisionShow {
@@ -76,8 +76,8 @@ model TelevisionShow {
   poster_link             String?         @db.VarChar(255)
   genres                  Genre[]
   original_country        String
-  content_rating          ContentRating[]
-  Review                  Review[]
+  content_ratings         ContentRating[]
+  reviews                 Review[]
 }
 
 model ContentRating {

@@ -10,13 +10,14 @@ TO DO MVP
 
 - [x] Set up DB
   - [x] seed with TVDB details
-  - [] Omit news shows
+  - [x] Omit news shows
   - [x] Seed Genres
   - [x] Seed Content Ratings
   - [x] Finish the links to above
   - [x] Figure out cringe rating system
   - [x] Set default Cringe Rating depending on content rating
-  - [] Set up regular content update
+  - [] Set up regular content update (ISR)
+  - [] ERROR: shows stop at 2012 - get new data source
 
 - [x] Fix carousel so it works under mobile
   - [x] Sort by newest release
@@ -36,12 +37,13 @@ TO DO MVP
   - [x] search functions
     - [x] search bar ui
   - [x] List of latest tv shows
+  - [x] Latest reviews (set up trpc route)
   
 - [ ] PROFILE PAGE
   - [x] Route by user id
   - [x] Name,
   - [x] Implement Bio
-  - [] Bio edit page
+  - [x] Bio edit page
   - [x] Account age
   - [] List of reviews
 
@@ -49,8 +51,20 @@ TO DO MVP
   - [x] Build UI
   - [x] Route by ID
   - [x] Review insert section
-    - [] Show current review left by user
+    - [] Show current review left by user as editable form
   - [x] Show latest reviews
   - [x] Show general consensus review weighing
   - [x] Film synopsis
   - [x] classification ratings
+
+- [ ] REVIEW FORM
+  - [] Implement form validation
+  - [x] Implement a form for adding a review
+  - [] Make sure ranking score works
+  - [] Make sure inserts review properly
+
+- [] PUBLISH
+  - [] Clean render bugs
+  - [] Sort mobile responsiveness
+  - [] clean up db/migrations
+  - [] Merge w/ main
