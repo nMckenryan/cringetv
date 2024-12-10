@@ -8,6 +8,7 @@ import { api } from "~/trpc/server";
 
 export default async function App() {
   const tvQuery: TV_Show[] = await api.tvShows.getNewestTvShows();
+  const dangerousShows: TV_Show[] = await api.tvShows.getMostDangerousShows();
 
   return (
     <div className="mt-3 flex flex-col gap-3">
@@ -18,15 +19,10 @@ export default async function App() {
         </UICard>
       </Suspense>
 
-      {/* <UICard>
-        <h4 className="text-xl font-bold text-white">Most Dangerous Shows</h4>
-        <EmblaCarousel collection={tvQuery.data} />
-      </UICard>
-
       <UICard>
-        <h4 className="text-xl font-bold text-white">Recent Reviewed Shows</h4>
-        <EmblaCarousel collection={tvQuery.data} />
-      </UICard> */}
+        <h4 className="text-xl font-bold text-white">Most Dangerous Shows</h4>
+        <EmblaCarousel collection={dangerousShows} />
+      </UICard>
     </div>
   );
 }

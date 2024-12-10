@@ -25,6 +25,20 @@ export const tvShowRouter = createTRPCRouter({
           not: 'Ended',
         }
       },
+    });
+  }),
+
+
+  getMostDangerousShows: publicProcedure.query(({ ctx }) => {
+    return ctx.db.televisionShow.findMany({
+      take: 10,
+      orderBy: {
+        aggregate_cringe_rating: "desc"
+      },
+
+      include: {
+        reviews: true
+      }
 
     });
   }),

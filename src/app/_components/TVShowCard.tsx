@@ -2,16 +2,15 @@ import { type ContentRating, type TV_Show } from "~/types";
 import RatingIcon from "./RatingIcon";
 import Image from "next/image";
 import noPoster from "../../../public/noPoster.png";
+import Flag from "react-flagkit";
 
 export default function TVShowCard({ show }: { show: TV_Show }) {
-  console.log(show);
   return (
     <div className="flex flex-row">
       <Image
-        src={noPoster}
+        src={show.poster_link || noPoster}
         width={125}
         height={250}
-        placeholder="blur"
         alt="placeholder"
         className="rounded-xl shadow-xl"
       />
@@ -43,7 +42,10 @@ export default function TVShowCard({ show }: { show: TV_Show }) {
               Genre{show.genres.length > 1 ? "s: " : ": "}
               {show.genres.map((g) => g.genre_name).join(", ")}
             </p>
-            <p>Country: {show.original_country}</p>
+            <p>
+              Country: {show.original_country}{" "}
+              <Flag country={show.original_country.slice(0, -1)} />
+            </p>
 
             {show.content_ratings.length > 0 && (
               <p>
