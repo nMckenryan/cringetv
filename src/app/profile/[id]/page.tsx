@@ -3,12 +3,20 @@ import { db } from "~/server/db";
 import UICard from "~/app/_components/UICard";
 import NotFound from "~/app/not-found";
 
+import EditBio from "~/app/_components/EditBio";
+
 export default async function ProfilePage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const user = await db.user.findUnique({ where: { id: (await params).id } });
+
+  const reviews = await db.review.findMany({
+    where: {
+      userId: (await params).id,
+    },
+  });
 
   if (!user) {
     return <NotFound />;
@@ -25,11 +33,14 @@ export default async function ProfilePage({
           </div>
         </div>
         <p>{user?.name}</p>
-        <p>Member since: </p>
-        <p>
-          Reviews:
-          {/* {user?.reviews} */}
+        <p className="text-sm">
+          Account Created: {user?.dateCreated.toLocaleDateString("en-au")}
         </p>
+
+        <p className="w-72 text-wrap break-all text-center text-sm">
+          Bio: {user?.userBio ?? "No bio provided"}
+        </p>
+        <EditBio user={user} />
       </UICard>
     </main>
   );

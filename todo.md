@@ -15,11 +15,11 @@ TO DO MVP
   - [x] Seed Content Ratings
   - [x] Finish the links to above
   - [x] Figure out cringe rating system
-  - [] Set default Cringe Rating depending on content rating
+  - [x] Set default Cringe Rating depending on content rating
   - [] Set up regular content update
 
 - [x] Fix carousel so it works under mobile
-  - [] Sort by newest release
+  - [x] Sort by newest release
   - [] Sort by most reviewed
 
 - [x] - Rig up routing for:
@@ -36,13 +36,13 @@ TO DO MVP
   - [x] search functions
     - [x] search bar ui
   - [x] List of latest tv shows
-  - [] - List of latest reviews
-
+  
 - [ ] PROFILE PAGE
   - [x] Route by user id
   - [x] Name,
-  - [] Implement Bio
-  - [] Account age
+  - [x] Implement Bio
+  - [] Bio edit page
+  - [x] Account age
   - [] List of reviews
 
 - [ ] FILM SELECT PAGE

@@ -47,12 +47,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   reviews       Review[]
-}
-
-model UserExtended {
-  userId      String   @id @default(cuid())
-  dateCreated DateTime
-  user_bio    String?
+  dateCreated   DateTime  @default(now())
+  userBio       String?
 }
 
 model VerificationToken {

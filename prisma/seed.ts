@@ -126,6 +126,8 @@ async function seed_genre_and_content_ratings() {
 async function main() {
     const tv_data_from_tmdb: TVDBShow[] = []
 
+    // await db.televisionShow.deleteMany({});
+
     // await seed_genre_and_content_ratings();
 
     await fetch("https://api4.thetvdb.com/v4/series", tvdb_options)
@@ -151,11 +153,19 @@ async function main() {
 
             const genres: Genre[] = extended_tv_data.genres;
 
-            const firstContentRating: ContentRating | undefined = extended_tv_data.contentRatings[0] ?? undefined;
-
             const poster = show.image ? `https://www.thetvdb.com${show.image}` : undefined;
 
-            if (show !== undefined) {
+            //does not seed if it's a news show
+            const omittedGenres = [];
+
+            for (const genre of genres) {
+                if (genre.name === "News") {
+                    omittedGenres.push(genre);
+                }
+            }
+
+
+            if (show !== undefined && omittedGenres.length === 0) {
                 await db.televisionShow.upsert({
                     where: { tvdb_id: show.id },
                     update: {
