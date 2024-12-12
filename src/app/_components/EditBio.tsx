@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import PageModal from "./PageModal";
 import { type User } from "@prisma/client";
 import { api } from "~/trpc/react";
+import { Pencil } from "lucide-react";
 
 export default function EditBio({ user }: { user: User }) {
   const [newBio, setNewBio] = useState(user.userBio ?? "");
@@ -18,7 +19,7 @@ export default function EditBio({ user }: { user: User }) {
 
   return (
     <PageModal
-      buttonTitle="Edit"
+      buttonTitle={<Pencil />}
       modalTitle="Edit Bio"
       confirmFunction={() => editBio.mutate({ bio: newBio })}
     >

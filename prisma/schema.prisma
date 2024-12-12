@@ -98,4 +98,6 @@ model Review {
   cringe_score_vote Int
   date_created      DateTime
   date_updated      DateTime?
+
+  @@unique([userId, tvdb_id])
 }

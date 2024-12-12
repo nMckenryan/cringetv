@@ -6,28 +6,19 @@ import { type Review } from "~/types";
 import ReviewForm from "./Review-Form";
 
 export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
-  const [page, setPage] = React.useState(1);
-  const per_page = 6;
+  const [page, setPage] = React.useState(0);
 
-  const start = page * per_page;
+  const tvId = reviewList[0]?.tvdb_id ?? 0;
+  const per_page = 6;
+  const start = (page + 1) * per_page;
   const end = start + per_page;
 
   const entries = reviewList.slice(start, end);
 
   return (
-    <div className="my-10 flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
       {reviewList.length === 0 ? (
-        <div className="w-full rounded-xl bg-primary-blue-light p-1 shadow-xl">
-          <ReviewForm tvdb_id={reviewList[0].tvdb_id} />
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {reviewList.length === 0 ? (
-        <p className="p-10 text-center text-lg">
-          No Reviews Yet. <br /> Be the first!
-        </p>
+        <p className="p-10 text-center text-lg">No Reviews Yet.</p>
       ) : (
         <div className="flex flex-col items-center gap-1">
           <div className="grid w-[90vw] grid-cols-1 gap-1 md:w-full md:grid-cols-2">

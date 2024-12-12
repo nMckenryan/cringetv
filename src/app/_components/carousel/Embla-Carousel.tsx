@@ -13,7 +13,7 @@ import {
   usePrevNextButtons,
 } from "./Embla-Carousel-Buttons";
 import Link from "next/link";
-import RatingIcon, { getRatingIcon } from "../RatingIcon";
+import { getRatingIcon } from "../RatingIcon";
 
 export default function EmblaCarousel({
   collection,
@@ -41,7 +41,7 @@ export default function EmblaCarousel({
   ) : collection.length > 0 ? (
     <div className="flex items-center">
       <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-      <div className="embla mx-auto text-4xl">
+      <div className="embla mx-auto w-screen text-2xl md:w-[50vw]">
         <div className="embla__viewport" ref={emblaRef}>
           <div className="embla__container">
             {collection.map((tv: TV_Show) => {
@@ -51,33 +51,26 @@ export default function EmblaCarousel({
                     rel="preload"
                     href="/tv_show/[id]"
                     as={`/tv_show/${tv.tvdb_id}`}
-                    className={`card m-2 flex min-h-[250px] min-w-[125px] justify-end bg-cover bg-center font-semibold no-underline shadow-xl transition hover:bg-secondary-purple/50 md:min-h-[400px] md:min-w-[200px]`}
+                    className={`card m-2 flex min-h-[30vw] min-w-[15vw] justify-end bg-cover bg-center font-semibold no-underline shadow-xl transition hover:bg-secondary-purple/50 md:min-h-[15vw] md:min-w-[10vw]`}
                     style={{
                       backgroundImage: `url(${
                         tv.poster_link ? `${tv.poster_link}` : noPoster.src
                       })`,
                     }}
                   >
+                    <div className="badge badge-neutral absolute right-0 top-0">
+                      {getRatingIcon(tv.aggregate_cringe_rating)}
+                    </div>
                     <div className="flex flex-col bg-primary-blue/70 align-bottom">
-                      <h2 className="card-title text-balance text-white">
+                      <h2 className="card-title line-clamp-2 overflow-hidden text-balance text-xs text-white md:text-sm">
                         {tv.name}
                       </h2>
-                      <p className="line-clamp-3 hidden text-sm font-normal text-white">
-                        {tv.description
-                          ? tv.description
-                          : "No Description Available"}
-                      </p>
-                      <div className="card-actions justify-end">
-                        <div className="badge badge-neutral">
-                          {getRatingIcon(tv.aggregate_cringe_rating, 20)}
-                        </div>
 
+                      <div className="card-actions flex flex-row justify-end">
                         <div className="badge badge-neutral">
-                          <Flag country={tv.original_country.slice(0, -1)} />
-                        </div>
-                        <div className="badge badge-neutral">
-                          <p className="text-sm text-slate-50">
-                            {tv.first_air_date.getFullYear()}
+                          <p className="flex text-xs text-slate-50">
+                            {tv.first_air_date.getFullYear()}&nbsp;
+                            <Flag country={tv.original_country.slice(0, -1)} />
                           </p>
                         </div>
                       </div>

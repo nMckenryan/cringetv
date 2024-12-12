@@ -13,11 +13,13 @@ export default async function TopNav() {
   const tvQuery: TV_Show[] = await api.tvShows.getNewestTvShows();
 
   return (
-    <div className="max-w-screen navbar sticky top-0 z-50 flex max-h-10 flex-row justify-between bg-primary-blue-light">
+    <div className="max-w-screen navbar sticky top-0 z-50 flex max-h-10 flex-row justify-between bg-primary-blue-light shadow-2xl">
       <Link className="flex flex-row items-end gap-1 text-xl" href={"/"}>
-        <Image src={cringeLogo} height={30} width={30} alt="logo"></Image>
+        <Image src={cringeLogo} height={40} width={40} alt="logo"></Image>
 
-        <h1 className="text2xl font-bold text-accent-gold">Binge Cringe</h1>
+        <h1 className="hidden text-lg font-bold text-accent-gold md:block">
+          Binge Cringe
+        </h1>
       </Link>
 
       <div className="flex flex-row gap-1">

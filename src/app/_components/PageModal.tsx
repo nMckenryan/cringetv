@@ -28,7 +28,7 @@ const PageModal = ({
   confirmFunction,
   children,
 }: {
-  buttonTitle: string;
+  buttonTitle: React.ReactNode | string;
   modalTitle: string;
   confirmFunction: () => void;
   children: React.ReactNode;
@@ -39,7 +39,7 @@ const PageModal = ({
     <div id="bioform">
       <button
         onClick={() => setModalOpen(true)}
-        className="btn-sm rounded bg-secondary-purple text-white"
+        className="btn btn-sm rounded bg-secondary-purple text-white"
       >
         {buttonTitle}
       </button>

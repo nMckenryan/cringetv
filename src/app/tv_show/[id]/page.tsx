@@ -1,6 +1,7 @@
 import TVShowCard from "~/app/_components/TVShowCard";
 
 import UICard from "~/app/_components/UICard";
+import ReviewForm from "~/app/_components/reviews/Review-Form";
 
 import ReviewList from "~/app/_components/reviews/ReviewList";
 
@@ -21,6 +22,11 @@ export default async function TVShowPage({
       <UICard>
         <TVShowCard show={show} />
       </UICard>
+
+      <div className="w-screen rounded-xl bg-primary-blue p-1 shadow-xl md:w-[60vw]">
+        <ReviewForm selectedTvId={show?.tvdb_id} />
+      </div>
+
       <UICard>
         <ReviewList reviewList={reviewList} />
       </UICard>

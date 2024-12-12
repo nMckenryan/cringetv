@@ -4,10 +4,10 @@ import RatingIcon from "../RatingIcon";
 import Image from "next/image";
 import { CircleHelp } from "lucide-react";
 
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/react";
 
 export default function ReviewView({ review }: { review: Review }) {
-  const user = api.users.getUser(review.userId);
+  const user: { name: string; image: string } = null;
   return (
     <div
       className="card w-full bg-primary-blue-light shadow-xl"
@@ -16,10 +16,6 @@ export default function ReviewView({ review }: { review: Review }) {
       <div className="card-body items-center text-center">
         <div className="flex flex-col gap-2">
           <div className="flex flex-row items-center justify-between gap-3">
-            <RatingIcon reviewScore={review.cringe_score_vote} />
-          </div>
-
-          <div className="rounded-full shadow-lg">
             {user?.image ? (
               <Image
                 src={user.image ?? ""}
@@ -30,11 +26,12 @@ export default function ReviewView({ review }: { review: Review }) {
               />
             ) : (
               <>
-                <CircleHelp size={40} />
+                <CircleHelp className="rounded-full shadow-md" size={40} />
               </>
             )}
+            <RatingIcon reviewScore={review.cringe_score_vote} />
           </div>
-          <p>{user?.name ?? "Unknown User"}</p>
+          <p className="text-sm">{user?.name ?? "Unknown User"}</p>
 
           <p className="text-left text-sm">{review.review_content}</p>
         </div>
