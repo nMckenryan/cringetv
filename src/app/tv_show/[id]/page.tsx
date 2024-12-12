@@ -10,10 +10,9 @@ import { api } from "~/trpc/server";
 export default async function TVShowPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const id = params.id;
-  const show = await api.tvShows.getTVShowById(id);
+  const show = await api.tvShows.getTVShowById((await params).id);
 
   const reviewList = show?.reviews;
 
