@@ -14,6 +14,15 @@ export const reviewRouter = createTRPCRouter({
     });
   }),
 
+  getUserReview: publicProcedure.input(z.object({ tvdb_id: z.number() })).query(({ ctx, input }) => {
+    return ctx.db.review.findFirst({
+      where: {
+        tvdb_id: input.tvdb_id,
+        userId: ctx.session?.user.id
+      }
+    });
+  }),
+
   getMostRecentReviews: publicProcedure.input(z.object({ tvdb_id: z.number() })).query(({ ctx, input }) => {
     return ctx.db.review.findFirst({
       orderBy: {
@@ -35,7 +44,7 @@ export const reviewRouter = createTRPCRouter({
         data: {
           review_content: input.review_content,
           tvdb_id: input.tvdb_id,
-          userId: { connect: { id: ctx.session.user.id } },
+          userId: ctx.session.user.id,
           cringe_score_vote: input.cringe_score_vote,
           date_created: new Date()
         },

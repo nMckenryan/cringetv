@@ -26,7 +26,7 @@ export default function RootLayout({
         <TRPCReactProvider>
           <HydrateClient>
             <TopNav />
-            <main className="justify-top flex min-h-screen flex-col items-center bg-background-black text-white">
+            <main className="justify-top my-3 flex min-h-screen flex-col items-center gap-3 bg-background-black text-white">
               {children}
             </main>
           </HydrateClient>

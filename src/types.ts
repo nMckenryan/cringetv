@@ -5,7 +5,8 @@ export type Review = {
     userId: string
     tvdb_id: number
     cringe_score_vote: number
-    review_rating: number
+    date_created: Date
+    date_updated: Date
 }
 
 // 0.0 - 0.25 Safe 

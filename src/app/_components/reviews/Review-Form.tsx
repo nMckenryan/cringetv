@@ -4,46 +4,41 @@ import { type SubmitHandler, useForm } from "react-hook-form";
 import RatingIcon from "../RatingIcon";
 
 import { api } from "~/trpc/react";
-import { RatingCode } from "~/types";
-
-type Inputs = {
-  tvId: string;
-  reviewBio: string;
-};
+import { RatingCode, Review } from "~/types";
 
 export default function ReviewForm({ tvdb_id }: { tvdb_id: string }) {
-  const [reviewScore, setReviewScore] = React.useState<number | null>(null);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>();
+  const existingUserReview = api.reviews.getUserReview.useQuery({
+    tvdb_id: Number(tvdb_id),
+  });
+
+  const [reviewBio, setReviewBio] = React.useState(
+    existingUserReview ? existingUserReview.data?.review_content : "",
+  );
+  const [reviewScore, setReviewScore] = React.useState<number | null>(
+    existingUserReview ? existingUserReview.data?.cringe_score_vote : null,
+  );
 
   const utils = api.useUtils();
 
   const createReview = api.reviews.createNewReview.useMutation({
     onSuccess: async () => {
       await utils.reviews.invalidate();
+      setReviewScore(null);
     },
   });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    createReview.mutate({
-      tvdb_id: Number(tvdb_id),
-      cringe_score_vote: Number(reviewScore),
-      review_content: data.reviewBio,
-    });
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form>
       <div className="flex flex-col text-center">
         <textarea
-          className="textarea textarea-bordered py-2"
+          className="textarea textarea-bordered w-full"
           placeholder="Add a Review"
-          {...register("reviewBio", { required: true })}
+          onChange={(e) => setReviewBio(e.target.value)}
         />
-
         <div className="flex flex-row items-center justify-around py-2">
           <button
             onClick={() => setReviewScore(0)}
@@ -72,13 +67,13 @@ export default function ReviewForm({ tvdb_id }: { tvdb_id: string }) {
           >
             <RatingIcon reviewScore={RatingCode.BaseDangerLimit} />
           </button>
-
+        </div>
+        <div className="flex flex-row items-center justify-between">
           <input
             type="submit"
             className="btn w-24 border-gray-800 bg-secondary-purple text-white/90 hover:bg-secondary-purple-light"
           />
         </div>
-        {errors.reviewBio && <span>This field is required</span>}
       </div>
     </form>
   );

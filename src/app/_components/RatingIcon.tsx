@@ -24,7 +24,7 @@ export const getRatingIcon = (
   }
 };
 
-const getRatingText = (reviewScore: number): string => {
+export function getRatingText(reviewScore: number): string {
   if (reviewScore >= 0 && reviewScore <= RatingCode.BaseSafeLimit.valueOf()) {
     return "Safe";
   } else if (
@@ -42,7 +42,7 @@ const getRatingText = (reviewScore: number): string => {
   } else {
     return reviewScore.toString();
   }
-};
+}
 
 export default function RatingIcon({ reviewScore }: { reviewScore: number }) {
   return (

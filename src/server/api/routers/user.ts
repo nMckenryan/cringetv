@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   createTRPCRouter,
   protectedProcedure,
+  publicProcedure,
 } from "../trpc";
 
 export const userRouter = createTRPCRouter({
@@ -15,5 +16,16 @@ export const userRouter = createTRPCRouter({
         userBio: input.bio,
       },
     });
-  })
+  }),
+  getUser: publicProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.db.user.findUnique({
+      where: {
+        id: input,
+      },
+      select: {
+        name: true,
+        image: true
+      },
+    });
+  }),
 });
