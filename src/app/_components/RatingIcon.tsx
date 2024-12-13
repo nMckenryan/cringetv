@@ -1,7 +1,8 @@
 import { ShieldCheck, OctagonAlert, Radiation, Skull } from "lucide-react";
 import { RatingCode } from "~/types";
 
-export function getRatingIcon(reviewScore: number): JSX.Element {
+export function getRatingIcon(reviewScore: number | null): JSX.Element {
+  if (reviewScore === null) return <p>?</p>;
   if (reviewScore >= 0 && reviewScore <= RatingCode.BaseSafeLimit.valueOf()) {
     return <ShieldCheck className="text-green-500" />;
   } else if (
@@ -21,7 +22,8 @@ export function getRatingIcon(reviewScore: number): JSX.Element {
   }
 }
 
-export function getRatingText(reviewScore: number): string {
+export function getRatingText(reviewScore: number | null): string {
+  if (reviewScore === null) return "?";
   if (reviewScore >= 0 && reviewScore <= RatingCode.BaseSafeLimit.valueOf()) {
     return "Safe";
   } else if (

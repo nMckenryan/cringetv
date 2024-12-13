@@ -5,12 +5,18 @@ import noPoster from "../../../public/noPoster.png";
 import Flag from "react-flagkit";
 
 export default function TVShowCard({ show }: { show: TV_Show }) {
+  const finalDate: string = show.last_air_date
+    ? show.last_air_date.toLocaleString("en-US", {
+        year: "numeric",
+      })
+    : "";
+
   return (
     <div className="flex flex-col items-center px-0 lg:flex-row">
       <div id="tv-card-top" className="w-lg flex flex-row justify-around gap-5">
         <div className="flex flex-col items-center">
           <Image
-            src={show.poster_link || noPoster}
+            src={show.poster_link ?? noPoster}
             width={100}
             height={150}
             alt={`${show.name} poster`}
@@ -32,12 +38,7 @@ export default function TVShowCard({ show }: { show: TV_Show }) {
               year: "numeric",
             })}
 
-            {show.series_status === "Ended"
-              ? " - " +
-                show.final_air_date.toLocaleString("en-US", {
-                  year: "numeric",
-                })
-              : " - Present"}
+            {show.series_status === "Ended" ? " - " + finalDate : " - Present"}
           </p>
           <p>Status: {show.series_status}</p>
 
@@ -46,7 +47,7 @@ export default function TVShowCard({ show }: { show: TV_Show }) {
             <Flag country={show.original_country.slice(0, -1)} />
           </p>
 
-          {show.content_ratings.length > 0 ? (
+          {show.content_ratings ? (
             <p>
               {show.content_ratings
                 .map((cr: ContentRating) => cr.content_rating)
@@ -54,7 +55,7 @@ export default function TVShowCard({ show }: { show: TV_Show }) {
             </p>
           ) : null}
 
-          {show.genres.length > 0 ? (
+          {show.genres ? (
             <p>{show.genres.map((g) => g.genre_name).join(" ")}</p>
           ) : null}
         </div>

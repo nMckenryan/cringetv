@@ -31,6 +31,7 @@ export type TV_Show = {
     poster_link: string | null;
     original_country: string;
     genres: Genre[] | null;
+    content_ratings: ContentRating[] | null;
 }
 
 
