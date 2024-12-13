@@ -83,10 +83,10 @@ async function seed_genre_and_content_ratings() {
     async function getGenres(genre_list: Genre[]) {
         for (const g of genre_list) {
             await db.genre.upsert({
-                where: { genre_id: g.id },
+                where: { genre_id: g.genre_id },
                 update: {},
                 create: {
-                    genre_id: g.id,
+                    genre_id: g.genre_id,
                     genre_name: g.genre_name,
                 }
             })
