@@ -37,7 +37,7 @@ export default function SearchBar({ tvList }: { tvList: TV_Show[] }) {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const searchContainer = document.getElementById("search-container");
-      if (searchContainer && !searchContainer.contains(event.target)) {
+      if (searchContainer && !searchContainer.contains(event.target as Node)) {
         setIsDropdownOpen(false);
       }
     };

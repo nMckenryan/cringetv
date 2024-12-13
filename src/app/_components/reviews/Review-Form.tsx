@@ -3,7 +3,7 @@ import React from "react";
 import RatingIcon from "../RatingIcon";
 
 import { api } from "~/trpc/react";
-import { RatingCode, Review } from "~/types";
+import { RatingCode } from "~/types";
 
 export default function ReviewForm({ selectedTvId }: { selectedTvId: number }) {
   const existingUserReview = api.reviews.getUserReview.useQuery({

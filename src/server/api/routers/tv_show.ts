@@ -7,7 +7,12 @@ import {
 
 export const tvShowRouter = createTRPCRouter({
   getAllTvShows: publicProcedure.query(({ ctx }) => {
-    return ctx.db.televisionShow.findMany();
+    return ctx.db.televisionShow.findMany({
+      include: {
+        genres: true,
+        content_ratings: true
+      },
+    });
   }),
 
   getNewestTvShows: publicProcedure.query(({ ctx }) => {

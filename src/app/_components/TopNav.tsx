@@ -4,13 +4,12 @@ import Image from "next/image";
 import cringeLogo from "../../../public/android-chrome-192x192.png";
 
 import SearchBar from "./search-components/SearchBar";
-import { type TV_Show } from "~/types";
 import { api } from "~/trpc/server";
 
 export default async function TopNav() {
   const session = await auth();
 
-  const tvQuery: TV_Show[] = await api.tvShows.getAllTvShows();
+  const tvQuery = await api.tvShows.getAllTvShows();
 
   return (
     <div className="max-w-screen navbar sticky top-0 z-50 flex max-h-10 flex-row justify-between bg-primary-blue-light shadow-2xl">

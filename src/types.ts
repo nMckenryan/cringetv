@@ -21,18 +21,16 @@ export enum RatingCode {
 }
 
 export type TV_Show = {
-    tvdb_id: number
-    name: string,
-    description: string,
-    content_ratings: ContentRating[],
-    aggregate_cringe_rating: number,
-    reviews: Review[],
-    first_air_date: Date,
-    final_air_date: Date,
-    series_status: string,
-    poster_link: string,
-    genres: Genre[],
-    original_country: string,
+    description: string | null;
+    tvdb_id: number;
+    name: string;
+    aggregate_cringe_rating: number | null;
+    first_air_date: Date;
+    last_air_date: Date | null;
+    series_status: string | null;
+    poster_link: string | null;
+    original_country: string;
+    genres: Genre[] | null;
 }
 
 
