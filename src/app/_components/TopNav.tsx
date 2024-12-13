@@ -5,6 +5,7 @@ import cringeLogo from "../../../public/android-chrome-192x192.png";
 
 import SearchBar from "./search-components/SearchBar";
 import { api } from "~/trpc/server";
+import { type TV_Show } from "~/types";
 
 export default async function TopNav() {
   const session = await auth();
@@ -22,7 +23,7 @@ export default async function TopNav() {
       </Link>
 
       <div className="flex flex-row gap-1">
-        <SearchBar tvList={tvQuery} />
+        <SearchBar tvList={tvQuery as unknown as TV_Show[]} />
         {session ? (
           <div className="dropdown dropdown-end">
             <div

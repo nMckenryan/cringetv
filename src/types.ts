@@ -71,7 +71,7 @@ export type TVDBShow = {
 }
 
 export type Genre = {
-    id: number;
+    genre_id: number;
     genre_name: string;
 }
 

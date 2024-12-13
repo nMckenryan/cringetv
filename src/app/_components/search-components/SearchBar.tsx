@@ -48,9 +48,9 @@ export default function SearchBar({ tvList }: { tvList: TV_Show[] }) {
     };
   }, []);
 
-  const updateSearchResults = useTVStore(
-    (state) => state.populate_search_result,
-  );
+  // const updateSearchResults = useTVStore(
+  //   (state) => state.populate_search_result,
+  // );
 
   return (
     <div id="search-container" className="relative mx-auto w-full max-w-md">
@@ -81,7 +81,7 @@ export default function SearchBar({ tvList }: { tvList: TV_Show[] }) {
             className="flex h-10 w-full flex-row items-center justify-center p-4 align-middle text-sm text-neutral-200 hover:bg-primary-blue-dark"
             href={`/search?q=${encodeURIComponent(searchTerm)}`}
             onClick={() => {
-              updateSearchResults(searchResults);
+              // updateSearchResults(searchResults);
               clearSearch();
             }}
           >
