@@ -41,7 +41,7 @@ export function calculateBaseCringeRating(showDetails: TVDB_Extended): number | 
         return 0.20;
     }
 
-    const ratingName = contentRatings.name;
+    const ratingName = contentRatings.content_rating;
     const ratingNumber = Number((/\d+/.exec(ratingName))?.[0]);
 
     if (!isNaN(ratingNumber)) {
@@ -87,7 +87,7 @@ async function seed_genre_and_content_ratings() {
                 update: {},
                 create: {
                     genre_id: g.id,
-                    genre_name: g.name,
+                    genre_name: g.genre_name,
                 }
             })
         }
@@ -105,10 +105,15 @@ async function seed_genre_and_content_ratings() {
         for (const cr of content_rating_list) {
             await db.contentRating.upsert({
                 where: { content_rating_id: cr.id },
-                update: {},
+                update: {
+                    content_rating_id: cr.id,
+                    content_rating: cr.content_rating,
+                    rating_country: cr.country,
+                    content_rating_description: cr.description ?? "No description available",
+                },
                 create: {
                     content_rating_id: cr.id,
-                    content_rating: cr.name,
+                    content_rating: cr.content_rating,
                     rating_country: cr.country,
                     content_rating_description: cr.description ?? "No description available",
                 }
@@ -126,9 +131,7 @@ async function seed_genre_and_content_ratings() {
 async function main() {
     const tv_data_from_tmdb: TVDBShow[] = []
 
-    // await db.televisionShow.deleteMany({});
-
-    // await seed_genre_and_content_ratings();
+    await seed_genre_and_content_ratings();
 
     await fetch("https://api4.thetvdb.com/v4/series", tvdb_options)
         .then((response) => response.json() as Promise<TVDB_Response>)
@@ -159,7 +162,7 @@ async function main() {
             const omittedGenres = [];
 
             for (const genre of genres) {
-                if (genre.name === "News") {
+                if (genre.genre_name === "News") {
                     omittedGenres.push(genre);
                 }
             }
@@ -182,16 +185,16 @@ async function main() {
                                 where: { genre_id: genre.id },
                                 create: {
                                     genre_id: genre.id,
-                                    genre_name: genre.name,
+                                    genre_name: genre.genre_name,
                                 },
                             })),
                         },
-                        content_rating: {
+                        content_ratings: {
                             connectOrCreate: extended_tv_data.contentRatings.map((cr: ContentRating) => ({
                                 where: { content_rating_id: cr.id },
                                 create: {
                                     content_rating_id: cr.id,
-                                    content_rating: cr.name,
+                                    content_rating: cr.content_rating,
                                     rating_country: cr.country,
                                     content_rating_description: cr.description ?? "No description available",
                                 }
@@ -213,16 +216,16 @@ async function main() {
                                 where: { genre_id: genre.id },
                                 create: {
                                     genre_id: genre.id,
-                                    genre_name: genre.name,
+                                    genre_name: genre.genre_name,
                                 },
                             })),
                         },
-                        content_rating: {
+                        content_ratings: {
                             connectOrCreate: extended_tv_data.contentRatings.map((cr: ContentRating) => ({
                                 where: { content_rating_id: cr.id },
                                 create: {
                                     content_rating_id: cr.id,
-                                    content_rating: cr.name,
+                                    content_rating: cr.content_rating,
                                     rating_country: cr.country,
                                     content_rating_description: cr.description ?? "No description available",
                                 }

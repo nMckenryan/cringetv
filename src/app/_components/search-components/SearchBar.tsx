@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { type TV_Show } from "~/types";
 import { Search, X } from "lucide-react";
 import SearchResult from "./SearchMenuResult";
+import { useTVStore } from "~/zustand/store";
 import Link from "next/link";
 
 export default function SearchBar({ tvList }: { tvList: TV_Show[] }) {
@@ -47,6 +48,10 @@ export default function SearchBar({ tvList }: { tvList: TV_Show[] }) {
     };
   }, []);
 
+  const updateSearchResults = useTVStore(
+    (state) => state.populate_search_result,
+  );
+
   return (
     <div id="search-container" className="relative mx-auto w-full max-w-md">
       <div className="relative">
@@ -76,6 +81,7 @@ export default function SearchBar({ tvList }: { tvList: TV_Show[] }) {
             className="flex h-10 w-full flex-row items-center justify-center p-4 align-middle text-sm text-neutral-200 hover:bg-primary-blue-dark"
             href={`/search?q=${encodeURIComponent(searchTerm)}`}
             onClick={() => {
+              updateSearchResults(searchResults);
               clearSearch();
             }}
           >

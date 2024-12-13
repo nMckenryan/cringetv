@@ -7,11 +7,7 @@ import {
 
 export const tvShowRouter = createTRPCRouter({
   getAllTvShows: publicProcedure.query(({ ctx }) => {
-    return ctx.db.televisionShow.findMany({
-      orderBy: {
-        last_air_date: "desc",
-      }
-    });
+    return ctx.db.televisionShow.findMany();
   }),
 
   getNewestTvShows: publicProcedure.query(({ ctx }) => {

@@ -5,9 +5,7 @@ import { type TV_Show } from "~/types";
 import { Suspense } from "react";
 
 import { api } from "~/trpc/server";
-import Image from "next/image";
-import cringeLogo from "../../public/cringetv-logo.png";
-import RatingIcon, { getRatingIcon } from "./_components/RatingIcon";
+import { getRatingIcon } from "./_components/RatingIcon";
 
 export default async function App() {
   const newTV: TV_Show[] = await api.tvShows.getNewestTvShows();
@@ -18,10 +16,10 @@ export default async function App() {
       <UICard>
         <div className="flex-grid flex">
           <>
-            {getRatingIcon(0, 30)} {getRatingIcon(0.5, 30)}
-          </>{" "}
+            {getRatingIcon(0)} {getRatingIcon(0.5)}
+          </>
           <>
-            {getRatingIcon(0.75, 30)} {getRatingIcon(1, 30)}
+            {getRatingIcon(0.75)} {getRatingIcon(1)}
           </>
         </div>
         <div className="flex flex-row items-center justify-center gap-2">
