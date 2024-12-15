@@ -3,6 +3,7 @@ import { getRatingIcon, getRatingText } from "./RatingIcon";
 import Image from "next/image";
 import noPoster from "../../../public/noPoster.png";
 import Flag from "react-flagkit";
+import BackButton from "./BackButton";
 
 export default function TVShowCard({ show }: { show: TV_Show }) {
   const finalDate: string = show.last_air_date
@@ -13,6 +14,7 @@ export default function TVShowCard({ show }: { show: TV_Show }) {
 
   return (
     <div className="flex flex-col items-center px-0 lg:flex-row">
+      <BackButton className="absolute left-1 top-1" />
       <div id="tv-card-top" className="w-lg flex flex-row justify-around gap-5">
         <div className="flex flex-col items-center">
           <Image

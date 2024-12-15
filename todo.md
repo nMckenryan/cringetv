@@ -9,6 +9,7 @@ TO DO MVP
 - [x] Set up basic auth
 
 - [x] Set up DB
+
   - [x] seed with TVDB details
   - [x] Omit news shows
   - [x] Seed Genres
@@ -20,6 +21,7 @@ TO DO MVP
   - [] ERROR: shows stop at 2012 - get new data source
 
 - [x] Fix carousel so it works under mobile
+
   - [x] Sort by newest release
   - [] Sort by most reviewed
 
@@ -38,8 +40,8 @@ TO DO MVP
     - [x] search bar ui
   - [x] List of latest tv shows
   - [x] Latest reviews (set up trpc route)
-  
 - [ ] PROFILE PAGE
+
   - [x] Route by user id
   - [x] Name,
   - [x] Implement Bio
@@ -48,6 +50,7 @@ TO DO MVP
   - [] List of reviews
 
 - [ ] FILM SELECT PAGE
+
   - [x] Build UI
   - [x] Route by ID
   - [x] Review insert section
@@ -58,6 +61,7 @@ TO DO MVP
   - [x] classification ratings
 
 - [ ] REVIEW FORM
+
   - [] Implement form validation
   - [x] Implement a form for adding a review
   - [] Make sure ranking score works

@@ -6,6 +6,7 @@ import cringeLogo from "../../../public/android-chrome-192x192.png";
 import SearchBar from "./search-components/SearchBar";
 import { api } from "~/trpc/server";
 import { type TV_Show } from "~/types";
+import { LogIn } from "lucide-react";
 
 export default async function TopNav() {
   const session = await auth();
@@ -55,11 +56,8 @@ export default async function TopNav() {
             </ul>
           </div>
         ) : (
-          <Link
-            href="/api/auth/signin"
-            className="0 border-1 rounded-full bg-secondary-purple px-10 py-3 font-semibold text-white no-underline transition hover:bg-secondary-purple/50"
-          >
-            Sign in
+          <Link href="/api/auth/signin" className="text-white">
+            <LogIn />
           </Link>
         )}{" "}
       </div>

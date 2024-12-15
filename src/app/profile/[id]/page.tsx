@@ -5,6 +5,7 @@ import NotFound from "~/app/not-found";
 
 import EditBio from "~/app/_components/EditBio";
 import ReviewList from "~/app/_components/reviews/ReviewList";
+import BackButton from "~/app/_components/BackButton";
 
 export default async function ProfilePage({
   params,
@@ -26,6 +27,7 @@ export default async function ProfilePage({
   return (
     <main className="mt-3 flex flex-col gap-3">
       <UICard>
+        <BackButton className="absolute left-1 top-1" />
         <div className="avatar">
           <div className="w-24 rounded-full">
             <picture>
