@@ -22,7 +22,7 @@ export default async function TVShowPage({
         <TVShowCard show={show} />
       </UICard>
 
-      <div className="w-screen rounded-xl bg-primary-blue p-1 shadow-xl md:w-[60vw]">
+      <div className="w-screen rounded-xl bg-primary-blue p-1 shadow-xl md:w-[80vw]">
         <ReviewForm selectedTvId={show?.tvdb_id} />
       </div>
 

@@ -4,8 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { type TV_Show } from "~/types";
 import { Search, X } from "lucide-react";
 import SearchResult from "./SearchMenuResult";
-import { useTVStore } from "~/zustand/store";
-import Link from "next/link";
 
 export default function SearchBar({ tvList }: { tvList: TV_Show[] }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,10 +46,6 @@ export default function SearchBar({ tvList }: { tvList: TV_Show[] }) {
     };
   }, []);
 
-  // const updateSearchResults = useTVStore(
-  //   (state) => state.populate_search_result,
-  // );
-
   return (
     <div id="search-container" className="relative mx-auto w-full max-w-md">
       <div className="relative">
@@ -61,7 +55,7 @@ export default function SearchBar({ tvList }: { tvList: TV_Show[] }) {
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
           placeholder="Search Movies"
-          className="w-full rounded-md border p-2 pl-8 focus:outline-none focus:ring-2 focus:ring-secondary-purple-light"
+          className="w-full rounded-md border p-2 pl-8 text-sm focus:outline-none focus:ring-2 focus:ring-secondary-purple-light md:text-lg lg:text-xl"
         />
         {searchTerm && (
           <X
@@ -77,7 +71,7 @@ export default function SearchBar({ tvList }: { tvList: TV_Show[] }) {
           {searchResults.map((tv: TV_Show) => (
             <SearchResult key={tv.tvdb_id} tv={tv} clearSearch={clearSearch} />
           ))}
-          <Link
+          {/* <Link
             className="flex h-10 w-full flex-row items-center justify-center p-4 align-middle text-sm text-neutral-200 hover:bg-primary-blue-dark"
             href={`/search?q=${encodeURIComponent(searchTerm)}`}
             onClick={() => {
@@ -88,7 +82,7 @@ export default function SearchBar({ tvList }: { tvList: TV_Show[] }) {
             <p className="text-md text-gray-800 dark:text-neutral-200">
               See all results
             </p>
-          </Link>
+          </Link> */}
         </div>
       )}
     </div>

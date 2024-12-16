@@ -36,10 +36,12 @@ TO DO MVP
 - [x] Auth0
 
 - [ ] HOMEPAGE COMPONENTS:
+
   - [x] search functions
     - [x] search bar ui
   - [x] List of latest tv shows
   - [x] Latest reviews (set up trpc route)
+
 - [ ] PROFILE PAGE
 
   - [x] Route by user id
@@ -48,6 +50,11 @@ TO DO MVP
   - [x] Bio edit page
   - [x] Account age
   - [] List of reviews
+
+- [] SEARCH
+
+  - [x] Search form
+  - [x] Search results
 
 - [ ] FILM SELECT PAGE
 
@@ -66,6 +73,9 @@ TO DO MVP
   - [x] Implement a form for adding a review
   - [] Make sure ranking score works
   - [] Make sure inserts review properly
+  - [ ] Update review
+  - [] Delete review
+  - [] Calculate consensus rating
 
 - [] PUBLISH
   - [] Clean render bugs
