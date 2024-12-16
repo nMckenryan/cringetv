@@ -3,7 +3,6 @@
 import React from "react";
 import ReviewView from "./ReviewView";
 import { type Review } from "~/types";
-import ReviewForm from "./Review-Form";
 
 export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
   const [page, setPage] = React.useState(0);
@@ -16,7 +15,7 @@ export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
   const entries = reviewList.slice(start, end);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex w-[70vw] flex-col gap-2">
       {reviewList.length === 0 ? (
         <p className="p-10 text-center text-lg">No Reviews Yet.</p>
       ) : (

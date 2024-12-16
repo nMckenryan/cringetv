@@ -10,6 +10,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 import { HydrateClient } from "~/trpc/server";
 import "../styles/embla.css";
 import TopNav from "./_components/TopNav";
+import Footer from "./_components/Footer";
 
 export const metadata: Metadata = {
   title: "BingeCringe",
@@ -29,6 +30,7 @@ export default function RootLayout({
             <main className="justify-top my-3 flex min-h-screen flex-col items-center gap-3 bg-background-black text-white">
               {children}
             </main>
+            <Footer />
           </HydrateClient>
         </TRPCReactProvider>
       </body>

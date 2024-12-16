@@ -32,9 +32,9 @@ export default function ReviewForm({ selectedTvId }: { selectedTvId: number }) {
   };
 
   return (
-    <form className="flex flex-col text-center">
+    <form className="flex w-full flex-col text-center md:w-[60vw]">
       <textarea
-        className="textarea textarea-bordered w-full bg-primary-blue-light text-white"
+        className="textarea textarea-bordered h-[5vw] w-full bg-primary-blue-light text-white"
         placeholder="Add a Review"
         onChange={(e) => setReviewBio(e.target.value)}
       />
