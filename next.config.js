@@ -7,7 +7,32 @@ import "./src/env.js";
 /** @type {import("next").NextConfig} */
 const config = {
   images: {
-    domains: ["thetvdb.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "thetvdb.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.thetvdb.com",
+      },
+      {
+        protocol: "https",
+        hostname: "artworks.thetvdb.com",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.discordapp.com",
+      },
+      {
+        protocol: "https",
+        hostname: "s.gravatar.com",
+      },
+      {
+        protocol: "https",
+        hostname: "m.media-amazon.com",
+      },
+    ],
   },
 };
 
