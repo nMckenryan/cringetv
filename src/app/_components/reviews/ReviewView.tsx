@@ -7,7 +7,11 @@ import { CircleHelp } from "lucide-react";
 import { api } from "~/trpc/react";
 
 export default function ReviewView({ review }: { review: Review }) {
-  const user: { name: string; image: string } = null;
+  const user: { name: string; image: string } = {
+    name: "none",
+    image: "none",
+  };
+
   return (
     <div
       className="card w-full bg-primary-blue-light shadow-xl"
