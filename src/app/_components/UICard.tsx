@@ -2,10 +2,11 @@
 
 export default function UICard({ children }: { children: React.ReactNode }) {
   return (
-    <main className="bg-background-black flex flex-col items-center justify-center text-white">
-      <div className="card bg-primary text-primary-content">
-        <div className="card-body">{children}</div>
-      </div>
-    </main>
+    <div
+      id="ui-card"
+      className="card w-screen bg-primary-blue px-10 shadow-xl md:w-[80vw]"
+    >
+      <div className="card-body items-center">{children}</div>
+    </div>
   );
 }
