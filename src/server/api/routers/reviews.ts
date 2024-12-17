@@ -24,7 +24,7 @@ export const reviewRouter = createTRPCRouter({
   }),
 
   getMostRecentReviews: publicProcedure.input(z.object({ tvdb_id: z.number() })).query(({ ctx, input }) => {
-    return ctx.db.review.findFirst({
+    return ctx.db.review.findMany({
       orderBy: {
         date_created: "desc",
       },

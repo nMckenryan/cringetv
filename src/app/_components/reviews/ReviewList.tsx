@@ -9,7 +9,7 @@ export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
 
   const tvId = reviewList[0]?.tvdb_id ?? 0;
   const per_page = 6;
-  const start = (page + 1) * per_page;
+  const start = page * per_page;
   const end = start + per_page;
 
   const entries = reviewList.slice(start, end);

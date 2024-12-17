@@ -15,6 +15,22 @@ export const tvShowRouter = createTRPCRouter({
     });
   }),
 
+  searchTVShows: publicProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.db.televisionShow.findMany({
+      take: 5,
+      where: {
+        name: {
+          contains: input,
+          mode: "insensitive"
+        },
+      },
+      include: {
+        genres: true,
+        content_ratings: true
+      }
+    });
+  }),
+
   getNewestTvShows: publicProcedure.query(({ ctx }) => {
     return ctx.db.televisionShow.findMany({
       take: 10,

@@ -13,6 +13,7 @@ import {
   usePrevNextButtons,
 } from "./Embla-Carousel-Buttons";
 import Link from "next/link";
+import Image from "next/image";
 import { getRatingIcon } from "../RatingIcon";
 
 export default function EmblaCarousel({
@@ -54,13 +55,16 @@ export default function EmblaCarousel({
                     rel="preload"
                     href="/tv_show/[id]"
                     as={`/tv_show/${tv.tvdb_id}`}
-                    className={`card m-2 flex min-h-[50vw] min-w-[40vw] justify-end bg-cover bg-center font-semibold no-underline shadow-xl transition hover:bg-secondary-purple/50 md:min-h-[25vw] md:min-w-[15vw]`}
-                    style={{
-                      backgroundImage: `url(${
-                        tv.poster_link ? `${tv.poster_link}` : noPoster.src
-                      })`,
-                    }}
+                    className={`card relative m-2 flex min-h-[50vw] min-w-[40vw] justify-end font-semibold no-underline shadow-xl transition hover:bg-secondary-purple/50 md:min-h-[25vw] md:min-w-[15vw]`}
                   >
+                    <Image
+                      src={tv.poster_link ?? noPoster.src}
+                      alt={`${tv.name} poster`}
+                      fill
+                      sizes="(max-width: 768px) 40vw, 15vw"
+                      className="object-cover"
+                      priority
+                    />
                     <div className="badge badge-neutral absolute right-0 top-0">
                       {getRatingIcon(tv.aggregate_cringe_rating)}
                     </div>
