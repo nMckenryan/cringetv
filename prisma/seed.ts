@@ -182,9 +182,9 @@ async function main() {
                         poster_link: poster,
                         genres: {
                             connectOrCreate: genres.map((genre: Genre) => ({
-                                where: { genre_id: genre.id },
+                                where: { genre_id: genre.genre_id },
                                 create: {
-                                    genre_id: genre.id,
+                                    genre_id: genre.genre_id,
                                     genre_name: genre.genre_name,
                                 },
                             })),
@@ -213,9 +213,9 @@ async function main() {
                         poster_link: poster,
                         genres: {
                             connectOrCreate: genres.map((genre: Genre) => ({
-                                where: { genre_id: genre.id },
+                                where: { genre_id: genre.genre_id },
                                 create: {
-                                    genre_id: genre.id,
+                                    genre_id: genre.genre_id,
                                     genre_name: genre.genre_name,
                                 },
                             })),
