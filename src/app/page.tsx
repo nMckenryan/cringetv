@@ -1,15 +1,16 @@
 import UICard from "./_components/UICard";
 import EmblaCarousel from "./_components/carousel/Embla-Carousel";
 
-import { type TV_Show } from "~/types";
+import { type TV_Show_Basic } from "~/types";
 import { Suspense } from "react";
 
 import { api } from "~/trpc/server";
 import { getRatingIcon } from "./_components/RatingIcon";
 
 export default async function App() {
-  const newTV: TV_Show[] = await api.tvShows.getNewestTvShows();
-  const dangerousShows: TV_Show[] = await api.tvShows.getMostDangerousShows();
+  const newTV: TV_Show_Basic[] = await api.tvShows.getNewestTvShows();
+  const dangerousShows: TV_Show_Basic[] =
+    await api.tvShows.getMostDangerousShows();
 
   return (
     <div className="mt-3 flex flex-col gap-3">

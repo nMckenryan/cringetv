@@ -6,8 +6,9 @@ export type Review = {
     tvdb_id: number
     cringe_score_vote: number
     date_created: Date
-    date_updated: Date
+    date_updated: Date | null
 }
+
 
 // 0.0 - 0.25 Safe 
 // 0.26 - 0.5 Caution
@@ -32,6 +33,16 @@ export type TV_Show = {
     original_country: string;
     genres: Genre[] | null;
     content_ratings: ContentRating[] | null;
+    reviews: Review[] | null;
+}
+
+export type TV_Show_Basic = {
+    tvdb_id: number;
+    name: string;
+    aggregate_cringe_rating: number | null;
+    first_air_date: Date;
+    poster_link: string | null;
+    original_country: string;
 }
 
 
@@ -76,13 +87,10 @@ export type Genre = {
 }
 
 export type ContentRating = {
-    id: number;
+    content_rating_id: number;
     content_rating: string;
-    country: string;
-    description: string;
-    contentType: string | null;
-    order: number | null;
-    fullName: string | null;
+    rating_country: string;
+    content_rating_description: string;
 }
 
 export type ContentRatingResponse = {

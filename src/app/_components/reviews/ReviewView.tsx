@@ -4,8 +4,6 @@ import RatingIcon from "../RatingIcon";
 import Image from "next/image";
 import { CircleHelp } from "lucide-react";
 
-import { api } from "~/trpc/react";
-
 export default function ReviewView({ review }: { review: Review }) {
   const user: { name: string; image: string } = {
     name: "none",

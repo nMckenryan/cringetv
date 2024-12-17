@@ -5,7 +5,7 @@ import React from "react";
 import { type EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay, { type AutoplayOptionsType } from "embla-carousel-autoplay";
-import { type TV_Show } from "~/types";
+import { type TV_Show_Basic } from "~/types";
 import noPoster from "../../../../public/noPoster.png";
 import {
   NextButton,
@@ -19,7 +19,7 @@ import { getRatingIcon } from "../RatingIcon";
 export default function EmblaCarousel({
   collection,
 }: {
-  collection: TV_Show[];
+  collection: TV_Show_Basic[];
 }) {
   const options: EmblaOptionsType = { dragFree: true, loop: true };
   const autoplayOptions: AutoplayOptionsType = {
@@ -48,7 +48,7 @@ export default function EmblaCarousel({
       <div className="embla mx-auto w-screen text-2xl md:w-[70vw]">
         <div className="embla__viewport" ref={emblaRef}>
           <div className="embla__container">
-            {collection.map((tv: TV_Show) => {
+            {collection.map((tv: TV_Show_Basic) => {
               return (
                 <div className="flex flex-col" key={tv.tvdb_id}>
                   <Link

@@ -41,7 +41,7 @@ export const tvShowRouter = createTRPCRouter({
         series_status: {
           not: 'Ended',
         }
-      },
+      }
     });
   }),
 

@@ -104,18 +104,18 @@ async function seed_genre_and_content_ratings() {
     async function setContentRatings(content_rating_list: ContentRating[]) {
         for (const cr of content_rating_list) {
             await db.contentRating.upsert({
-                where: { content_rating_id: cr.id },
+                where: { content_rating_id: cr.content_rating_id },
                 update: {
-                    content_rating_id: cr.id,
+                    content_rating_id: cr.content_rating_id,
                     content_rating: cr.content_rating,
-                    rating_country: cr.country,
-                    content_rating_description: cr.description ?? "No description available",
+                    rating_country: cr.rating_country,
+                    content_rating_description: cr.content_rating_description ?? "No description available",
                 },
                 create: {
-                    content_rating_id: cr.id,
+                    content_rating_id: cr.content_rating_id,
                     content_rating: cr.content_rating,
-                    rating_country: cr.country,
-                    content_rating_description: cr.description ?? "No description available",
+                    rating_country: cr.rating_country,
+                    content_rating_description: cr.content_rating_description ?? "No description available",
                 }
             })
         }
@@ -191,12 +191,12 @@ async function main() {
                         },
                         content_ratings: {
                             connectOrCreate: extended_tv_data.contentRatings.map((cr: ContentRating) => ({
-                                where: { content_rating_id: cr.id },
+                                where: { content_rating_id: cr.content_rating_id },
                                 create: {
-                                    content_rating_id: cr.id,
+                                    content_rating_id: cr.content_rating_id,
                                     content_rating: cr.content_rating,
-                                    rating_country: cr.country,
-                                    content_rating_description: cr.description ?? "No description available",
+                                    rating_country: cr.rating_country,
+                                    content_rating_description: cr.content_rating_description ?? "No description available",
                                 }
                             })),
                         },
@@ -222,12 +222,12 @@ async function main() {
                         },
                         content_ratings: {
                             connectOrCreate: extended_tv_data.contentRatings.map((cr: ContentRating) => ({
-                                where: { content_rating_id: cr.id },
+                                where: { content_rating_id: cr.content_rating_id },
                                 create: {
-                                    content_rating_id: cr.id,
+                                    content_rating_id: cr.content_rating_id,
                                     content_rating: cr.content_rating,
-                                    rating_country: cr.country,
-                                    content_rating_description: cr.description ?? "No description available",
+                                    rating_country: cr.rating_country,
+                                    content_rating_description: cr.content_rating_description ?? "No description available",
                                 }
                             })),
                         },
