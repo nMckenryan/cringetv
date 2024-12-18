@@ -45,45 +45,44 @@ export type TV_Show_Basic = {
     original_country: string;
 }
 
+export type TV_Show_Search = {
+    description: string | null;
+    tvdb_id: number;
+    name: string;
+    aggregate_cringe_rating: number | null;
+    first_air_date: Date;
+    last_air_date: Date | null;
+    series_status: string | null;
+    poster_link: string | null;
+    original_country: string;
+}
+
 
 export type TVDBShow = {
     id: number
-    tvdb_id: number;
-    name: string;
-    slug: string;
-    image: string;
-    nameTranslations: string[];
-    overviewTranslations: string[];
-    aliases: {
-        language: string;
-        name: string;
-    }[];
-
     firstAired: string;
     lastAired: string;
-    nextAired: string;
-    score: number;
-    status: {
-        id: number | null;
-        name: string | null;
-        recordType: string;
-        keepUpdated: boolean;
-    };
-
-    originalCountry: string;
-    originalLanguage: string;
-    defaultSeasonType: number;
-    isOrderRandomized: boolean;
-    lastUpdated: string;
-    averageRuntime: number;
-    episodes: null;
-    overview: string;
-    year: string;
 }
 
 export type Genre = {
     genre_id: number;
     genre_name: string;
+}
+
+export type Genre_Db = {
+    id: number;
+    name: string;
+    slug: string
+}
+
+export type ContentRating_db = {
+    id: number;
+    name: string;
+    country: string;
+    description: string;
+    contentType: string;
+    order: number,
+    fullname: string
 }
 
 export type ContentRating = {
@@ -110,11 +109,7 @@ export interface TVDB_Response {
     status: string
     data: TVDBShow[]
     links: {
-        prev: string,
-        self: string,
         next: string,
-        total_items: number,
-        page_size: number
     }
 }
 
@@ -145,7 +140,7 @@ export interface TVDB_Extended {
         slug: string;
     };
 
-    contentRatings: Array<ContentRating>;
+    contentRatings: Array<ContentRating_db>;
 
     first_release: {
         id: number;
@@ -157,7 +152,11 @@ export interface TVDB_Extended {
         };
     };
 
-    genres: Array<Genre>;
+    firstAired: string;
+
+    lastAired: string;
+
+    genres: Array<Genre_Db>;
 
     id: number;
 
@@ -176,6 +175,8 @@ export interface TVDB_Extended {
     originalCountry: string;
 
     originalLanguage: string;
+
+    overview: string;
 
     overviewTranslations: Array<unknown>;
 

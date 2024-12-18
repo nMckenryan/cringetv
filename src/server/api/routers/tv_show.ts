@@ -6,28 +6,27 @@ import {
 } from "../../../server/api/trpc";
 
 export const tvShowRouter = createTRPCRouter({
-  getAllTvShows: publicProcedure.query(({ ctx }) => {
-    return ctx.db.televisionShow.findMany({
-      include: {
-        genres: true,
-        content_ratings: true
-      },
-    });
-  }),
-
-  searchTVShows: publicProcedure.input(z.string()).query(({ ctx, input }) => {
+  searchTVShows: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
     return ctx.db.televisionShow.findMany({
       take: 5,
       where: {
         name: {
-          contains: input,
-          mode: "insensitive"
+          search: input
         },
       },
       include: {
         genres: true,
-        content_ratings: true
-      }
+        content_ratings: true,
+        reviews: true
+      },
+    });
+  }),
+
+  getAllTVShowIds: publicProcedure.query(({ ctx }) => {
+    return ctx.db.televisionShow.findMany({
+      select: {
+        tvdb_id: true,
+      },
     });
   }),
 

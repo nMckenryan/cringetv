@@ -4,21 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import { type TV_Show } from "~/types";
 import { Search, X } from "lucide-react";
 import SearchResult from "./SearchMenuResult";
+import { api } from "~/trpc/react";
 
-export default function SearchBar({ tvList }: { tvList: TV_Show[] }) {
+export default function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState<TV_Show[]>(tvList);
+  const [searchResults, setSearchResults] = useState<TV_Show[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const resultsLimit = useRef(5);
 
-  const handleSearch = (value: string) => {
+  const handleSearch = async (value: string) => {
     setSearchTerm(value);
 
     if (value.length > 0) {
-      const filteredResults = tvList.filter((item: TV_Show) =>
-        item.name.toLowerCase().includes(value.toLowerCase()),
-      );
-      setSearchResults(filteredResults.slice(0, resultsLimit.current));
+      setSearchResults(await api.tvShows.searchTVShows(searchTerm));
       setIsDropdownOpen(true);
     } else {
       setSearchResults([]);

@@ -1,4 +1,3 @@
-
 import { RatingCode, type ContentRating, type Extended_Response } from '../src/types';
 import { db } from "~/server/db";
 import { type GenreResponse, type TVDB_Extended, type ContentRatingResponse, type Genre, type TVDB_Response, type TVDBShow } from "~/types";
@@ -7,6 +6,8 @@ import {
     englishDataset,
     englishRecommendedTransformers,
 } from 'obscenity';
+import { readFileSync, writeFileSync } from 'fs';
+import { api } from '~/trpc/server';
 
 const matcher = new RegExpMatcher({
     ...englishDataset.build(),
@@ -41,12 +42,13 @@ export function calculateBaseCringeRating(showDetails: TVDB_Extended): number | 
         return 0.20;
     }
 
-    const ratingName = contentRatings.content_rating;
+    const ratingName = contentRatings.name;
     const ratingNumber = Number((/\d+/.exec(ratingName))?.[0]);
 
     if (!isNaN(ratingNumber)) {
         return null;
     }
+
     if (ratingNumber <= 13 || ratingName.toLowerCase().includes("pg") || ratingName.toLowerCase().includes("M")) {
         return RatingCode.BaseSafeLimit.valueOf()
     }
@@ -121,127 +123,130 @@ async function seed_genre_and_content_ratings() {
         }
     }
 
+    const start = performance.now();
     await getGenres(genre);
     console.log("genre seeded");
     await setContentRatings(contentRating)
     console.log("content rating seeded");
+    const end = performance.now();
+    console.log(`Time taken to retrieve TVDB list: ${(end - start) / 1000} seconds`);
 }
 
 
-async function main() {
-    const tv_data_from_tmdb: TVDBShow[] = []
+async function getTVDBData(tv_id_list: number[]) {
+    const omittedGenreName = ["News", "Talk Show", "Children", "Reality"];
 
-    await seed_genre_and_content_ratings();
+    const processShow = async (id: number) => {
 
-    await fetch("https://api4.thetvdb.com/v4/series", tvdb_options)
-        .then((response) => response.json() as Promise<TVDB_Response>)
-        .then((data) => tv_data_from_tmdb.push(...data.data))
-        .catch((err) => console.error(err))
-
-
-    const retrieved_tv = tv_data_from_tmdb;
-
-    if (!retrieved_tv) return;
-
-    for (const show of retrieved_tv) {
         try {
-            const extended_response = await fetch(`https://api4.thetvdb.com/v4/series/${show.id}/extended?short=true`, tvdb_options);
+            const extended_response = await fetch(`https://api4.thetvdb.com/v4/series/${id}/extended?short=true`, tvdb_options);
             if (!extended_response.ok) {
-                console.error(`Failed to fetch extended data for show ID ${show.id}`);
-                continue;
+                console.error(`Failed to fetch extended data for show ID ${id}`);
+                return null;
             }
-            const res = await extended_response.json() as Extended_Response;
+            const { data: extended_tv_data } = await extended_response.json() as Extended_Response;
+            const genres = extended_tv_data.genres;
+            const poster = extended_tv_data.image ? extended_tv_data.image : undefined;
+            const showName = extended_tv_data.name ?? (extended_tv_data.slug).replace(/-/g, ' ');
 
-            const extended_tv_data: TVDB_Extended = res.data;
-
-            const genres: Genre[] = extended_tv_data.genres;
-
-            const poster = show.image ? `https://www.thetvdb.com${show.image}` : undefined;
-
-            //does not seed if it's a news show
-            const omittedGenres = [];
-
-            for (const genre of genres) {
-                if (genre.genre_name === "News") {
-                    omittedGenres.push(genre);
-                }
+            if (genres.some(genre => omittedGenreName.includes(genre.name)) || extended_tv_data.firstAired === null || extended_tv_data.firstAired === "" || showName === null) {
+                return null;
             }
 
+            const upsertData = {
+                tvdb_id: extended_tv_data.id,
+                name: showName,
+                description: extended_tv_data.overview,
+                aggregate_cringe_rating: calculateBaseCringeRating(extended_tv_data),
+                first_air_date: new Date(extended_tv_data.firstAired),
+                last_air_date: new Date(extended_tv_data.lastAired),
+                series_status: extended_tv_data.status.name,
+                poster_link: poster,
+                genres: {
+                    connectOrCreate: genres.map(genre => ({
+                        where: { genre_id: genre.id },
+                        create: {
+                            genre_id: genre.id,
+                            genre_name: genre.name
+                        },
+                    })),
+                },
+                content_ratings: {
+                    connectOrCreate: extended_tv_data.contentRatings.map(cr => ({
+                        where: { content_rating_id: cr.id },
+                        create: {
+                            content_rating_id: cr.id,
+                            content_rating: cr.name,
+                            rating_country: cr.country,
+                            content_rating_description: cr.description ?? "No description available",
+                        }
+                    })),
+                },
+                original_country: extended_tv_data.originalCountry ?? "Unknown",
+            };
 
-            if (show !== undefined && omittedGenres.length === 0) {
-                await db.televisionShow.upsert({
-                    where: { tvdb_id: show.id },
-                    update: {
-                        tvdb_id: show.id,
-                        name: show.name,
-                        description: show.overview,
-                        aggregate_cringe_rating: calculateBaseCringeRating(extended_tv_data),
-                        first_air_date: new Date(show.firstAired),
-                        last_air_date: new Date(show.lastAired),
-                        series_status: extended_tv_data.status.name,
-                        poster_link: poster,
-                        genres: {
-                            connectOrCreate: genres.map((genre: Genre) => ({
-                                where: { genre_id: genre.genre_id },
-                                create: {
-                                    genre_id: genre.genre_id,
-                                    genre_name: genre.genre_name,
-                                },
-                            })),
-                        },
-                        content_ratings: {
-                            connectOrCreate: extended_tv_data.contentRatings.map((cr: ContentRating) => ({
-                                where: { content_rating_id: cr.content_rating_id },
-                                create: {
-                                    content_rating_id: cr.content_rating_id,
-                                    content_rating: cr.content_rating,
-                                    rating_country: cr.rating_country,
-                                    content_rating_description: cr.content_rating_description ?? "No description available",
-                                }
-                            })),
-                        },
-                        original_country: show.originalCountry ?? "Unknown",
-                    },
-                    create: {
-                        tvdb_id: show.id,
-                        name: show.name,
-                        description: show.overview,
-                        aggregate_cringe_rating: calculateBaseCringeRating(extended_tv_data),
-                        first_air_date: new Date(show.firstAired),
-                        last_air_date: new Date(show.lastAired),
-                        series_status: extended_tv_data.status.name,
-                        poster_link: poster,
-                        genres: {
-                            connectOrCreate: genres.map((genre: Genre) => ({
-                                where: { genre_id: genre.genre_id },
-                                create: {
-                                    genre_id: genre.genre_id,
-                                    genre_name: genre.genre_name,
-                                },
-                            })),
-                        },
-                        content_ratings: {
-                            connectOrCreate: extended_tv_data.contentRatings.map((cr: ContentRating) => ({
-                                where: { content_rating_id: cr.content_rating_id },
-                                create: {
-                                    content_rating_id: cr.content_rating_id,
-                                    content_rating: cr.content_rating,
-                                    rating_country: cr.rating_country,
-                                    content_rating_description: cr.content_rating_description ?? "No description available",
-                                }
-                            })),
-                        },
-
-                        original_country: show.originalCountry ?? "Unknown",
-
-                    }
-                })
-            }
+            return await db.televisionShow.upsert({
+                where: { tvdb_id: extended_tv_data.id },
+                update: {},
+                create: upsertData
+            });
         } catch (error) {
-            console.error(`Error seeding show with ID ${show.id}`, error);
+            console.error(`Error seeding show with ID ${id}`, error);
+            return null;
         }
+    };
+
+    // Process in batches to avoid overwhelming the API
+    const BATCH_SIZE = 100;
+    for (let i = 0; i < tv_id_list.length; i += BATCH_SIZE) {
+        const batch = tv_id_list.slice(i, i + BATCH_SIZE);
+        await Promise.all(batch.map(processShow).filter(Boolean));
+
+        // Optional: Add a small delay between batches to prevent rate limiting
+        await new Promise(resolve => setTimeout(resolve, 0));
+        console.log(`Processed batch ${Math.floor(i / BATCH_SIZE) + 1} of ${Math.ceil(tv_id_list.length / BATCH_SIZE)}`);
     }
-    console.log('Seeding Done!' + tv_data_from_tmdb.length);
+}
+async function getListOfShows() {
+    let tvdb_url = "https://api4.thetvdb.com/v4/series?page=1";
+    const tvdb_list_of_ids: number[] = [];
+
+    const start = performance.now();
+    while (tvdb_url !== null) {
+        await fetch(tvdb_url, tvdb_options)
+            .then((response) => response.json() as Promise<TVDB_Response>)
+            .then(async (data) => {
+                for (const show of data.data) {
+                    if (show.firstAired != null) {
+                        tvdb_list_of_ids.push(show.id);
+                    }
+                }
+                tvdb_url = data.links.next
+                console.log(tvdb_url)
+            })
+            .catch((err) => "Failed to retrieve data from: " + tvdb_url + "\n" + console.error(err))
+    }
+    const end = performance.now();
+    console.log(`Time taken to retrieve TVDB list: ${(end - start) / 1000} seconds`);
+
+
+    writeFileSync('tvdb_list_of_ids.json', JSON.stringify(tvdb_list_of_ids, null, 2));
+
+}
+
+async function main() {
+
+    // await seed_genre_and_content_ratings();
+    // await getListOfShows();
+    const tvdb_list_of_ids = JSON.parse(readFileSync('tvdb_list_of_ids.json', 'utf-8')) as number[];
+
+    // const existingIds = await api.tvShows.getAllTVShowIds();
+
+    // const filteredList = tvdb_list_of_ids.filter(id => !existingIds.includes(id));
+
+    await getTVDBData(tvdb_list_of_ids);
+
+    console.log('Seeding Done!');
 }
 
 

@@ -2,7 +2,6 @@ import UICard from "./_components/UICard";
 import EmblaCarousel from "./_components/carousel/Embla-Carousel";
 
 import { type TV_Show_Basic } from "~/types";
-import { Suspense } from "react";
 
 import { api } from "~/trpc/server";
 import { getRatingIcon } from "./_components/RatingIcon";
@@ -32,12 +31,11 @@ export default async function App() {
           </div>
         </div>
       </UICard>
-      <Suspense fallback={<div>Loading...</div>}>
-        <UICard>
-          <h4 className="text-xl font-bold text-white">Newest Shows</h4>
-          <EmblaCarousel collection={newTV} />
-        </UICard>
-      </Suspense>
+
+      <UICard>
+        <h4 className="text-xl font-bold text-white">Newest Shows</h4>
+        <EmblaCarousel collection={newTV} />
+      </UICard>
 
       <UICard>
         <h4 className="text-xl font-bold text-white">Most Dangerous Shows</h4>

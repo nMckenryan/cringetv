@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
 }
 
 datasource db {
@@ -78,6 +79,8 @@ model TelevisionShow {
   original_country        String
   content_ratings         ContentRating[]
   reviews                 Review[]
+
+  @@index([tvdb_id], map: "tvdb_id_idx")
 }
 
 model ContentRating {

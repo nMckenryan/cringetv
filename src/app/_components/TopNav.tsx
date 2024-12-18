@@ -11,8 +11,6 @@ import { LogIn } from "lucide-react";
 export default async function TopNav() {
   const session = await auth();
 
-  const tvQuery = await api.tvShows.getAllTvShows();
-
   return (
     <div className="max-w-screen navbar sticky top-0 z-50 flex max-h-10 flex-row justify-between bg-primary-blue-light shadow-2xl">
       <Link className="flex flex-row items-end gap-1 text-xl" href={"/"}>
@@ -24,7 +22,7 @@ export default async function TopNav() {
       </Link>
 
       <div className="flex flex-row gap-1">
-        <SearchBar tvList={tvQuery as unknown as TV_Show[]} />
+        <SearchBar />
         {session ? (
           <div className="dropdown dropdown-end">
             <div
