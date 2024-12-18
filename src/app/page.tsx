@@ -11,6 +11,8 @@ export default async function App() {
   const dangerousShows: TV_Show_Basic[] =
     await api.tvShows.getMostDangerousShows();
 
+  const safestShows: TV_Show_Basic[] = await api.tvShows.getSafestShows();
+
   return (
     <div className="mt-3 flex flex-col gap-3">
       <UICard>
@@ -33,12 +35,23 @@ export default async function App() {
       </UICard>
 
       <UICard>
-        <h4 className="text-xl font-bold text-white">Newest Shows</h4>
+        <h4 className="flex flex-row items-center justify-center text-xl font-bold text-white">
+          Newest Shows
+        </h4>
         <EmblaCarousel collection={newTV} />
       </UICard>
 
       <UICard>
-        <h4 className="text-xl font-bold text-white">Most Dangerous Shows</h4>
+        <h4 className="flex flex-row items-center justify-center gap-1 text-xl font-bold text-white">
+          {getRatingIcon(0)} Safest Shows {getRatingIcon(0.26)}
+        </h4>
+        <EmblaCarousel collection={safestShows} />
+      </UICard>
+
+      <UICard>
+        <h4 className="flex flex-row items-center justify-center gap-1 text-xl font-bold text-white">
+          {getRatingIcon(0.75)} Most Dangerous Shows {getRatingIcon(1)}
+        </h4>
         <EmblaCarousel collection={dangerousShows} />
       </UICard>
     </div>

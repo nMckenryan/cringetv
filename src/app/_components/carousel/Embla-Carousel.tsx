@@ -57,7 +57,7 @@ export default function EmblaCarousel({
                     as={`/tv_show/${tv.tvdb_id}`}
                     className={`card relative m-2 flex min-h-[50vw] min-w-[40vw] justify-end font-semibold no-underline shadow-xl transition hover:bg-secondary-purple/50 md:min-h-[25vw] md:min-w-[15vw]`}
                   >
-                    <div className="badge badge-neutral absolute right-0 top-0">
+                    <div className="absolute right-0 top-0 z-10 m-0 rounded-full bg-slate-900 p-0 shadow-lg">
                       {getRatingIcon(tv.aggregate_cringe_rating)}
                     </div>
                     <Image

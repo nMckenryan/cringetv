@@ -54,14 +54,42 @@ export const tvShowRouter = createTRPCRouter({
   getMostDangerousShows: publicProcedure.query(({ ctx }) => {
     return ctx.db.televisionShow.findMany({
       take: 10,
+      where: {
+        aggregate_cringe_rating: {
+          gte: 0.5
+        },
+        poster_link: {
+          not: null
+        }
+      },
       orderBy: {
         aggregate_cringe_rating: "desc"
       },
 
       include: {
         reviews: true
-      }
+      },
+    });
+  }),
 
+  getSafestShows: publicProcedure.query(({ ctx }) => {
+    return ctx.db.televisionShow.findMany({
+      take: 10,
+      where: {
+        aggregate_cringe_rating: {
+          lte: 0.2
+        },
+        poster_link: {
+          not: null
+        }
+      },
+      orderBy: {
+        aggregate_cringe_rating: "desc"
+      },
+
+      include: {
+        reviews: true
+      },
     });
   }),
 
