@@ -37,8 +37,14 @@ export const tvShowRouter = createTRPCRouter({
         first_air_date: "desc",
       },
       where: {
+        original_country: {
+          in: ['usa', 'gbr', 'can', 'aus']
+        },
         series_status: {
-          not: 'Ended',
+          notIn: ['Ended', 'Upcoming']
+        },
+        poster_link: {
+          not: null
         }
       }
     });

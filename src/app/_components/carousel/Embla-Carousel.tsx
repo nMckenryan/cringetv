@@ -57,18 +57,19 @@ export default function EmblaCarousel({
                     as={`/tv_show/${tv.tvdb_id}`}
                     className={`card relative m-2 flex min-h-[50vw] min-w-[40vw] justify-end font-semibold no-underline shadow-xl transition hover:bg-secondary-purple/50 md:min-h-[25vw] md:min-w-[15vw]`}
                   >
+                    <div className="badge badge-neutral absolute right-0 top-0">
+                      {getRatingIcon(tv.aggregate_cringe_rating)}
+                    </div>
                     <Image
                       src={tv.poster_link ?? noPoster.src}
                       alt={`${tv.name} poster`}
                       fill
                       sizes="(max-width: 768px) 40vw, 15vw"
-                      className="object-cover"
+                      className="z-0 object-cover"
                       priority
                     />
-                    <div className="badge badge-neutral absolute right-0 top-0">
-                      {getRatingIcon(tv.aggregate_cringe_rating)}
-                    </div>
-                    <div className="flex flex-col bg-primary-blue/70 align-bottom">
+
+                    <div className="z-10 flex flex-col bg-primary-blue/70 align-bottom">
                       <h2 className="card-title line-clamp-2 overflow-hidden text-balance text-xs text-white md:text-sm">
                         {tv.name}
                       </h2>
