@@ -7,20 +7,38 @@ import {
 
 export const tvShowRouter = createTRPCRouter({
   searchTVShows: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    return ctx.db.televisionShow.findMany({
-      take: 5,
-      where: {
-        name: {
-          search: input
+    try {
+      const results = await ctx.db.televisionShow.findMany({
+        take: 5,
+        where: {
+          name: {
+            contains: input,
+            mode: 'insensitive',
+          },
         },
-      },
-      include: {
-        genres: true,
-        content_ratings: true,
-        reviews: true
-      },
-    });
+      });
+      return {
+        results,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        error: 'Failed to search for TV shows',
+      };
+    }
   }),
+
+  // recalculateAvgCringeRating: publicProcedure.mutation(async ({ ctx }) => {
+  //   return ctx.db.televisionShow.updateMany({
+  //     data: {
+  //       aggregate_cringe_rating: {
+  //         avg: {
+  //           of: "reviews.cringe_score_vote"
+  //         }
+  //       }
+  //     }
+  //   });
+  // }),
 
   getAllTVShowIds: publicProcedure.query(({ ctx }) => {
     return ctx.db.televisionShow.findMany({

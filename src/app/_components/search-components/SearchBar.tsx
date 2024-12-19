@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { type TV_Show } from "~/types";
 import { Search, X } from "lucide-react";
 import SearchResult from "./SearchMenuResult";
-import { api } from "~/trpc/react";
+import { search } from "~/app/actions";
 
 export default function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,7 +15,7 @@ export default function SearchBar() {
     setSearchTerm(value);
 
     if (value.length > 0) {
-      setSearchResults(await api.tvShows.searchTVShows(searchTerm));
+      setSearchResults(await search(value));
       setIsDropdownOpen(true);
     } else {
       setSearchResults([]);
@@ -63,12 +63,18 @@ export default function SearchBar() {
         )}
       </div>
 
-      {isDropdownOpen && searchResults.length > 0 && (
+      {isDropdownOpen && (
         <div className="absolute z-10 mt-1 max-h-80 w-full overflow-y-auto rounded-md border bg-primary-blue shadow-lg">
-          {searchResults.map((tv: TV_Show) => (
-            <SearchResult key={tv.tvdb_id} tv={tv} clearSearch={clearSearch} />
-          ))}
-          {/* <Link
+          {searchResults.length > 0 ? (
+            searchResults.map((tv: TV_Show) => (
+              <SearchResult
+                key={tv.tvdb_id}
+                tv={tv}
+                clearSearch={clearSearch}
+              />
+            ))
+          ) : (
+            /* <Link
             className="flex h-10 w-full flex-row items-center justify-center p-4 align-middle text-sm text-neutral-200 hover:bg-primary-blue-dark"
             href={`/search?q=${encodeURIComponent(searchTerm)}`}
             onClick={() => {
@@ -79,7 +85,13 @@ export default function SearchBar() {
             <p className="text-md text-gray-800 dark:text-neutral-200">
               See all results
             </p>
-          </Link> */}
+          </Link> */
+            <div className="flex h-10 w-full flex-row items-center justify-center p-4 align-middle text-sm text-neutral-200 hover:bg-primary-blue-dark">
+              <p className="text-md text-gray-800 dark:text-neutral-200">
+                No Results
+              </p>
+            </div>
+          )}
         </div>
       )}
     </div>

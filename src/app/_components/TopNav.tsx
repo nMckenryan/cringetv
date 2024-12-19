@@ -4,8 +4,6 @@ import Image from "next/image";
 import cringeLogo from "../../../public/android-chrome-192x192.png";
 
 import SearchBar from "./search-components/SearchBar";
-import { api } from "~/trpc/server";
-import { type TV_Show } from "~/types";
 import { LogIn } from "lucide-react";
 
 export default async function TopNav() {

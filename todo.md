@@ -18,12 +18,13 @@ TO DO MVP
   - [x] Figure out cringe rating system
   - [x] Set default Cringe Rating depending on content rating
   - [] Set up regular content update (ISR)
-  - [] ERROR: shows stop at 2012 - get new data source
+  - [x] ERROR: shows stop at 2012 - get new data source
 
 - [x] Fix carousel so it works under mobile
 
   - [x] Sort by newest release
   - [] Sort by most reviewed
+  - [x] Sort safest/most dangerous shows
 
 - [x] - Rig up routing for:
   - [x] homepage
@@ -35,21 +36,12 @@ TO DO MVP
 - [x] Auth set up
 - [x] Auth0
 
-- [ ] HOMEPAGE COMPONENTS:
-
+- [x] HOMEPAGE COMPONENTS:
   - [x] search functions
     - [x] search bar ui
   - [x] List of latest tv shows
   - [x] Latest reviews (set up trpc route)
 
-- [ ] PROFILE PAGE
-
-  - [x] Route by user id
-  - [x] Name,
-  - [x] Implement Bio
-  - [x] Bio edit page
-  - [x] Account age
-  - [] List of reviews
 
 - [] SEARCH
 
@@ -76,6 +68,16 @@ TO DO MVP
   - [ ] Update review
   - [] Delete review
   - [] Calculate consensus rating
+
+
+- [] PROFILE PAGE
+  - [x] Route by user id
+  - [x] Name,
+  - [x] Implement Bio
+  - [x] Bio edit page
+  - [x] Account age
+  - [] List of reviews
+
 
 - [] PUBLISH
   - [] Clean render bugs
