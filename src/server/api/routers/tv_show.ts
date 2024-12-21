@@ -2,31 +2,35 @@
 import { z } from "zod";
 import {
   createTRPCRouter,
+  protectedProcedure,
   publicProcedure,
 } from "../../../server/api/trpc";
 
 export const tvShowRouter = createTRPCRouter({
-  searchTVShows: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    try {
-      const results = await ctx.db.televisionShow.findMany({
-        take: 5,
-        where: {
-          name: {
-            contains: input,
-            mode: 'insensitive',
-          },
+  searchTVShows: publicProcedure.input(z.string()).query(async ({ ctx, input: searchTerm }) => {
+    const results = await ctx.db.televisionShow.findMany({
+      take: 5,
+      where: {
+        name: {
+          search: searchTerm,
+          mode: 'insensitive',
         },
-      });
-      return {
-        results,
-      };
-    } catch (error) {
-      console.error(error);
-      return {
-        error: 'Failed to search for TV shows',
-      };
-    }
+      },
+      orderBy: [
+        {
+          _relevance: {
+            fields: ['name'],
+            search: 'database',
+            sort: 'asc'
+          },
+        }
+      ],
+    });
+    return {
+      results,
+    };
   }),
+
 
   // recalculateAvgCringeRating: publicProcedure.mutation(async ({ ctx }) => {
   //   return ctx.db.televisionShow.updateMany({

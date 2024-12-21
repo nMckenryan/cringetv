@@ -26,7 +26,7 @@ export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
             ))}
           </div>
 
-          <div className="flex gap-2">
+          {/* <div className="flex gap-2">
             <div className="flex flex-col items-center">
               <span className="text-sm text-gray-700 dark:text-gray-400">
                 Showing{" "}
@@ -65,7 +65,7 @@ export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       )}
     </div>

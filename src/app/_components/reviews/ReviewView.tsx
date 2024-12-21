@@ -1,15 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { type Review } from "~/types";
-import RatingIcon from "../RatingIcon";
+
+import { getUserById } from "~/app/actions";
 import Image from "next/image";
+
+import RatingIcon from "../RatingIcon";
+
 import { CircleHelp } from "lucide-react";
-
+export type UserDetails = {
+  name: string | null;
+  image: string | null;
+};
 export default function ReviewView({ review }: { review: Review }) {
-  const user: { name: string; image: string } = {
-    name: "none",
-    image: "none",
-  };
+  const [user, setUser] = useState<UserDetails>();
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await getUserById(review.userId);
+      setUser(user);
+    };
+
+    fetchUser();
+  }, [review.userId]);
   return (
     <div
       className="card w-full bg-primary-blue-light shadow-xl"
@@ -31,9 +43,9 @@ export default function ReviewView({ review }: { review: Review }) {
                 <CircleHelp className="rounded-full shadow-md" size={40} />
               </>
             )}
+            <p className="text-sm">{user?.name ?? "Unknown User"}</p>
             <RatingIcon reviewScore={review.cringe_score_vote} />
           </div>
-          <p className="text-sm">{user?.name ?? "Unknown User"}</p>
 
           <p className="text-left text-sm">{review.review_content}</p>
         </div>

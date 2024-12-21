@@ -5,23 +5,32 @@ import { type TV_Show } from "~/types";
 import { Search, X } from "lucide-react";
 import SearchResult from "./SearchMenuResult";
 import { search } from "~/app/actions";
+import { useDebounce } from "use-debounce";
+import { set } from "zod";
 
 export default function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<TV_Show[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [debouncedText] = useDebounce(searchTerm, 500);
 
-  const handleSearch = async (value: string) => {
-    setSearchTerm(value);
+  useEffect(() => {
+    const searchTv = async () => {
+      const result = await search(debouncedText);
+      setSearchResults(result);
+    };
+    setIsLoading(true);
 
-    if (value.length > 0) {
-      setSearchResults(await search(value));
+    if (debouncedText.length > 1) {
+      void searchTv();
       setIsDropdownOpen(true);
     } else {
       setSearchResults([]);
       setIsDropdownOpen(false);
     }
-  };
+    setIsLoading(false);
+  }, [debouncedText]);
 
   const clearSearch = () => {
     setSearchTerm("");
@@ -50,7 +59,7 @@ export default function SearchBar() {
         <input
           type="text"
           value={searchTerm}
-          onChange={(e) => handleSearch(e.target.value)}
+          onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search Movies"
           className="w-full rounded-md border p-2 pl-8 text-sm focus:outline-none focus:ring-2 focus:ring-secondary-purple-light md:text-lg lg:text-xl"
         />
@@ -65,7 +74,11 @@ export default function SearchBar() {
 
       {isDropdownOpen && (
         <div className="absolute z-10 mt-1 max-h-80 w-full overflow-y-auto rounded-md border bg-primary-blue shadow-lg">
-          {searchResults.length > 0 ? (
+          {isLoading ? (
+            <div className="flex h-10 w-full flex-row items-center justify-center p-4 align-middle text-sm text-neutral-200 hover:bg-primary-blue-dark">
+              <span className="loading loading-bars loading-sm" />
+            </div>
+          ) : searchResults.length > 0 ? (
             searchResults.map((tv: TV_Show) => (
               <SearchResult
                 key={tv.tvdb_id}
@@ -74,18 +87,6 @@ export default function SearchBar() {
               />
             ))
           ) : (
-            /* <Link
-            className="flex h-10 w-full flex-row items-center justify-center p-4 align-middle text-sm text-neutral-200 hover:bg-primary-blue-dark"
-            href={`/search?q=${encodeURIComponent(searchTerm)}`}
-            onClick={() => {
-              // updateSearchResults(searchResults);
-              clearSearch();
-            }}
-          >
-            <p className="text-md text-gray-800 dark:text-neutral-200">
-              See all results
-            </p>
-          </Link> */
             <div className="flex h-10 w-full flex-row items-center justify-center p-4 align-middle text-sm text-neutral-200 hover:bg-primary-blue-dark">
               <p className="text-md text-gray-800 dark:text-neutral-200">
                 No Results
