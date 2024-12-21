@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import ReviewView from "./ReviewView";
 import { type Review } from "~/types";
 
@@ -16,17 +16,24 @@ export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
 
   return (
     <div className="flex w-[70vw] flex-col gap-2">
-      {reviewList.length === 0 ? (
-        <p className="p-10 text-center text-lg">No Reviews Yet.</p>
-      ) : (
-        <div className="flex flex-col items-center gap-1">
-          <div className="grid w-[90vw] grid-cols-1 gap-1 md:w-full md:grid-cols-2">
-            {entries.map((rev) => (
-              <ReviewView review={rev} key={rev.review_id} />
-            ))}
+      <Suspense fallback={<span className="loading loading-bars loading-sm" />}>
+        {reviewList.length === 0 ? (
+          <p className="p-10 text-center text-lg">No Reviews Yet.</p>
+        ) : (
+          <div className="flex flex-col items-center gap-1">
+            <div className="grid w-[90vw] grid-cols-1 gap-1 md:w-full md:grid-cols-2">
+              {entries.map((rev) => (
+                <ReviewView review={rev} key={rev.review_id} />
+              ))}
+            </div>
           </div>
+        )}
+      </Suspense>
+    </div>
+  );
+}
 
-          {/* <div className="flex gap-2">
+/* <div className="flex gap-2">
             <div className="flex flex-col items-center">
               <span className="text-sm text-gray-700 dark:text-gray-400">
                 Showing{" "}
@@ -65,9 +72,4 @@ export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
                 </button>
               </div>
             </div>
-          </div> */}
-        </div>
-      )}
-    </div>
-  );
-}
+          </div> */

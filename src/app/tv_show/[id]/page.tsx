@@ -18,8 +18,19 @@ export default async function TVShowPage({
   const show = await api.tvShows.getTVShowById((await params).id);
 
   const session = await auth();
-
   const reviewList: Review[] = show?.reviews ?? [];
+
+  const hasLeftReviewIndex = reviewList.findIndex(
+    (rev) => rev.userId === session?.user?.id,
+  );
+
+  if (hasLeftReviewIndex > 0) {
+    // if the user has left a review, move it to the top of the list (if it isnt already)
+    const userReview = reviewList.splice(hasLeftReviewIndex, 1)[0]!;
+    reviewList.unshift(userReview);
+  }
+
+  const canLeaveReview = session?.user && hasLeftReviewIndex > 0;
 
   if (!show) return <NotFound />;
 
@@ -29,7 +40,7 @@ export default async function TVShowPage({
         <TVShowCard show={show} />
       </UICard>
 
-      {session?.user && (
+      {canLeaveReview && (
         <UICard>
           <ReviewForm selectedTvId={show?.tvdb_id} />
         </UICard>
