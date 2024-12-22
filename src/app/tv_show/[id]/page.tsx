@@ -25,12 +25,12 @@ export default async function TVShowPage({
   );
 
   if (hasLeftReviewIndex > 0) {
-    // if the user has left a review, move it to the top of the list (if it isnt already)
+    // if the user has left a review, move it to the top of the list (if it isn't already)
     const userReview = reviewList.splice(hasLeftReviewIndex, 1)[0]!;
     reviewList.unshift(userReview);
   }
 
-  const canLeaveReview = session?.user && hasLeftReviewIndex > 0;
+  const canLeaveReview = session?.user && hasLeftReviewIndex === -1;
 
   if (!show) return <NotFound />;
 

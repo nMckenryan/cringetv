@@ -1,18 +1,16 @@
-"use client";
-
 import React, { Suspense } from "react";
 import ReviewView from "./ReviewView";
 import { type Review } from "~/types";
 
 export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
-  const [page, setPage] = React.useState(0);
+  // const [page, setPage] = React.useState(0);
 
-  const tvId = reviewList[0]?.tvdb_id ?? 0;
-  const per_page = 6;
-  const start = page * per_page;
-  const end = start + per_page;
+  // const tvId = reviewList[0]?.tvdb_id ?? 0;
+  // const per_page = 6;
+  // const start = page * per_page;
+  // const end = start + per_page;
 
-  const entries = reviewList.slice(start, end);
+  // const entries = reviewList.slice(start, end);
 
   return (
     <div className="flex w-[70vw] flex-col gap-2">
@@ -22,7 +20,7 @@ export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
         ) : (
           <div className="flex flex-col items-center gap-1">
             <div className="grid w-[90vw] grid-cols-1 gap-1 md:w-full md:grid-cols-2">
-              {entries.map((rev) => (
+              {reviewList.map((rev) => (
                 <ReviewView review={rev} key={rev.review_id} />
               ))}
             </div>
