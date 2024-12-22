@@ -5,7 +5,7 @@
 - [x] Launch on vercel
 - [x] Set up zustand for state
 - [x] Load TV show details
-- [/] Load most recent shows
+- [x] Load most recent shows
 - [x] Set up basic auth
 
 - [x] Set up DB
@@ -61,7 +61,7 @@
 
 - [ ] REVIEW FORM
 
-  - [] Implement form validation
+  - [x] Implement form validation
   - [x] Implement a form for adding a review
   - [] Make sure ranking score works
   - [x] Make sure inserts review properly
