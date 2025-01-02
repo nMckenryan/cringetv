@@ -236,15 +236,16 @@ async function getListOfShows() {
 
 async function main() {
 
-    // await seed_genre_and_content_ratings();
-    // await getListOfShows();
+    await seed_genre_and_content_ratings();
+    await getListOfShows();
     const tvdb_list_of_ids = JSON.parse(readFileSync('tvdb_list_of_ids.json', 'utf-8')) as number[];
 
     // const existingIds = await api.tvShows.getAllTVShowIds();
 
     // const filteredList = tvdb_list_of_ids.filter(id => !existingIds.includes(id));
 
-    await getTVDBData(tvdb_list_of_ids);
+    const limitedList = tvdb_list_of_ids.slice(0, 300);
+    await getTVDBData(limitedList);
 
     console.log('Seeding Done!');
 }
