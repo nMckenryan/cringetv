@@ -1,13 +1,12 @@
 import { RatingCode, type ContentRating, type Extended_Response } from '../src/types';
 import { db } from "~/server/db";
-import { type GenreResponse, type TVDB_Extended, type ContentRatingResponse, type Genre, type TVDB_Response, type TVDBShow } from "~/types";
+import { type GenreResponse, type TVDB_Extended, type ContentRatingResponse, type Genre, type TVDB_Response } from "~/types";
 import {
     RegExpMatcher,
     englishDataset,
     englishRecommendedTransformers,
 } from 'obscenity';
 import { readFileSync, writeFileSync } from 'fs';
-import { api } from '~/trpc/server';
 
 const matcher = new RegExpMatcher({
     ...englishDataset.build(),
@@ -22,6 +21,20 @@ const tvdb_options = {
     },
 };
 
+type AuthResponse = {
+    status: string
+    data: {
+        token: string
+    }
+
+}
+
+export async function getAuthToken() {
+    await fetch("https://api4.thetvdb.com/v4/genres", tvdb_options)
+        .then((response) => response.json() as Promise<AuthResponse>)
+        .then((data) => tvdb_options.headers.Authorization = `Bearer ${data.data.token}`)
+        .catch((err) => console.error("auth token not recieved: " + err))
+}
 export function calculateBaseCringeRating(showDetails: TVDB_Extended): number | null {
 
     const showName = showDetails.name;
@@ -79,10 +92,10 @@ async function seed_genre_and_content_ratings() {
     await fetch("https://api4.thetvdb.com/v4/genres", tvdb_options)
         .then((response) => response.json() as Promise<GenreResponse>)
         .then((data) => genre.push(...data.data))
-        .catch((err) => console.error(err))
+        .catch((err) => console.error("Genres not recieved: " + err))
 
     // generate Genres
-    async function getGenres(genre_list: Genre[]) {
+    async function setGenres(genre_list: Genre[]) {
         for (const g of genre_list) {
             await db.genre.upsert({
                 where: { genre_id: g.genre_id },
@@ -100,7 +113,7 @@ async function seed_genre_and_content_ratings() {
         .then((response) => response.json() as Promise<ContentRatingResponse>)
         .then((data) => contentRating.push
             (...data.data))
-        .catch((err) => console.error(err))
+        .catch((err) => console.error("Rating not retrieved " + err))
 
     // generate ContentRatings
     async function setContentRatings(content_rating_list: ContentRating[]) {
@@ -124,7 +137,7 @@ async function seed_genre_and_content_ratings() {
     }
 
     const start = performance.now();
-    await getGenres(genre);
+    await setGenres(genre);
     console.log("genre seeded");
     await setContentRatings(contentRating)
     console.log("content rating seeded");
@@ -224,7 +237,7 @@ async function getListOfShows() {
                 tvdb_url = data.links.next
                 console.log(tvdb_url)
             })
-            .catch((err) => "Failed to retrieve data from: " + tvdb_url + "\n" + console.error(err))
+            .catch((err) => console.error("Failed to retrieve data from: " + tvdb_url + "\n" + err))
     }
     const end = performance.now();
     console.log(`Time taken to retrieve TVDB list: ${(end - start) / 1000} seconds`);
@@ -256,7 +269,7 @@ main()
         await db.$disconnect();
     })
     .catch(async (e) => {
-        console.error(e);
+        console.error("main error: " + e);
         await db.$disconnect();
         process.exit(1);
     });
