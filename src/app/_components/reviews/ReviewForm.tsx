@@ -33,6 +33,7 @@ export default function ReviewForm({ selectedTvId }: { selectedTvId: number }) {
 
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>({
@@ -58,14 +59,14 @@ export default function ReviewForm({ selectedTvId }: { selectedTvId: number }) {
     >
       <input
         {...register("reviewContent", { required: true })}
-        className="textarea textarea-bordered w-full bg-primary-blue-light pb-10 text-white"
+        className="textarea textarea-bordered bg-primary-blue-light pb-10 text-white"
         placeholder="Add a Review"
       />
 
-      <div className="flex flex-row items-center justify-between py-2">
+      <div className="mx-auto inline-flex rounded-lg py-2 shadow-sm">
         <button
           type="reset"
-          className="btn border-gray-800 bg-secondary-purple text-white/90 hover:bg-secondary-purple-light"
+          className="-ms-px inline-flex items-center gap-x-2 border border-neutral-700 bg-secondary-purple px-4 py-3 text-sm font-medium text-white shadow-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg hover:bg-secondary-purple-dark/70 focus:z-10 focus:bg-gray-50 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
           onClick={() => setReviewScore(null)}
         >
           <Eraser />
@@ -79,10 +80,15 @@ export default function ReviewForm({ selectedTvId }: { selectedTvId: number }) {
         ].map((score) => (
           <button
             type="button"
-            name="review_score"
+            className={`-ms-px inline-flex items-center gap-x-2 border border-neutral-700 bg-primary-blue px-4 py-3 text-sm font-medium text-white shadow-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg focus:z-10 ${reviewScore === score ? "bg-secondary-purple" : ""} focus:outline-none disabled:pointer-events-none disabled:opacity-50`}
             key={score}
-            onClick={() => setReviewScore(score)}
-            className={`hover:bg-primary-purple/20 active:bg-primary-purple/40 rounded-xl ${reviewScore === score ? "bg-primary-blue-light" : ""}`}
+            onClick={() => {
+              setValue("reviewScore", score, {
+                shouldValidate: true,
+                shouldDirty: true,
+                shouldTouch: true,
+              });
+            }}
           >
             <RatingIcon reviewScore={score} />
           </button>
@@ -90,15 +96,16 @@ export default function ReviewForm({ selectedTvId }: { selectedTvId: number }) {
 
         <button
           type="submit"
-          className="btn border-gray-800 bg-secondary-purple text-white/90 hover:bg-secondary-purple-light"
+          className="-ms-px inline-flex items-center gap-x-2 border border-neutral-700 bg-secondary-purple px-4 py-3 text-sm font-medium text-white shadow-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg hover:bg-secondary-purple-dark/70 focus:z-10 focus:bg-gray-50 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
         >
           <Send />
         </button>
       </div>
       {errors && (
-        <p className="flex-auto break-words text-left text-xs text-red-500">
+        <p className="mx-auto flex-auto break-words text-left text-xs text-red-500">
           {errors.reviewContent && <span>Please enter a review</span>}
-          {errors.reviewScore && <span>Please enter a score</span>}
+          <br />
+          {errors.reviewScore && <span>Please select a score</span>}
         </p>
       )}
     </form>

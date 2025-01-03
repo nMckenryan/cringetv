@@ -63,7 +63,7 @@
 
   - [x] Implement form validation
   - [x] Implement a form for adding a review
-  - [] Make sure ranking score works
+  - [x] Make sure ranking score validation works
   - [x] Make sure inserts review properly
   - [ ] Update review
   - [] Delete review
