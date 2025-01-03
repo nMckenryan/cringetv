@@ -34,6 +34,7 @@ export default function ReviewForm({ selectedTvId }: { selectedTvId: number }) {
   const {
     register,
     setValue,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>({
@@ -67,7 +68,7 @@ export default function ReviewForm({ selectedTvId }: { selectedTvId: number }) {
         <button
           type="reset"
           className="-ms-px inline-flex items-center gap-x-2 border border-neutral-700 bg-secondary-purple px-4 py-3 text-sm font-medium text-white shadow-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg hover:bg-secondary-purple-dark/70 focus:z-10 focus:bg-gray-50 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-          onClick={() => setReviewScore(null)}
+          onClick={() => reset()}
         >
           <Eraser />
         </button>

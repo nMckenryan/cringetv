@@ -32,6 +32,17 @@ export const reviewRouter = createTRPCRouter({
       });
     }),
 
+  deleteReview: protectedProcedure
+    .input(z.object({
+      review_id: z.number()
+    }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.review.delete({
+        where: {
+          review_id: input.review_id
+        },
+      })
+    }),
 
   getUserReview: publicProcedure.input(z.object({ tvdb_id: z.number() })).query(({ ctx, input }) => {
     return ctx.db.review.findFirst({
