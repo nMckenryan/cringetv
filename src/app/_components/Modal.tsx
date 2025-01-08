@@ -13,9 +13,9 @@ export function Modal({
     <>
       <dialog
         id={modalIdentifier}
-        className="modal modal-bottom sm:modal-middle"
+        className="modal modal-bottom bg-slate-50 bg-zinc-800/80 sm:modal-middle"
       >
-        <div className="modal-box">
+        <div className="modal-box bg-primary-blue-light shadow-xl">
           <form method="dialog">
             {/* if there is a button in form, it will close the modal */}
             <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">
@@ -27,6 +27,7 @@ export function Modal({
       </dialog>
 
       <button
+        className="my-5"
         onClick={() =>
           (
             document.getElementById(modalIdentifier) as HTMLDialogElement

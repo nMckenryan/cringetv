@@ -13,7 +13,7 @@ export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
   // const entries = reviewList.slice(start, end);
 
   return (
-    <div className="flex w-[70vw] flex-col gap-2">
+    <div className="flex w-full flex-col gap-2">
       <Suspense fallback={<span className="loading loading-bars loading-sm" />}>
         {reviewList.length === 0 ? (
           <p className="p-10 text-center text-lg">No Reviews Yet.</p>

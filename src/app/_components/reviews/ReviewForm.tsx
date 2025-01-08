@@ -1,10 +1,9 @@
 "use client";
-import React from "react";
 import RatingIcon from "../RatingIcon";
 
 import { useForm } from "react-hook-form";
 import { api } from "~/trpc/react";
-import { RatingCode } from "~/types";
+import { RatingCode, type Review } from "~/types";
 import { Eraser, Send } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,11 +27,16 @@ const schema = z.object({
 
 type IFormInput = z.infer<typeof schema>;
 
-export default function ReviewForm({ selectedTvId }: { selectedTvId: number }) {
-  const [reviewScore, setReviewScore] = React.useState<number | null>(null);
-
+export default function ReviewForm({
+  selectedTvId,
+  existingReview,
+}: {
+  selectedTvId: number;
+  existingReview: Review | null;
+}) {
   const {
     register,
+    getValues,
     setValue,
     reset,
     handleSubmit,
@@ -45,29 +49,47 @@ export default function ReviewForm({ selectedTvId }: { selectedTvId: number }) {
     },
   });
 
-  const { mutate } = api.reviews.createNewReview.useMutation();
+  const updateReviewMutation = api.reviews.updateReview.useMutation();
+  const createNewReviewMutation = api.reviews.createNewReview.useMutation();
+
+  const submitReview = async (data: IFormInput) => {
+    if (existingReview != null) {
+      if (
+        data.reviewContent === existingReview.review_content &&
+        data.reviewScore === existingReview.cringe_score_vote
+      ) {
+        return null;
+      }
+      updateReviewMutation.mutate({
+        review_id: existingReview.review_id,
+        review_content: data.reviewContent,
+        cringe_score_vote: data.reviewScore,
+      });
+    } else {
+      createNewReviewMutation.mutate({
+        review_content: data.reviewContent,
+        cringe_score_vote: data.reviewScore,
+        tvdb_id: selectedTvId,
+      });
+    }
+  };
 
   return (
     <form
       className="flex w-full flex-col text-center md:w-[47vw]"
-      onSubmit={handleSubmit((data) =>
-        mutate({
-          review_content: data.reviewContent,
-          cringe_score_vote: data.reviewScore,
-          tvdb_id: selectedTvId,
-        }),
-      )}
+      onSubmit={handleSubmit((data) => submitReview(data))}
     >
       <input
         {...register("reviewContent", { required: true })}
         className="textarea textarea-bordered bg-primary-blue-light pb-10 text-white"
-        placeholder="Add a Review"
+        placeholder="Write a Review"
       />
 
       <div className="mx-auto inline-flex rounded-lg py-2 shadow-sm">
+        {/* TODO: set reset button to return to existing review when in edit mode */}
         <button
           type="reset"
-          className="-ms-px inline-flex items-center gap-x-2 border border-neutral-700 bg-secondary-purple px-4 py-3 text-sm font-medium text-white shadow-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg hover:bg-secondary-purple-dark/70 focus:z-10 focus:bg-gray-50 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+          className="-ms-px inline-flex items-center gap-x-2 border border-neutral-700 bg-secondary-purple-dark px-4 py-3 text-sm font-medium text-white shadow-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg hover:bg-secondary-purple-dark/70 focus:z-10 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
           onClick={() => reset()}
         >
           <Eraser />
@@ -81,7 +103,7 @@ export default function ReviewForm({ selectedTvId }: { selectedTvId: number }) {
         ].map((score) => (
           <button
             type="button"
-            className={`-ms-px inline-flex items-center gap-x-2 border border-neutral-700 bg-primary-blue px-4 py-3 text-sm font-medium text-white shadow-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg focus:z-10 ${reviewScore === score ? "bg-secondary-purple" : ""} focus:outline-none disabled:pointer-events-none disabled:opacity-50`}
+            className={`-ms-px inline-flex items-center gap-x-2 border border-neutral-700 bg-primary-blue px-4 py-3 text-sm font-medium text-white shadow-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg focus:z-10 ${getValues("reviewScore") === score ? "bg-secondary-purple" : ""} focus:outline-none disabled:pointer-events-none disabled:opacity-50`}
             key={score}
             onClick={() => {
               setValue("reviewScore", score, {
@@ -97,7 +119,7 @@ export default function ReviewForm({ selectedTvId }: { selectedTvId: number }) {
 
         <button
           type="submit"
-          className="-ms-px inline-flex items-center gap-x-2 border border-neutral-700 bg-secondary-purple px-4 py-3 text-sm font-medium text-white shadow-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg hover:bg-secondary-purple-dark/70 focus:z-10 focus:bg-gray-50 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+          className="-ms-px inline-flex items-center gap-x-2 border border-neutral-700 bg-secondary-purple-dark px-4 py-3 text-sm font-medium text-white shadow-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg hover:bg-secondary-purple-dark/70 focus:z-10 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
         >
           <Send />
         </button>

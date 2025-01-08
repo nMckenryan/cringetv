@@ -49,7 +49,10 @@ export default function ReviewView({ review }: { review: Review }) {
             <div className="absolute right-2 top-2 flex flex-row gap-2">
               <Modal modalIdentifier="edit-modal" icon={<Edit />}>
                 <h3 className="text-lg font-bold">Edit Review</h3>
-                <ReviewForm selectedTvId={review.tvdb_id} />
+                <ReviewForm
+                  selectedTvId={review.tvdb_id}
+                  existingReview={review}
+                />
               </Modal>
 
               <Modal
@@ -90,11 +93,15 @@ export default function ReviewView({ review }: { review: Review }) {
                     <CircleHelp className="rounded-full shadow-md" size={40} />
                   </>
                 )}
-                <p className="text-sm">{user?.name ?? "Unknown User"}</p>
+                <p className="text-sm md:text-lg">
+                  {user?.name ?? "Unknown User"}
+                </p>
                 <RatingIcon reviewScore={review.cringe_score_vote} />
               </div>
 
-              <p className="text-left text-sm">{review.review_content}</p>
+              <p className="text-left text-sm md:text-lg">
+                {review.review_content}
+              </p>
             </div>
           </>
         )}{" "}

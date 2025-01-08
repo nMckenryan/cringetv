@@ -34,23 +34,23 @@ export default function TVShowCard({ show }: { show: TV_Show }) {
         </div>
 
         <div className="mb-2 flex flex-col gap-0 text-sm">
-          <p className="font-bold">{show.name}</p>
-          <p>
+          <p className="text-base font-bold md:text-lg">{show.name}</p>
+          <p className="text-base md:text-lg">
             {show.first_air_date.toLocaleString("en-US", {
               year: "numeric",
             })}
 
             {show.series_status === "Ended" ? " - " + finalDate : " - Present"}
           </p>
-          <p>Status: {show.series_status}</p>
+          <p className="text-base md:text-lg">Status: {show.series_status}</p>
 
-          <p>
+          <p className="text-base md:text-lg">
             Country:&nbsp;
             <Flag country={show.original_country.slice(0, -1)} />
           </p>
 
           {show.content_ratings ? (
-            <p>
+            <p className="text-base md:text-lg">
               {show.content_ratings
                 .map((cr: ContentRating) => cr.content_rating)
                 .join(" ") ?? ""}
@@ -58,13 +58,15 @@ export default function TVShowCard({ show }: { show: TV_Show }) {
           ) : null}
 
           {show.genres ? (
-            <p>{show.genres.map((g) => g.genre_name).join(" ")}</p>
+            <p className="text-base md:text-lg">
+              {show.genres.map((g) => g.genre_name).join(" ")}
+            </p>
           ) : null}
         </div>
       </div>
       <p
         id="tv-card-desc"
-        className="my-2 max-w-lg text-pretty px-5 py-1 text-sm md:max-w-sm"
+        className="text-ms my-2 max-w-lg text-pretty px-5 py-1 md:max-w-sm md:text-lg"
       >
         {show.description ?? "No Description Available"}
       </p>
