@@ -1,13 +1,12 @@
-import { RatingCode, type ContentRating, type Extended_Response } from '../src/types';
+import { ContentRatingRaw, GenreRaw, RatingCode, type ContentRating, type Extended_Response } from '../src/types';
 import { db } from "~/server/db";
-import { type GenreResponse, type TVDB_Extended, type ContentRatingResponse, type Genre, type TVDB_Response, type TVDBShow } from "~/types";
+import { type GenreResponse, type TVDB_Extended, type ContentRatingResponse, type Genre, type TVDB_Response } from "~/types";
 import {
     RegExpMatcher,
     englishDataset,
     englishRecommendedTransformers,
 } from 'obscenity';
 import { readFileSync, writeFileSync } from 'fs';
-import { api } from '~/trpc/server';
 
 const matcher = new RegExpMatcher({
     ...englishDataset.build(),
@@ -22,6 +21,20 @@ const tvdb_options = {
     },
 };
 
+type AuthResponse = {
+    status: string
+    data: {
+        token: string
+    }
+
+}
+
+export async function getAuthToken() {
+    await fetch("https://api4.thetvdb.com/v4/genres", tvdb_options)
+        .then((response) => response.json() as Promise<AuthResponse>)
+        .then((data) => tvdb_options.headers.Authorization = `Bearer ${data.data.token}`)
+        .catch((err) => console.error("auth token not recieved: " + err))
+}
 export function calculateBaseCringeRating(showDetails: TVDB_Extended): number | null {
 
     const showName = showDetails.name;
@@ -73,58 +86,54 @@ export function calculateBaseCringeRating(showDetails: TVDB_Extended): number | 
 
 
 async function seed_genre_and_content_ratings() {
-    const genre: Genre[] = []
-    const contentRating: ContentRating[] = []
+    const genre: GenreRaw[] = []
+    const contentRating: ContentRatingRaw[] = []
 
     await fetch("https://api4.thetvdb.com/v4/genres", tvdb_options)
         .then((response) => response.json() as Promise<GenreResponse>)
         .then((data) => genre.push(...data.data))
-        .catch((err) => console.error(err))
+        .catch((err) => console.error("Genres not recieved: " + err))
 
     // generate Genres
-    async function getGenres(genre_list: Genre[]) {
+    async function setGenres(genre_list: GenreRaw[]) {
         for (const g of genre_list) {
             await db.genre.upsert({
-                where: { genre_id: g.genre_id },
+                where: { genre_id: g.id },
                 update: {},
                 create: {
-                    genre_id: g.genre_id,
-                    genre_name: g.genre_name,
+                    genre_id: g.id,
+                    genre_name: g.name,
                 }
             })
         }
     }
 
-
     await fetch("https://api4.thetvdb.com/v4/content/ratings", tvdb_options)
         .then((response) => response.json() as Promise<ContentRatingResponse>)
         .then((data) => contentRating.push
             (...data.data))
-        .catch((err) => console.error(err))
+        .catch((err) => console.error("Rating not retrieved " + err))
 
     // generate ContentRatings
-    async function setContentRatings(content_rating_list: ContentRating[]) {
+    async function setContentRatings(content_rating_list: ContentRatingRaw[]) {
         for (const cr of content_rating_list) {
             await db.contentRating.upsert({
-                where: { content_rating_id: cr.content_rating_id },
+                where: { content_rating_id: cr.id },
                 update: {
-                    content_rating_id: cr.content_rating_id,
-                    content_rating: cr.content_rating,
-                    rating_country: cr.rating_country,
-                    content_rating_description: cr.content_rating_description ?? "No description available",
+
                 },
                 create: {
-                    content_rating_id: cr.content_rating_id,
-                    content_rating: cr.content_rating,
-                    rating_country: cr.rating_country,
-                    content_rating_description: cr.content_rating_description ?? "No description available",
+                    content_rating_id: cr.id,
+                    content_rating: cr.name,
+                    rating_country: cr.country,
+                    content_rating_description: cr.description ?? "No description available",
                 }
             })
         }
     }
 
     const start = performance.now();
-    await getGenres(genre);
+    await setGenres(genre);
     console.log("genre seeded");
     await setContentRatings(contentRating)
     console.log("content rating seeded");
@@ -212,7 +221,7 @@ async function getListOfShows() {
     const tvdb_list_of_ids: number[] = [];
 
     const start = performance.now();
-    while (tvdb_url !== null) {
+    while (tvdb_url !== "https://api4.thetvdb.com/v4/series?page=5") {
         await fetch(tvdb_url, tvdb_options)
             .then((response) => response.json() as Promise<TVDB_Response>)
             .then(async (data) => {
@@ -222,9 +231,9 @@ async function getListOfShows() {
                     }
                 }
                 tvdb_url = data.links.next
-                console.log(tvdb_url)
+                console.log("Processed: " + tvdb_url)
             })
-            .catch((err) => "Failed to retrieve data from: " + tvdb_url + "\n" + console.error(err))
+            .catch((err) => console.error("Failed to retrieve data from: " + tvdb_url + "\n" + err))
     }
     const end = performance.now();
     console.log(`Time taken to retrieve TVDB list: ${(end - start) / 1000} seconds`);
@@ -236,13 +245,14 @@ async function getListOfShows() {
 
 async function main() {
 
-    // await seed_genre_and_content_ratings();
-    // await getListOfShows();
+    await seed_genre_and_content_ratings();
+    await getListOfShows();
     const tvdb_list_of_ids = JSON.parse(readFileSync('tvdb_list_of_ids.json', 'utf-8')) as number[];
 
     // const existingIds = await api.tvShows.getAllTVShowIds();
 
     // const filteredList = tvdb_list_of_ids.filter(id => !existingIds.includes(id));
+
 
     await getTVDBData(tvdb_list_of_ids);
 
@@ -255,7 +265,7 @@ main()
         await db.$disconnect();
     })
     .catch(async (e) => {
-        console.error(e);
+        console.error("main error: " + e);
         await db.$disconnect();
         process.exit(1);
     });

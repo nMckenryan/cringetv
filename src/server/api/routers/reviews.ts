@@ -7,9 +7,17 @@ import {
 
 export const reviewRouter = createTRPCRouter({
   getReviewsByTVId: publicProcedure.input(z.object({ tvdb_id: z.number() })).query(({ ctx, input }) => {
-    return ctx.db.review.findFirst({
+    return ctx.db.review.findMany({
       where: {
         tvdb_id: input.tvdb_id,
+      },
+    });
+  }),
+
+  getReviewsByUserId: publicProcedure.input(z.object({ userId: z.string() })).query(({ ctx, input }) => {
+    return ctx.db.review.findMany({
+      where: {
+        userId: input.userId,
       },
     });
   }),
@@ -31,7 +39,6 @@ export const reviewRouter = createTRPCRouter({
         },
       });
     }),
-
 
   getUserReview: publicProcedure.input(z.object({ tvdb_id: z.number() })).query(({ ctx, input }) => {
     return ctx.db.review.findFirst({

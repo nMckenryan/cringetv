@@ -1,11 +1,11 @@
-TO DO MVP
+# TO DO MVP
 
 - [x] Set up basic launch
 - [x] Find Movie DB and do basic imports
 - [x] Launch on vercel
 - [x] Set up zustand for state
 - [x] Load TV show details
-- [/] Load most recent shows
+- [x] Load most recent shows
 - [x] Set up basic auth
 
 - [x] Set up DB
@@ -42,18 +42,18 @@ TO DO MVP
   - [x] List of latest tv shows
   - [x] Latest reviews (set up trpc route)
 
-
 - [] SEARCH
 
   - [x] Search form
   - [x] Search results
+  - [] debounce
 
 - [ ] FILM SELECT PAGE
 
   - [x] Build UI
   - [x] Route by ID
   - [x] Review insert section
-    - [] Show current review left by user as editable form
+    - [x] Show current review left by user as editable form
   - [x] Show latest reviews
   - [x] Show general consensus review weighing
   - [x] Film synopsis
@@ -61,14 +61,13 @@ TO DO MVP
 
 - [ ] REVIEW FORM
 
-  - [] Implement form validation
+  - [x] Implement form validation
   - [x] Implement a form for adding a review
-  - [] Make sure ranking score works
-  - [] Make sure inserts review properly
+  - [x] Make sure ranking score validation works
+  - [x] Make sure inserts review properly
   - [ ] Update review
   - [] Delete review
   - [] Calculate consensus rating
-
 
 - [] PROFILE PAGE
   - [x] Route by user id
@@ -76,8 +75,8 @@ TO DO MVP
   - [x] Implement Bio
   - [x] Bio edit page
   - [x] Account age
-  - [] List of reviews
-
+  - [x] List of reviews
+    - [] Paginate
 
 - [] PUBLISH
   - [] Clean render bugs
