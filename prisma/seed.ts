@@ -1,6 +1,6 @@
-import { ContentRatingRaw, GenreRaw, RatingCode, type ContentRating, type Extended_Response } from '../src/types';
+import { type ContentRatingRaw, type GenreRaw, RatingCode, type Extended_Response } from '../src/types';
 import { db } from "~/server/db";
-import { type GenreResponse, type TVDB_Extended, type ContentRatingResponse, type Genre, type TVDB_Response } from "~/types";
+import { type GenreResponse, type TVDB_Extended, type ContentRatingResponse, type TVDB_Response } from "~/types";
 import {
     RegExpMatcher,
     englishDataset,
@@ -26,8 +26,64 @@ type AuthResponse = {
     data: {
         token: string
     }
-
 }
+
+export async function getAdminAccount() {
+    try {
+        const adminUser = await db.user.findFirst({
+            where: {
+                name: "admin@cringedb.com",
+                email: "admin@cringedb.com",
+            },
+        });
+
+        if (!adminUser) {
+            console.error("Admin user not found");
+            return null;
+        }
+        return adminUser;
+    } catch (error) {
+        console.error("Error checking for admin account: ", error);
+        return null;
+    }
+}
+
+
+//TODO: make sure this works when seeding on new DB. makes admin account to use for initial reviews.
+export async function createAdminUser() {
+    await db.user.create({
+        data: {
+            email: "admin@cringedb.com",
+            name: "admin@cringedb.com",
+        }
+    })
+}
+
+
+export async function createAdminReview(show: TVDB_Extended, initial_rating: number) {
+    try {
+        const adminUser = await getAdminAccount();
+
+        if (!adminUser) {
+            console.error("Could not add default admin review. Admin user not found");
+            return null;
+        }
+
+        return await db.review.create({
+            data: {
+                review_content: "Initial Review, based on content rating, name or year",
+                tvdb_id: show.id,
+                userId: adminUser.id,
+                cringe_score_vote: initial_rating,
+                date_created: new Date()
+            }
+        });
+    } catch (error) {
+        console.error("Error creating admin review: ", error);
+
+    }
+}
+
 
 export async function getAuthToken() {
     await fetch("https://api4.thetvdb.com/v4/genres", tvdb_options)
@@ -35,8 +91,8 @@ export async function getAuthToken() {
         .then((data) => tvdb_options.headers.Authorization = `Bearer ${data.data.token}`)
         .catch((err) => console.error("auth token not recieved: " + err))
 }
-export function calculateBaseCringeRating(showDetails: TVDB_Extended): number | null {
 
+export function calculateBaseCringeRating(showDetails: TVDB_Extended): number | null {
     const showName = showDetails.name;
     const contentRatings = showDetails.contentRatings[0];
     const year = showDetails.year;
@@ -193,12 +249,24 @@ async function getTVDBData(tv_id_list: number[]) {
                 },
                 original_country: extended_tv_data.originalCountry ?? "Unknown",
             };
+            const cringeRatingBase = calculateBaseCringeRating(extended_tv_data);
 
-            return await db.televisionShow.upsert({
-                where: { tvdb_id: extended_tv_data.id },
-                update: {},
-                create: upsertData
-            });
+            if (cringeRatingBase !== null) {
+                await db.televisionShow.upsert({
+                    where: { tvdb_id: extended_tv_data.id },
+                    update: {},
+                    create: upsertData
+                });
+                await createAdminReview(extended_tv_data, cringeRatingBase);
+            } else {
+                await db.televisionShow.upsert({
+                    where: { tvdb_id: extended_tv_data.id },
+                    update: {},
+                    create: upsertData
+
+                }
+                );
+            }
         } catch (error) {
             console.error(`Error seeding show with ID ${id}`, error);
             return null;
@@ -206,7 +274,7 @@ async function getTVDBData(tv_id_list: number[]) {
     };
 
     // Process in batches to avoid overwhelming the API
-    const BATCH_SIZE = 100;
+    const BATCH_SIZE = 10;
     for (let i = 0; i < tv_id_list.length; i += BATCH_SIZE) {
         const batch = tv_id_list.slice(i, i + BATCH_SIZE);
         await Promise.all(batch.map(processShow).filter(Boolean));
@@ -244,8 +312,17 @@ async function getListOfShows() {
 }
 
 async function main() {
+    const getAdmin = await getAdminAccount();
+    if (getAdmin === null) {
+        await createAdminUser();
+        console.log("Admin account created!");
+    } else {
+        console.log("Admin account exists! Skipping creation");
+    }
+    await db.$executeRaw`TRUNCATE TABLE "TelevisionShow" CASCADE;`;
+    await db.$executeRaw`TRUNCATE TABLE "Review" CASCADE;`;
 
-    await seed_genre_and_content_ratings();
+    // await seed_genre_and_content_ratings();
     await getListOfShows();
     const tvdb_list_of_ids = JSON.parse(readFileSync('tvdb_list_of_ids.json', 'utf-8')) as number[];
 

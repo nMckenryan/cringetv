@@ -2,7 +2,6 @@
 import { z } from "zod";
 import {
   createTRPCRouter,
-  protectedProcedure,
   publicProcedure,
 } from "../../../server/api/trpc";
 
@@ -32,17 +31,36 @@ export const tvShowRouter = createTRPCRouter({
   }),
 
 
-  // recalculateAvgCringeRating: publicProcedure.mutation(async ({ ctx }) => {
-  //   return ctx.db.televisionShow.updateMany({
-  //     data: {
-  //       aggregate_cringe_rating: {
-  //         avg: {
-  //           of: "reviews.cringe_score_vote"
-  //         }
-  //       }
-  //     }
-  //   });
-  // }),
+  recalculateAverageCringeRating: publicProcedure.input(z.number()).mutation(async ({ ctx, input }) => {
+
+    const currentAggregateCringeScore = await ctx.db.televisionShow.findFirst({
+      where: {
+        tvdb_id: input
+      },
+      select: {
+        aggregate_cringe_rating: true
+      }
+    });
+
+    const newAggregateCringeScore = await ctx.db.review.aggregate({
+      _avg: {
+        "cringe_score_vote": true
+      }
+    });
+
+    if (newAggregateCringeScore._avg.cringe_score_vote === currentAggregateCringeScore?.aggregate_cringe_rating) {
+      return null;
+    }
+
+    return ctx.db.televisionShow.update({
+      where: {
+        tvdb_id: input,
+      },
+      data: {
+        aggregate_cringe_rating: newAggregateCringeScore._avg.cringe_score_vote
+      }
+    });
+  }),
 
   getAllTVShowIds: publicProcedure.query(({ ctx }) => {
     return ctx.db.televisionShow.findMany({

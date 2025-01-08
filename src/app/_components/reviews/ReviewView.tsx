@@ -36,6 +36,9 @@ export default function ReviewView({ review }: { review: Review }) {
     void fetchUser();
   }, [review.userId]);
 
+  const updateAvgCringeRating =
+    api.tvShows.recalculateAverageCringeRating.useMutation();
+
   return (
     <div
       className="card w-full bg-primary-blue-light shadow-xl"
@@ -63,6 +66,7 @@ export default function ReviewView({ review }: { review: Review }) {
                   onSubmit={(e) => {
                     e.preventDefault();
                     mutate({ review_id: review.review_id });
+                    updateAvgCringeRating.mutate(review.tvdb_id);
                   }}
                 >
                   <h3 className="text-lg font-bold">Delete Review</h3>

@@ -67,7 +67,7 @@
   - [x] Make sure inserts review properly
   - [ ] Update review
   - [x] Delete review
-  - [] Calculate consensus rating
+  - [/] Calculate consensus rating
 
 - [] PROFILE PAGE
   - [x] Route by user id

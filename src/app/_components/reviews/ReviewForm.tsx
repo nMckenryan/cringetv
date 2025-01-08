@@ -51,6 +51,8 @@ export default function ReviewForm({
 
   const updateReviewMutation = api.reviews.updateReview.useMutation();
   const createNewReviewMutation = api.reviews.createNewReview.useMutation();
+  const updateAvgCringeRating =
+    api.tvShows.recalculateAverageCringeRating.useMutation();
 
   const submitReview = async (data: IFormInput) => {
     if (existingReview != null) {
@@ -65,12 +67,14 @@ export default function ReviewForm({
         review_content: data.reviewContent,
         cringe_score_vote: data.reviewScore,
       });
+      updateAvgCringeRating.mutate(selectedTvId);
     } else {
       createNewReviewMutation.mutate({
         review_content: data.reviewContent,
         cringe_score_vote: data.reviewScore,
         tvdb_id: selectedTvId,
       });
+      updateAvgCringeRating.mutate(selectedTvId);
     }
   };
 
