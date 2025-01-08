@@ -66,7 +66,7 @@
   - [x] Make sure ranking score validation works
   - [x] Make sure inserts review properly
   - [ ] Update review
-  - [] Delete review
+  - [x] Delete review
   - [] Calculate consensus rating
 
 - [] PROFILE PAGE

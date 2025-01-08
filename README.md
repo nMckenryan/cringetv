@@ -33,13 +33,20 @@ CringeTV is a community driven platform where users can share reviews for TV sho
 
 ## Built with:
 
-[![React][React.js]][React-url] [![ReactHookForm][ReactHookForm]][ReactHookFormURL] [![ReactQuery][ReactQuery]][ReactQueryURL]
-[![Next][Next.js]][Next-url] [![NextAuth][NextAuth.js]][NextAuth.jsURL] [![Auth0][Auth0]][Auth0URL]
-[![TailwindCSS][TailwindCSS]][TailwindCSSURL] [![Daisy.UI][Daisy.UI]][Daisy.UIURL]
 [![Typescript][Typescript]][TypescriptURL]
-[![PostgreSql][PostgreSql]][PostgreSqlURL][![Prisma][Prisma]][PrismaURL][![tRPC][tRPC]][tRPCURL]
+[![React][React.js]][React-url]
+[![ReactHookForm][ReactHookForm]][ReactHookFormURL]
+[![ReactQuery][ReactQuery]][ReactQueryURL]
+[![Next][Next.js]][Next-url]
+[![NextAuth][NextAuth.js]][NextAuth.jsURL]
+[![Auth0][Auth0]][Auth0URL]
+[![TailwindCSS][TailwindCSS]][TailwindCSSURL]
+[![Daisy.UI][Daisy.UI]][Daisy.UIURL]
+[![PostgreSql][PostgreSql]][PostgreSqlURL]
+[![Prisma][Prisma]][PrismaURL]
+[![tRPC][tRPC]][tRPCURL]
 [![Vercel][Vercel]][VercelURL]
-
+[![Docker][Docker]][DockerURL]
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -143,8 +150,12 @@ Project Link: [https://github.com/nmckenryan/cringetv](https://github.com/nmcken
 
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=white&color=%2361DAFB
 [React-url]: https://reactjs.org/
+
+[ReactQuery]: https://img.shields.io/badge/ReactQuery-000000?style=for-the-badge&logo=reactquery&logoColor=white&color=%23FF4154
+[ReactQueryURL]: https://react-query.tanstack.com
 
 [ReactHookForm]: https://img.shields.io/badge/React%20Hook%20Form-000000?style=for-the-badge&logo=reacthookform&logoColor=white&color=%23EC5990
 [ReactHookFormURL]: https://react-hook-form.com/
@@ -167,7 +178,7 @@ Project Link: [https://github.com/nmckenryan/cringetv](https://github.com/nmcken
 [Prisma]: https://img.shields.io/badge/Prisma-000000?style=for-the-badge&logo=prisma&logoColor=white&color=%232D3748
 [PrismaURL]: https://prisma.io
 
-[TailwindCSS]: https://img.shields.io/badge/tailwind-00000?style=for-the-badge&logo=tailwind&logoColor=white&color=%2306B6D4
+[TailwindCSS]: https://img.shields.io/badge/tailwind-00000?style=for-the-badge&logo=tailwindcss&logoColor=white&color=%2306B6D4
 
 [TailwindCSSURL]: https://tailwindcss.com
 
@@ -179,3 +190,6 @@ Project Link: [https://github.com/nmckenryan/cringetv](https://github.com/nmcken
 
 [Vercel]: https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white&color=%23000000
 [VercelURL]: https://vercel.com
+
+[Docker]: https://img.shields.io/badge/Docker-000000?style=for-the-badge&logo=docker&logoColor=white&color=%232496ED
+[DockerURL]: https://www.docker.com
