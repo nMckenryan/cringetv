@@ -10,6 +10,9 @@ export default {
       fontFamily: {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],
       },
+      aspectRatio: {
+        poster: '2 / 3'
+      },
       colors: {
         'primary-blue': '#1E2738',
         'background-black': '#20211A',

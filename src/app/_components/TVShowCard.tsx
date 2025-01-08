@@ -13,44 +13,49 @@ export default function TVShowCard({ show }: { show: TV_Show }) {
     : "";
 
   return (
-    <div className="flex flex-col items-center px-0 lg:flex-row">
-      <BackButton className="absolute left-1 top-1" />
-      <div id="tv-card-top" className="w-lg flex flex-row justify-around gap-5">
-        <div className="flex flex-col items-center">
-          <Image
-            src={show.poster_link ?? noPoster}
-            width={100}
-            height={150}
-            alt={`${show.name} poster`}
-            className="rounded-xl shadow-xl"
-          />
-
-          <div className="flex flex-row align-middle">
-            {getRatingIcon(show.aggregate_cringe_rating)}
-            <p className="content-center align-middle text-sm">
-              {getRatingText(show.aggregate_cringe_rating)}
-            </p>
-          </div>
-        </div>
-
-        <div className="mb-2 flex flex-col gap-0 text-sm">
+    <div className="flex w-full flex-row items-center px-0 lg:w-[50vw]">
+      <BackButton className="absolute left-1 top-1 p-2" />{" "}
+      <div
+        id="tv-card-col1-image"
+        className="aspect-poster relative mx-2 flex flex-col items-center"
+      >
+        <Image
+          src={show.poster_link ?? noPoster}
+          alt={`${show.name} poster`}
+          className="rounded-xl shadow-xl"
+          width={200}
+          height={200}
+        />
+      </div>
+      <div
+        id="tv-card-top"
+        className="w-lg flex flex-row flex-nowrap justify-around gap-5"
+      >
+        <div
+          id="tv-card-col2-data"
+          className="mb-2 flex w-2/5 flex-col text-sm lg:text-lg"
+        >
           <p className="text-base font-bold md:text-lg">{show.name}</p>
-          <p className="text-base md:text-lg">
+          <p>
             {show.first_air_date.toLocaleString("en-US", {
               year: "numeric",
             })}
 
             {show.series_status === "Ended" ? " - " + finalDate : " - Present"}
           </p>
-          <p className="text-base md:text-lg">Status: {show.series_status}</p>
+          <p>Status: {show.series_status}</p>
 
-          <p className="text-base md:text-lg">
+          <p>
             Country:&nbsp;
-            <Flag country={show.original_country.slice(0, -1)} />
+            {show.original_country == "Unknown" ? (
+              "???"
+            ) : (
+              <Flag country={show.original_country.slice(0, -1)} />
+            )}
           </p>
 
           {show.content_ratings ? (
-            <p className="text-base md:text-lg">
+            <p>
               {show.content_ratings
                 .map((cr: ContentRating) => cr.content_rating)
                 .join(" ") ?? ""}
@@ -58,18 +63,25 @@ export default function TVShowCard({ show }: { show: TV_Show }) {
           ) : null}
 
           {show.genres ? (
-            <p className="text-base md:text-lg">
-              {show.genres.map((g) => g.genre_name).join(" ")}
-            </p>
+            <p>{show.genres.map((g) => g.genre_name).join(" ")}</p>
           ) : null}
+
+          <div className="mt-2 flex flex-row align-middle">
+            {getRatingIcon(show.aggregate_cringe_rating)}
+            <p className="ml-2 content-center align-middle">
+              {getRatingText(show.aggregate_cringe_rating)}
+            </p>
+          </div>
+        </div>
+        <div id="tv-card-col2">
+          <p
+            id="tv-card-desc"
+            className="my-2 max-w-lg text-pretty px-5 py-1 text-sm md:max-w-sm lg:text-lg"
+          >
+            {show.description ?? "No Description Available"}
+          </p>
         </div>
       </div>
-      <p
-        id="tv-card-desc"
-        className="text-ms my-2 max-w-lg text-pretty px-5 py-1 md:max-w-sm md:text-lg"
-      >
-        {show.description ?? "No Description Available"}
-      </p>
     </div>
   );
 }

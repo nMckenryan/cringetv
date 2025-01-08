@@ -76,12 +76,12 @@ export default function ReviewForm({
 
   return (
     <form
-      className="flex w-full flex-col text-center md:w-[47vw]"
+      className="flex flex-col text-center"
       onSubmit={handleSubmit((data) => submitReview(data))}
     >
-      <input
+      <textarea
         {...register("reviewContent", { required: true })}
-        className="textarea textarea-bordered bg-primary-blue-light pb-10 text-white"
+        className="max-h-50 textarea resize-y bg-primary-blue-light text-white"
         placeholder="Write a Review"
       />
 

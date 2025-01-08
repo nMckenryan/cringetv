@@ -22,12 +22,12 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
+    <html lang="en" className={`${GeistSans.variable} bg-background-black`}>
       <body>
         <TRPCReactProvider>
           <HydrateClient>
             <TopNav />
-            <main className="justify-top my-3 flex min-h-screen flex-col items-center gap-3 bg-background-black text-white">
+            <main className="justify-top my-3 flex min-h-screen flex-col items-center gap-3 text-white">
               {children}
             </main>
             <Footer />

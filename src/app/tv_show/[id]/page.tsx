@@ -42,7 +42,7 @@ export default async function TVShowPage({
 
       {canLeaveReview && (
         <UICard>
-          <ReviewForm selectedTvId={show?.tvdb_id} />
+          <ReviewForm selectedTvId={show?.tvdb_id} existingReview={null} />
         </UICard>
       )}
 
