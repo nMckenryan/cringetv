@@ -136,7 +136,7 @@ Project Link: [https://github.com/nmckenryan/cringetv](https://github.com/nmcken
 [issues-shield]: https://img.shields.io/github/issues/nmckenryan/cringetv.svg?style=for-the-badge
 [issues-url]: https://github.com/nMckenryan/cringetv/issues
 [license-shield]: https://img.shields.io/github/license/nmckenryan/cringetv.svg?style=for-the-badge
-[license-url]: https://github.com/nMckenryan/cringetv/main/LICENSE.txt
+[license-url]: https://github.com/nMckenryan/cringetv/blob/main/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/nmckenryan
 [product-screenshot]: images/screenshot.png
