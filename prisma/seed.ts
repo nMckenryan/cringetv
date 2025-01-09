@@ -132,7 +132,6 @@ export function calculateBaseCringeRating(showDetails: TVDB_Extended): number | 
     }
 
     if (matcher.hasMatch(showName)) {
-        console.log(showName);
         return RatingCode.BaseUnsafeLimit.valueOf()
     }
     else {

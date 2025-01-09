@@ -99,7 +99,7 @@ model Review {
   user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   tvdb_id           Int
   televisionShow    TelevisionShow @relation(fields: [tvdb_id], references: [tvdb_id], onDelete: Cascade)
-  cringe_score_vote Int
+  cringe_score_vote Float
   date_created      DateTime
   date_updated      DateTime?
 
