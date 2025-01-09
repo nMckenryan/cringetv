@@ -33,33 +33,51 @@ export const tvShowRouter = createTRPCRouter({
 
   recalculateAverageCringeRating: publicProcedure.input(z.number()).mutation(async ({ ctx, input }) => {
 
-    const currentAggregateCringeScore = await ctx.db.televisionShow.findFirst({
+    const hasReviews = await ctx.db.review.count({
       where: {
         tvdb_id: input
-      },
-      select: {
-        aggregate_cringe_rating: true
       }
     });
 
-    const newAggregateCringeScore = await ctx.db.review.aggregate({
-      _avg: {
-        "cringe_score_vote": true
-      }
-    });
+    if (hasReviews !== 0) {
+      const currentAggregateCringeScore = await ctx.db.televisionShow.findFirst({
+        where: {
+          tvdb_id: input
+        },
+        select: {
+          aggregate_cringe_rating: true
+        }
+      });
 
-    if (newAggregateCringeScore._avg.cringe_score_vote === currentAggregateCringeScore?.aggregate_cringe_rating) {
-      return null;
+      const newAggregateCringeScore = await ctx.db.review.aggregate({
+        _avg: {
+          "cringe_score_vote": true
+        }
+      });
+
+      if (newAggregateCringeScore._avg.cringe_score_vote === currentAggregateCringeScore?.aggregate_cringe_rating) {
+        return null;
+      }
+      return ctx.db.televisionShow.update({
+        where: {
+          tvdb_id: input,
+        },
+        data: {
+          aggregate_cringe_rating: newAggregateCringeScore._avg.cringe_score_vote
+        }
+      });
+    } else {
+      return ctx.db.televisionShow.update({
+        where: {
+          tvdb_id: input,
+        },
+        data: {
+          aggregate_cringe_rating: null
+        }
+      });
     }
 
-    return ctx.db.televisionShow.update({
-      where: {
-        tvdb_id: input,
-      },
-      data: {
-        aggregate_cringe_rating: newAggregateCringeScore._avg.cringe_score_vote
-      }
-    });
+
   }),
 
   getAllTVShowIds: publicProcedure.query(({ ctx }) => {

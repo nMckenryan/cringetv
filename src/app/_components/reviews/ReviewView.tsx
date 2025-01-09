@@ -1,5 +1,5 @@
 "use client";
-import { Modal } from "../Modal";
+
 import React, { useEffect, useState } from "react";
 import { type Review } from "~/types";
 
@@ -8,9 +8,8 @@ import Image from "next/image";
 
 import RatingIcon from "../RatingIcon";
 
-import { CircleHelp, Edit, Trash } from "lucide-react";
-import ReviewForm from "./ReviewForm";
-import { api } from "~/trpc/react";
+import { CircleHelp } from "lucide-react";
+import ReviewActionsBar from "./ReviewActionsBar";
 export type UserDetails = {
   name: string | null;
   image: string | null;
@@ -18,8 +17,6 @@ export type UserDetails = {
 export default function ReviewView({ review }: { review: Review }) {
   const [user, setUser] = useState<UserDetails>();
   const [isLoading, setIsLoading] = useState(true);
-
-  const { mutate } = api.reviews.deleteReview.useMutation();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -36,9 +33,6 @@ export default function ReviewView({ review }: { review: Review }) {
     void fetchUser();
   }, [review.userId]);
 
-  const updateAvgCringeRating =
-    api.tvShows.recalculateAverageCringeRating.useMutation();
-
   return (
     <div
       className="card w-full bg-primary-blue-light shadow-xl"
@@ -49,39 +43,7 @@ export default function ReviewView({ review }: { review: Review }) {
           <span className="loading loading-bars loading-sm" />
         ) : (
           <>
-            <div className="absolute right-2 top-2 flex flex-row gap-2">
-              <Modal modalIdentifier="edit-modal" icon={<Edit />}>
-                <h3 className="text-lg font-bold">Edit Review</h3>
-                <ReviewForm
-                  selectedTvId={review.tvdb_id}
-                  existingReview={review}
-                />
-              </Modal>
-
-              <Modal
-                modalIdentifier="delete-modal"
-                icon={<Trash className="cursor-pointer" size={20} />}
-              >
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    mutate({ review_id: review.review_id });
-                    updateAvgCringeRating.mutate(review.tvdb_id);
-                  }}
-                >
-                  <h3 className="text-lg font-bold">Delete Review</h3>
-                  <p>Are you sure you want to delete this review?</p>
-                  <div className="flex flex-row justify-center">
-                    <button
-                      type="submit"
-                      className="-ms-px inline-flex items-center gap-x-2 rounded-lg border border-neutral-700 bg-red-500 px-4 py-3 text-sm font-medium text-white shadow-sm first:ms-0 hover:bg-secondary-purple-dark/70 focus:z-10 focus:bg-red-500/90 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                    >
-                      <Trash />
-                    </button>
-                  </div>
-                </form>
-              </Modal>
-            </div>
+            <ReviewActionsBar review={review} />
             <div className="flex flex-col gap-2">
               <div className="flex flex-row items-center justify-between gap-3">
                 {user?.image ? (

@@ -23,7 +23,7 @@
 - [x] Fix carousel so it works under mobile
 
   - [x] Sort by newest release
-  - [] Sort by most reviewed
+  - [x] Sort by most reviewed
   - [x] Sort safest/most dangerous shows
 
 - [x] - Rig up routing for:
@@ -43,7 +43,6 @@
   - [x] Latest reviews (set up trpc route)
 
 - [] SEARCH
-
   - [x] Search form
   - [x] Search results
   - [] debounce
@@ -60,14 +59,14 @@
   - [x] classification ratings
 
 - [ ] REVIEW FORM
-
   - [x] Implement form validation
   - [x] Implement a form for adding a review
   - [x] Make sure ranking score validation works
   - [x] Make sure inserts review properly
-  - [ ] Update review
+  - [x] Update review
   - [x] Delete review
-  - [/] Calculate consensus rating
+  - [x] Calculate consensus rating
+  - [] trigger update once action complete
 
 - [] PROFILE PAGE
   - [x] Route by user id

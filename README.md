@@ -127,7 +127,7 @@ Project Link: [https://github.com/nmckenryan/cringetv](https://github.com/nmcken
 
 * [TheTVDB](https://www.thetvdb.com)
 * [Best-README-Template](https://github.com/othneildrew/Best-README-Template/)
-
+* [EmblaCarousel](https://www.embla-carousel.com/)
 
 
 

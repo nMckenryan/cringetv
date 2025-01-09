@@ -44,8 +44,8 @@ export default function ReviewForm({
   } = useForm<IFormInput>({
     resolver: zodResolver(schema),
     defaultValues: {
-      reviewContent: "",
-      reviewScore: -1,
+      reviewContent: existingReview?.review_content ?? "",
+      reviewScore: existingReview?.cringe_score_vote ?? -1,
     },
   });
 
@@ -76,6 +76,7 @@ export default function ReviewForm({
       });
       updateAvgCringeRating.mutate(selectedTvId);
     }
+    window.location.reload();
   };
 
   return (
