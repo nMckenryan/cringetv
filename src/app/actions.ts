@@ -28,3 +28,26 @@ export async function search(searchTerm: string) {
     }
     return results;
 }
+
+
+export async function getReviewsByUserId(userId: string) {
+    try {
+        const newReviews = await api.reviews.getReviewsByUserId({
+            userId: userId,
+        });
+        return newReviews;
+    } catch (error) {
+        console.error("Error getting TV show by ID:", error);
+        return null;
+    }
+}
+
+export async function getReviewsByTVId(tvdb_id: number) {
+    try {
+        const newReviews = await api.reviews.getReviewsByTVId({ tvdb_id: tvdb_id });
+        return newReviews;
+    } catch (error) {
+        console.error("Error getting TV show by UserID:", error);
+        return null;
+    }
+}

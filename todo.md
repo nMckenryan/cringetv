@@ -47,7 +47,7 @@
   - [x] Search results
   - [] debounce
 
-- [ ] FILM SELECT PAGE
+- [x] FILM SELECT PAGE
 
   - [x] Build UI
   - [x] Route by ID
@@ -78,7 +78,7 @@
     - [] Paginate
 
 - [] PUBLISH
-  - [] Clean render bugs
-  - [] Sort mobile responsiveness
+  - [x] Clean render bugs
+  - [x] Sort mobile responsiveness
   - [] clean up db/migrations
   - [] Merge w/ main

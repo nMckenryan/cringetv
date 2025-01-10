@@ -1,7 +1,6 @@
 import TVShowCard from "~/app/_components/TVShowCard";
 
 import UICard from "~/app/_components/UICard";
-import ReviewForm from "~/app/_components/reviews/ReviewForm";
 
 import ReviewList from "~/app/_components/reviews/ReviewList";
 import NotFound from "~/app/not-found";
@@ -40,14 +39,12 @@ export default async function TVShowPage({
         <TVShowCard show={show} />
       </UICard>
 
-      {canLeaveReview && (
-        <UICard>
-          <ReviewForm selectedTvId={show?.tvdb_id} existingReview={null} />
-        </UICard>
-      )}
-
       <UICard>
-        <ReviewList reviewList={reviewList} />
+        <ReviewList
+          tv_show_id={show.tvdb_id}
+          userId={session?.user?.id}
+          isUserPage={false}
+        />
       </UICard>
     </>
   );

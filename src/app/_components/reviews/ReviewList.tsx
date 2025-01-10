@@ -1,8 +1,24 @@
-import React, { Suspense } from "react";
+"use client";
+
+import React, { Suspense, useCallback, useEffect, useState } from "react";
 import ReviewView from "./ReviewView";
+
+import ReviewForm from "~/app/_components/reviews/ReviewForm";
+
 import { type Review } from "~/types";
 
-export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
+import { getReviewsByTVId, getReviewsByUserId } from "~/app/actions";
+import { get } from "http";
+
+export default function ReviewList({
+  tv_show_id,
+  userId,
+  isUserPage,
+}: {
+  tv_show_id: number;
+  userId?: string;
+  isUserPage: boolean;
+}) {
   // const [page, setPage] = React.useState(0);
 
   // const tvId = reviewList[0]?.tvdb_id ?? 0;
@@ -12,9 +28,41 @@ export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
 
   // const entries = reviewList.slice(start, end);
 
+  const [reviewList, setReviewList] = useState<Review[]>([]);
+
+  const fetchReviews = async () => {
+    if (isUserPage && userId) {
+      return await getReviewsByUserId(userId);
+    } else {
+      return await getReviewsByTVId(tv_show_id);
+    }
+  };
+
+  const getInitialReviews = useCallback(() => {
+    return void fetchReviews().then((data) => setReviewList(data));
+  }, [fetchReviews]);
+
+  useEffect(() => {
+    void getInitialReviews();
+  }, [getInitialReviews]);
+
+  const hasLeftReviewIndex = reviewList.findIndex(
+    (rev) => rev.userId === userId,
+  );
+  const canLeaveReview = userId && hasLeftReviewIndex === -1;
+
+  if (hasLeftReviewIndex > 0) {
+    // if the user has left a review, move it to the top of the list (if it isn't already)
+    const userReview = reviewList.splice(hasLeftReviewIndex, 1)[0]!;
+    reviewList.unshift(userReview);
+  }
+
   return (
     <div className="flex w-full flex-col gap-2">
       <Suspense fallback={<span className="loading loading-bars loading-sm" />}>
+        {canLeaveReview && (
+          <ReviewForm selectedTvId={tv_show_id} existingReview={null} />
+        )}
         {reviewList.length === 0 ? (
           <p className="p-10 text-center text-lg">No Reviews Yet.</p>
         ) : (
