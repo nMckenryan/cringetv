@@ -5,6 +5,7 @@ import { type Review } from "~/types";
 
 import { getUserById } from "~/app/actions";
 import Image from "next/image";
+import { api } from "~/trpc/react";
 
 import RatingIcon from "../RatingIcon";
 
@@ -17,6 +18,9 @@ export type UserDetails = {
 export default function ReviewView({ review }: { review: Review }) {
   const [user, setUser] = useState<UserDetails>();
   const [isLoading, setIsLoading] = useState(true);
+
+  const session = api.users.me.useQuery();
+  const isReviewOwnedByUser = session.data?.id === review.userId;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -35,7 +39,7 @@ export default function ReviewView({ review }: { review: Review }) {
 
   return (
     <div
-      className="card w-full bg-primary-blue-light shadow-xl"
+      className={`card w-full ${isReviewOwnedByUser ? "border-2 border-secondary-purple-light" : ""} bg-primary-blue-light shadow-xl`}
       key={review.review_id}
     >
       <div className="card-body items-center text-center">
@@ -43,7 +47,8 @@ export default function ReviewView({ review }: { review: Review }) {
           <span className="loading loading-bars loading-sm" />
         ) : (
           <>
-            <ReviewActionsBar review={review} />
+            {isReviewOwnedByUser ? <ReviewActionsBar review={review} /> : null}
+
             <div className="flex flex-col gap-2">
               <div className="flex flex-row items-center justify-between gap-3">
                 {user?.image ? (

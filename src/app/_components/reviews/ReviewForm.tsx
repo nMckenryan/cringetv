@@ -7,6 +7,8 @@ import { RatingCode, type Review } from "~/types";
 import { Eraser, Send } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { hasUserLeftReview } from "~/app/actions";
+import { useEffect, useRef, useState } from "react";
 
 const schema = z.object({
   reviewContent: z
@@ -34,6 +36,7 @@ export default function ReviewForm({
   selectedTvId: number;
   existingReview: Review | null;
 }) {
+  const [hasLeftReview, setHasLeftReview] = useState<boolean | null>(false);
   const {
     register,
     getValues,
@@ -78,6 +81,22 @@ export default function ReviewForm({
     }
     window.location.reload();
   };
+  useEffect(() => {
+    const checkUserLeftReview = async () => {
+      try {
+        const hlr = await hasUserLeftReview(selectedTvId);
+        setHasLeftReview(hlr);
+        // Additional logic if user has not left a review
+      } catch (error) {
+        console.error("Error checking user review status:", error);
+      }
+    };
+    void checkUserLeftReview();
+  }, [selectedTvId]);
+
+  if (hasLeftReview) {
+    return null;
+  }
 
   return (
     <form

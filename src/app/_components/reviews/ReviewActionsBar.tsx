@@ -6,20 +6,13 @@ import { api } from "~/trpc/react";
 import { type Review } from "~/types";
 
 export default function ReviewActionsBar({ review }: { review: Review }) {
-  const session = api.users.me.useQuery();
-  //"cm5ololng0000dj30v58n7m1r";
-
   const { mutate } = api.reviews.deleteReview.useMutation();
 
   const updateAvgCringeRating =
     api.tvShows.recalculateAverageCringeRating.useMutation();
 
-  if (session.data?.id !== review.userId) {
-    return null;
-  }
-
   return (
-    <div className="absolute right-2 top-2 flex flex-row gap-2">
+    <div className="absolute top-1 flex flex-row gap-2">
       <Modal modalIdentifier="edit-modal" icon={<Edit />}>
         <h3 className="text-lg font-bold">Edit Review</h3>
         <ReviewForm selectedTvId={review.tvdb_id} existingReview={review} />
