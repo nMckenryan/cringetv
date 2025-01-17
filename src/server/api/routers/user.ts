@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -8,12 +7,11 @@ import {
 
 export const userRouter = createTRPCRouter({
   me: protectedProcedure.query(async ({ ctx }) => {
-    const user = await ctx.db.user.findUnique({
+    return await ctx.db.user.findUnique({
       where: {
         id: ctx.session.user.id,
       },
     });
-    return user;
   }),
 
   editBio: protectedProcedure.input(z.object({ bio: z.string() })).mutation(async ({ ctx, input }) => {

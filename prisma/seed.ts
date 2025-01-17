@@ -150,18 +150,6 @@ async function seed_genre_and_content_ratings() {
         .catch((err) => console.error("Genres not recieved: " + err))
 
     // generate Genres
-    async function setGenres(genre_list: GenreRaw[]) {
-        for (const g of genre_list) {
-            await db.genre.upsert({
-                where: { genre_id: g.id },
-                update: {},
-                create: {
-                    genre_id: g.id,
-                    genre_name: g.name,
-                }
-            })
-        }
-    }
 
     await fetch("https://api4.thetvdb.com/v4/content/ratings", tvdb_options)
         .then((response) => response.json() as Promise<ContentRatingResponse>)
@@ -169,28 +157,39 @@ async function seed_genre_and_content_ratings() {
             (...data.data))
         .catch((err) => console.error("Rating not retrieved " + err))
 
-    // generate ContentRatings
-    async function setContentRatings(content_rating_list: ContentRatingRaw[]) {
-        for (const cr of content_rating_list) {
-            await db.contentRating.upsert({
-                where: { content_rating_id: cr.id },
-                update: {
 
-                },
-                create: {
-                    content_rating_id: cr.id,
-                    content_rating: cr.name,
-                    rating_country: cr.country,
-                    content_rating_description: cr.description ?? "No description available",
-                }
-            })
-        }
-    }
 
     const start = performance.now();
-    await setGenres(genre);
+
+    //SET GENRES
+    for (const g of genre) {
+        await db.genre.upsert({
+            where: { genre_id: g.id },
+            update: {},
+            create: {
+                genre_id: g.id,
+                genre_name: g.name,
+            }
+        })
+    }
+
     console.log("genre seeded");
-    await setContentRatings(contentRating)
+
+    // generate ContentRatings
+    for (const cr of contentRating) {
+        await db.contentRating.upsert({
+            where: { content_rating_id: cr.id },
+            update: {
+
+            },
+            create: {
+                content_rating_id: cr.id,
+                content_rating: cr.name,
+                rating_country: cr.country,
+                content_rating_description: cr.description ?? "No description available",
+            }
+        })
+    }
     console.log("content rating seeded");
     const end = performance.now();
     console.log(`Time taken to retrieve TVDB list: ${(end - start) / 1000} seconds`);
