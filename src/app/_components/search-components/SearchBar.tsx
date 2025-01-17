@@ -6,7 +6,6 @@ import { Search, X } from "lucide-react";
 import SearchResult from "./SearchMenuResult";
 import { search } from "~/app/actions";
 import { useDebounce } from "use-debounce";
-import { set } from "zod";
 
 export default function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("");

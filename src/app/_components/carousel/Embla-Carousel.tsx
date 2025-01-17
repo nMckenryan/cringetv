@@ -40,12 +40,12 @@ export default function EmblaCarousel({
   return collection === undefined ? (
     <div
       id="placeholder-carousel"
-      className="embla skeleton mx-auto h-72 w-screen md:w-[70vw]"
+      className="embla skeleton mx-auto h-72 w-[90vw] md:w-[50vw]"
     />
   ) : collection.length > 0 ? (
     <div id="carousel-full" className="flex items-center">
       <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-      <div className="embla mx-auto w-screen text-2xl md:w-[70vw]">
+      <div className="embla mx-auto w-[80vw] text-2xl md:w-[50vw]">
         <div className="embla__viewport" ref={emblaRef}>
           <div className="embla__container">
             {collection.map((tv: TV_Show_Basic) => {
@@ -55,7 +55,7 @@ export default function EmblaCarousel({
                     rel="preload"
                     href="/tv_show/[id]"
                     as={`/tv_show/${tv.tvdb_id}`}
-                    className={`card relative m-2 flex min-h-[50vw] min-w-[40vw] justify-end font-semibold no-underline shadow-xl transition hover:bg-secondary-purple/50 md:min-h-[25vw] md:min-w-[15vw]`}
+                    className={`card relative m-2 flex min-h-[40vw] min-w-[20vw] justify-end font-semibold no-underline shadow-xl transition hover:bg-secondary-purple/50 sm:min-h-[20vw] sm:min-w-[10vw]`}
                   >
                     <div className="absolute right-0 top-0 z-10 m-0 rounded-full bg-slate-900 p-0 shadow-lg">
                       {getRatingIcon(tv.aggregate_cringe_rating)}

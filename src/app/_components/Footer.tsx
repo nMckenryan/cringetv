@@ -7,8 +7,11 @@ export default function Footer() {
         <p>TV Series data retrieved from TheTVDB.com Api V4</p>
       </aside>
       <nav className="grid-row gap-4 md:place-self-center md:justify-self-end">
-        <a className="flex-row" href="https://github.com/nmckenryan">
-          <GithubIcon /> Created by nmckenryan - 2024
+        <a
+          className="flex flex-row items-center justify-center"
+          href="https://github.com/nmckenryan"
+        >
+          Created by nmckenryan - 2024 <br /> <GithubIcon />
         </a>
       </nav>
     </footer>

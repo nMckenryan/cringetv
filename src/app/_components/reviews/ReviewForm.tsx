@@ -1,40 +1,105 @@
 "use client";
-import React from "react";
 import RatingIcon from "../RatingIcon";
 
+import { useForm } from "react-hook-form";
 import { api } from "~/trpc/react";
-import { RatingCode } from "~/types";
+import { RatingCode, type Review } from "~/types";
+import { Eraser, Send } from "lucide-react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-export default function ReviewForm({ selectedTvId }: { selectedTvId: number }) {
-  const [reviewContent, setReviewContent] = React.useState<string>("");
-  const [reviewScore, setReviewScore] = React.useState<number>(0);
+const schema = z.object({
+  reviewContent: z
+    .string({
+      invalid_type_error: "Invalid Review Content",
+    })
+    .min(1, { message: "Review Content is required" })
+    .max(500, {
+      message: "Review Content cannot be longer than 500 characters",
+    }),
+  reviewScore: z
+    .number({
+      invalid_type_error: "Invalid Review Score",
+    })
+    .min(0)
+    .max(1),
+});
 
-  const existingUserReview = api.reviews.getUserReview.useQuery({
-    tvdb_id: selectedTvId,
+type IFormInput = z.infer<typeof schema>;
+
+export default function ReviewForm({
+  selectedTvId,
+  existingReview,
+}: {
+  selectedTvId: number;
+  existingReview: Review | null;
+}) {
+  const {
+    register,
+    getValues,
+    setValue,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      reviewContent: existingReview?.review_content ?? "",
+      reviewScore: existingReview?.cringe_score_vote ?? -1,
+    },
   });
 
-  const { mutate, error } = api.reviews.createNewReview.useMutation();
+  const updateReviewMutation = api.reviews.updateReview.useMutation();
+  const createNewReviewMutation = api.reviews.createNewReview.useMutation();
+  const updateAvgCringeRating =
+    api.tvShows.recalculateAverageCringeRating.useMutation();
+
+  const submitReview = async (data: IFormInput) => {
+    if (existingReview != null) {
+      if (
+        data.reviewContent === existingReview.review_content &&
+        data.reviewScore === existingReview.cringe_score_vote
+      ) {
+        return null;
+      }
+      updateReviewMutation.mutate({
+        review_id: existingReview.review_id,
+        review_content: data.reviewContent,
+        cringe_score_vote: data.reviewScore,
+      });
+      updateAvgCringeRating.mutate(selectedTvId);
+    } else {
+      createNewReviewMutation.mutate({
+        review_content: data.reviewContent,
+        cringe_score_vote: data.reviewScore,
+        tvdb_id: selectedTvId,
+      });
+      updateAvgCringeRating.mutate(selectedTvId);
+    }
+    window.location.reload();
+  };
 
   return (
     <form
-      className="flex w-full flex-col text-center md:w-[60vw]"
-      onSubmit={(e) => {
-        e.preventDefault();
-        // const formData = new FormData(e.currentTarget);
-        mutate({
-          review_content: reviewContent,
-          cringe_score_vote: reviewScore,
-          tvdb_id: selectedTvId,
-        });
-      }}
+      className="flex flex-col text-center"
+      onSubmit={handleSubmit((data) => submitReview(data))}
     >
       <textarea
-        name="review_content"
-        className="textarea textarea-bordered h-24 w-full bg-primary-blue-light text-white"
-        placeholder="Add a Review"
-        onChange={(e) => setReviewContent(e.target.value)}
+        {...register("reviewContent", { required: true })}
+        className="max-h-50 textarea resize-y bg-primary-blue-light text-white"
+        placeholder="Write a Review"
       />
-      <div className="flex flex-row items-center justify-around py-2">
+
+      <div className="mx-auto inline-flex rounded-lg py-2 shadow-sm">
+        {/* TODO: set reset button to return to existing review when in edit mode */}
+        <button
+          type="reset"
+          className="-ms-px inline-flex items-center gap-x-2 border border-neutral-700 bg-secondary-purple-dark px-4 py-3 text-sm font-medium text-white shadow-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg hover:bg-secondary-purple-dark/70 focus:z-10 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+          onClick={() => reset()}
+        >
+          <Eraser />
+        </button>
+
         {[
           0,
           RatingCode.BaseCautionLimit,
@@ -43,9 +108,15 @@ export default function ReviewForm({ selectedTvId }: { selectedTvId: number }) {
         ].map((score) => (
           <button
             type="button"
+            className={`-ms-px inline-flex items-center gap-x-2 border border-neutral-700 bg-primary-blue px-4 py-3 text-sm font-medium text-white shadow-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg focus:z-10 ${getValues("reviewScore") === score ? "bg-secondary-purple" : ""} focus:outline-none disabled:pointer-events-none disabled:opacity-50`}
             key={score}
-            onClick={() => setReviewScore(score)}
-            className={`hover:bg-primary-purple/20 active:bg-primary-purple/40 rounded-xl ${reviewScore === score ? "bg-primary-blue-light" : ""}`}
+            onClick={() => {
+              setValue("reviewScore", score, {
+                shouldValidate: true,
+                shouldDirty: true,
+                shouldTouch: true,
+              });
+            }}
           >
             <RatingIcon reviewScore={score} />
           </button>
@@ -53,11 +124,18 @@ export default function ReviewForm({ selectedTvId }: { selectedTvId: number }) {
 
         <button
           type="submit"
-          className="btn border-gray-800 bg-secondary-purple text-white/90 hover:bg-secondary-purple-light"
+          className="-ms-px inline-flex items-center gap-x-2 border border-neutral-700 bg-secondary-purple-dark px-4 py-3 text-sm font-medium text-white shadow-sm first:ms-0 first:rounded-s-lg last:rounded-e-lg hover:bg-secondary-purple-dark/70 focus:z-10 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
         >
-          Post
+          <Send />
         </button>
       </div>
+      {errors && (
+        <p className="mx-auto flex-auto break-words text-left text-xs text-red-500">
+          {errors.reviewContent && <span>Please enter a review</span>}
+          <br />
+          {errors.reviewScore && <span>Please select a score</span>}
+        </p>
+      )}
     </form>
   );
 }

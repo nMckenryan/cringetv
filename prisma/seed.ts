@@ -1,13 +1,12 @@
-import { RatingCode, type ContentRating, type Extended_Response } from '../src/types';
+import { type ContentRatingRaw, type GenreRaw, RatingCode, type Extended_Response } from '../src/types';
 import { db } from "~/server/db";
-import { type GenreResponse, type TVDB_Extended, type ContentRatingResponse, type Genre, type TVDB_Response, type TVDBShow } from "~/types";
+import { type GenreResponse, type TVDB_Extended, type ContentRatingResponse, type TVDB_Response } from "~/types";
 import {
     RegExpMatcher,
     englishDataset,
     englishRecommendedTransformers,
 } from 'obscenity';
 import { readFileSync, writeFileSync } from 'fs';
-import { api } from '~/trpc/server';
 
 const matcher = new RegExpMatcher({
     ...englishDataset.build(),
@@ -22,8 +21,78 @@ const tvdb_options = {
     },
 };
 
-export function calculateBaseCringeRating(showDetails: TVDB_Extended): number | null {
+type AuthResponse = {
+    status: string
+    data: {
+        token: string
+    }
+}
 
+export async function getAdminAccount() {
+    try {
+        const adminUser = await db.user.findFirst({
+            where: {
+                name: "admin@cringedb.com",
+                email: "admin@cringedb.com",
+            },
+        });
+
+        if (!adminUser) {
+            console.error("Admin user not found");
+            return null;
+        }
+        return adminUser;
+    } catch (error) {
+        console.error("Error checking for admin account: ", error);
+        return null;
+    }
+}
+
+
+//TODO: make sure this works when seeding on new DB. makes admin account to use for initial reviews.
+export async function createAdminUser() {
+    await db.user.create({
+        data: {
+            email: "admin@cringedb.com",
+            name: "admin@cringedb.com",
+        }
+    })
+}
+
+
+export async function createAdminReview(show: TVDB_Extended, initial_rating: number) {
+    try {
+        const adminUser = await getAdminAccount();
+
+        if (!adminUser) {
+            console.error("Could not add default admin review. Admin user not found");
+            return null;
+        }
+
+        return await db.review.create({
+            data: {
+                review_content: "Initial Review, based on content rating, name or year",
+                tvdb_id: show.id,
+                userId: adminUser.id,
+                cringe_score_vote: initial_rating,
+                date_created: new Date()
+            }
+        });
+    } catch (error) {
+        console.error("Error creating admin review: ", error);
+
+    }
+}
+
+
+export async function getAuthToken() {
+    await fetch("https://api4.thetvdb.com/v4/genres", tvdb_options)
+        .then((response) => response.json() as Promise<AuthResponse>)
+        .then((data) => tvdb_options.headers.Authorization = `Bearer ${data.data.token}`)
+        .catch((err) => console.error("auth token not recieved: " + err))
+}
+
+export function calculateBaseCringeRating(showDetails: TVDB_Extended): number | null {
     const showName = showDetails.name;
     const contentRatings = showDetails.contentRatings[0];
     const year = showDetails.year;
@@ -63,7 +132,6 @@ export function calculateBaseCringeRating(showDetails: TVDB_Extended): number | 
     }
 
     if (matcher.hasMatch(showName)) {
-        console.log(showName);
         return RatingCode.BaseUnsafeLimit.valueOf()
     }
     else {
@@ -73,60 +141,55 @@ export function calculateBaseCringeRating(showDetails: TVDB_Extended): number | 
 
 
 async function seed_genre_and_content_ratings() {
-    const genre: Genre[] = []
-    const contentRating: ContentRating[] = []
+    const genre: GenreRaw[] = []
+    const contentRating: ContentRatingRaw[] = []
 
     await fetch("https://api4.thetvdb.com/v4/genres", tvdb_options)
         .then((response) => response.json() as Promise<GenreResponse>)
         .then((data) => genre.push(...data.data))
-        .catch((err) => console.error(err))
+        .catch((err) => console.error("Genres not recieved: " + err))
 
     // generate Genres
-    async function getGenres(genre_list: Genre[]) {
-        for (const g of genre_list) {
-            await db.genre.upsert({
-                where: { genre_id: g.genre_id },
-                update: {},
-                create: {
-                    genre_id: g.genre_id,
-                    genre_name: g.genre_name,
-                }
-            })
-        }
-    }
-
 
     await fetch("https://api4.thetvdb.com/v4/content/ratings", tvdb_options)
         .then((response) => response.json() as Promise<ContentRatingResponse>)
         .then((data) => contentRating.push
             (...data.data))
-        .catch((err) => console.error(err))
+        .catch((err) => console.error("Rating not retrieved " + err))
 
-    // generate ContentRatings
-    async function setContentRatings(content_rating_list: ContentRating[]) {
-        for (const cr of content_rating_list) {
-            await db.contentRating.upsert({
-                where: { content_rating_id: cr.content_rating_id },
-                update: {
-                    content_rating_id: cr.content_rating_id,
-                    content_rating: cr.content_rating,
-                    rating_country: cr.rating_country,
-                    content_rating_description: cr.content_rating_description ?? "No description available",
-                },
-                create: {
-                    content_rating_id: cr.content_rating_id,
-                    content_rating: cr.content_rating,
-                    rating_country: cr.rating_country,
-                    content_rating_description: cr.content_rating_description ?? "No description available",
-                }
-            })
-        }
-    }
+
 
     const start = performance.now();
-    await getGenres(genre);
+
+    //SET GENRES
+    for (const g of genre) {
+        await db.genre.upsert({
+            where: { genre_id: g.id },
+            update: {},
+            create: {
+                genre_id: g.id,
+                genre_name: g.name,
+            }
+        })
+    }
+
     console.log("genre seeded");
-    await setContentRatings(contentRating)
+
+    // generate ContentRatings
+    for (const cr of contentRating) {
+        await db.contentRating.upsert({
+            where: { content_rating_id: cr.id },
+            update: {
+
+            },
+            create: {
+                content_rating_id: cr.id,
+                content_rating: cr.name,
+                rating_country: cr.country,
+                content_rating_description: cr.description ?? "No description available",
+            }
+        })
+    }
     console.log("content rating seeded");
     const end = performance.now();
     console.log(`Time taken to retrieve TVDB list: ${(end - start) / 1000} seconds`);
@@ -184,12 +247,24 @@ async function getTVDBData(tv_id_list: number[]) {
                 },
                 original_country: extended_tv_data.originalCountry ?? "Unknown",
             };
+            const cringeRatingBase = calculateBaseCringeRating(extended_tv_data);
 
-            return await db.televisionShow.upsert({
-                where: { tvdb_id: extended_tv_data.id },
-                update: {},
-                create: upsertData
-            });
+            if (cringeRatingBase !== null) {
+                await db.televisionShow.upsert({
+                    where: { tvdb_id: extended_tv_data.id },
+                    update: {},
+                    create: upsertData
+                });
+                await createAdminReview(extended_tv_data, cringeRatingBase);
+            } else {
+                await db.televisionShow.upsert({
+                    where: { tvdb_id: extended_tv_data.id },
+                    update: {},
+                    create: upsertData
+
+                }
+                );
+            }
         } catch (error) {
             console.error(`Error seeding show with ID ${id}`, error);
             return null;
@@ -197,7 +272,7 @@ async function getTVDBData(tv_id_list: number[]) {
     };
 
     // Process in batches to avoid overwhelming the API
-    const BATCH_SIZE = 100;
+    const BATCH_SIZE = 10;
     for (let i = 0; i < tv_id_list.length; i += BATCH_SIZE) {
         const batch = tv_id_list.slice(i, i + BATCH_SIZE);
         await Promise.all(batch.map(processShow).filter(Boolean));
@@ -212,7 +287,7 @@ async function getListOfShows() {
     const tvdb_list_of_ids: number[] = [];
 
     const start = performance.now();
-    while (tvdb_url !== null) {
+    while (tvdb_url !== "https://api4.thetvdb.com/v4/series?page=5") {
         await fetch(tvdb_url, tvdb_options)
             .then((response) => response.json() as Promise<TVDB_Response>)
             .then(async (data) => {
@@ -222,9 +297,9 @@ async function getListOfShows() {
                     }
                 }
                 tvdb_url = data.links.next
-                console.log(tvdb_url)
+                console.log("Processed: " + tvdb_url)
             })
-            .catch((err) => "Failed to retrieve data from: " + tvdb_url + "\n" + console.error(err))
+            .catch((err) => console.error("Failed to retrieve data from: " + tvdb_url + "\n" + err))
     }
     const end = performance.now();
     console.log(`Time taken to retrieve TVDB list: ${(end - start) / 1000} seconds`);
@@ -235,14 +310,24 @@ async function getListOfShows() {
 }
 
 async function main() {
+    const getAdmin = await getAdminAccount();
+    if (getAdmin === null) {
+        await createAdminUser();
+        console.log("Admin account created!");
+    } else {
+        console.log("Admin account exists! Skipping creation");
+    }
+    await db.$executeRaw`TRUNCATE TABLE "TelevisionShow" CASCADE;`;
+    await db.$executeRaw`TRUNCATE TABLE "Review" CASCADE;`;
 
     // await seed_genre_and_content_ratings();
-    // await getListOfShows();
+    await getListOfShows();
     const tvdb_list_of_ids = JSON.parse(readFileSync('tvdb_list_of_ids.json', 'utf-8')) as number[];
 
     // const existingIds = await api.tvShows.getAllTVShowIds();
 
     // const filteredList = tvdb_list_of_ids.filter(id => !existingIds.includes(id));
+
 
     await getTVDBData(tvdb_list_of_ids);
 
@@ -255,7 +340,7 @@ main()
         await db.$disconnect();
     })
     .catch(async (e) => {
-        console.error(e);
+        console.error("main error: " + e);
         await db.$disconnect();
         process.exit(1);
     });

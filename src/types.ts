@@ -93,13 +93,28 @@ export type ContentRating = {
 }
 
 export type ContentRatingResponse = {
-    data: ContentRating[]
+    data: ContentRatingRaw[]
     status: string
 }
 
+export type GenreRaw = {
+    id: number;
+    name: string;
+    slug: string;
+}
+
+export type ContentRatingRaw = {
+    id: number,
+    name: string,
+    country: string,
+    description: string,
+    contentType: string,
+    order: number,
+    fullname: string
+}
 
 export type GenreResponse = {
-    data: Genre[]
+    data: GenreRaw[]
     status: string
     slug: string
 }
