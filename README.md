@@ -33,6 +33,7 @@ CringeTV is a community driven platform where users can share reviews for TV sho
 
 ## Built with:
 
+
 [![Typescript][Typescript]][TypescriptURL]
 [![React][React.js]][React-url]
 [![ReactHookForm][ReactHookForm]][ReactHookFormURL]
@@ -132,6 +133,7 @@ Project Link: [https://github.com/nmckenryan/cringetv](https://github.com/nmcken
 
 
 
+
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/nmckenryan/cringetv.svg?style=for-the-badge
@@ -143,7 +145,8 @@ Project Link: [https://github.com/nmckenryan/cringetv](https://github.com/nmcken
 [issues-shield]: https://img.shields.io/github/issues/nmckenryan/cringetv.svg?style=for-the-badge
 [issues-url]: https://github.com/nMckenryan/cringetv/issues
 [license-shield]: https://img.shields.io/github/license/nmckenryan/cringetv.svg?style=for-the-badge
-[license-url]: https://github.com/nMckenryan/cringetv/main/LICENSE.txt
+[license-url]: https://github.com/nMckenryan/cringetv/blob/main/LICENSE.txt
+
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/nmckenryan
 [product-screenshot]: images/screenshot.png
@@ -156,6 +159,7 @@ Project Link: [https://github.com/nmckenryan/cringetv](https://github.com/nmcken
 
 [ReactQuery]: https://img.shields.io/badge/ReactQuery-000000?style=for-the-badge&logo=reactquery&logoColor=white&color=%23FF4154
 [ReactQueryURL]: https://react-query.tanstack.com
+
 
 [ReactHookForm]: https://img.shields.io/badge/React%20Hook%20Form-000000?style=for-the-badge&logo=reacthookform&logoColor=white&color=%23EC5990
 [ReactHookFormURL]: https://react-hook-form.com/
@@ -180,6 +184,7 @@ Project Link: [https://github.com/nmckenryan/cringetv](https://github.com/nmcken
 
 [TailwindCSS]: https://img.shields.io/badge/tailwind-00000?style=for-the-badge&logo=tailwindcss&logoColor=white&color=%2306B6D4
 
+
 [TailwindCSSURL]: https://tailwindcss.com
 
 [tRPC]: https://img.shields.io/badge/tRPC-000000?style=for-the-badge&logo=tRPC&logoColor=white&color=%232596BE
@@ -193,3 +198,4 @@ Project Link: [https://github.com/nmckenryan/cringetv](https://github.com/nmcken
 
 [Docker]: https://img.shields.io/badge/Docker-000000?style=for-the-badge&logo=docker&logoColor=white&color=%232496ED
 [DockerURL]: https://www.docker.com
+
