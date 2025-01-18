@@ -16,10 +16,11 @@ export default function SearchBar() {
 
   useEffect(() => {
     const searchTv = async () => {
+      setIsLoading(true);
       const result = await search(debouncedText);
       setSearchResults(result);
+      setIsLoading(false);
     };
-    setIsLoading(true);
 
     if (debouncedText.length > 1) {
       void searchTv();
@@ -28,7 +29,6 @@ export default function SearchBar() {
       setSearchResults([]);
       setIsDropdownOpen(false);
     }
-    setIsLoading(false);
   }, [debouncedText]);
 
   const clearSearch = () => {
