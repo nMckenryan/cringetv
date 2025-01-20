@@ -28,3 +28,13 @@ export async function search(searchTerm: string) {
     }
     return results;
 }
+
+export async function getTVNameById(reviewId: number) {
+    try {
+        const data = await api.tvShows.getTVNameById({ tvdb_id: Number(reviewId) });
+        return data
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}

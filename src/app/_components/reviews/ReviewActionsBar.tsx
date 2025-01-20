@@ -19,7 +19,7 @@ export default function ReviewActionsBar({ review }: { review: Review }) {
   }
 
   return (
-    <div className="absolute right-2 top-2 flex flex-row gap-2">
+    <div className="center-1 absolute top-1 flex flex-row gap-2">
       <Modal modalIdentifier="edit-modal" icon={<Edit />}>
         <h3 className="text-lg font-bold">Edit Review</h3>
         <ReviewForm selectedTvId={review.tvdb_id} existingReview={review} />

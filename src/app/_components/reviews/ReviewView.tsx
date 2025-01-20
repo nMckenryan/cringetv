@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { type Review } from "~/types";
 
-import { getUserById } from "~/app/actions";
+import { getReviewNameById, getTVNameById, getUserById } from "~/app/actions";
 import Image from "next/image";
 
 import RatingIcon from "../RatingIcon";
@@ -17,25 +17,31 @@ export type UserDetails = {
 export default function ReviewView({ review }: { review: Review }) {
   const [user, setUser] = useState<UserDetails>();
   const [isLoading, setIsLoading] = useState(true);
+  const [reviewName, setReviewName] = useState<string>("");
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchReviewData = async () => {
       try {
         const user = await getUserById(review.userId);
+        const retrievedName = await getTVNameById(review.tvdb_id);
+
         setUser(user as UserDetails);
+        if (retrievedName) {
+          setReviewName(retrievedName.name);
+        }
       } catch (error) {
-        console.error("Failed to fetch user", error);
+        console.error("Failed to fetch review data", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    void fetchUser();
-  }, [review.userId]);
+    void fetchReviewData();
+  }, [review.userId, review.tvdb_id]);
 
   return (
     <div
-      className="card w-full bg-primary-blue-light shadow-xl"
+      className="card w-full bg-primary-blue-light pt-3 shadow-xl"
       key={review.review_id}
     >
       <div className="card-body items-center text-center">
@@ -59,9 +65,12 @@ export default function ReviewView({ review }: { review: Review }) {
                     <CircleHelp className="rounded-full shadow-md" size={40} />
                   </>
                 )}
-                <p className="text-sm md:text-lg">
-                  {user?.name ?? "Unknown User"}
-                </p>
+                <div className="flex flex-col">
+                  <p className="text-sm md:text-lg">
+                    {user?.name ?? "Unknown User"}
+                  </p>
+                  <p className="text-xs md:text-sm">{reviewName ?? "???"}</p>
+                </div>
                 <RatingIcon reviewScore={review.cringe_score_vote} />
               </div>
 

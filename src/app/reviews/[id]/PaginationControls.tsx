@@ -3,13 +3,13 @@
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface PaginationControlsProps {
-  show_id: number;
+  list_id: number;
   hasNextPage: boolean;
   hasPrevPage: boolean;
 }
 
 export default function PaginationControls({
-  show_id,
+  list_id,
   hasNextPage,
   hasPrevPage,
 }: PaginationControlsProps) {
@@ -26,7 +26,7 @@ export default function PaginationControls({
           className="btn join-item bg-primary-blue disabled:bg-primary-blue-dark"
           disabled={!hasPrevPage}
           onClick={() => {
-            router.push(`/reviews/${show_id}?page=${Number(page) - 1}`);
+            router.push(`/reviews/${list_id}?page=${Number(page) - 1}`);
           }}
         >
           «
@@ -40,7 +40,7 @@ export default function PaginationControls({
           className="btn join-item bg-primary-blue disabled:bg-primary-blue-dark"
           disabled={!hasNextPage}
           onClick={() => {
-            router.push(`/reviews/${show_id}?page=${Number(page) + 1}`);
+            router.push(`/reviews/${list_id}?page=${Number(page) + 1}`);
           }}
         >
           »

@@ -16,10 +16,12 @@ export default async function ReviewListPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string | number }>;
   searchParams: Record<string, string | string[] | undefined>;
 }) {
-  const show = await api.tvShows.getTVShowById((await params).id);
+  const id = String((await params).id);
+
+  const show = await api.tvShows.getTVShowById(id);
 
   const reviewList: Review[] = show?.reviews ?? [];
 
@@ -66,7 +68,7 @@ export default async function ReviewListPage({
           </div>
         </div>
         <PaginationControls
-          show_id={(await params).id}
+          list_id={id}
           hasNextPage={end < reviewList.length}
           hasPrevPage={start > 0}
         />
