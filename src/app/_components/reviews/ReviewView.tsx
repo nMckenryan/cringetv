@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { type Review } from "~/types";
 
-import { getReviewNameById, getTVNameById, getUserById } from "~/app/actions";
+import { getTVNameById, getUserById } from "~/app/actions";
 import Image from "next/image";
 
 import RatingIcon from "../RatingIcon";

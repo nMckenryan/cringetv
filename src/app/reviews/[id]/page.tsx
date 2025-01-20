@@ -7,17 +7,16 @@ import { api } from "~/trpc/server";
 import { type Review } from "~/types";
 import BackButton from "~/app/_components/BackButton";
 import { getRatingIcon, getRatingText } from "~/app/_components/RatingIcon";
-import ReviewList from "~/app/_components/reviews/ReviewList";
-import Link from "next/link";
 import PaginationControls from "./PaginationControls";
 import ReviewView from "~/app/_components/reviews/ReviewView";
+import { type SearchParams } from "next/dist/server/request/search-params";
 
 export default async function ReviewListPage({
   params,
   searchParams,
 }: {
   params: Promise<{ id: string | number }>;
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: SearchParams;
 }) {
   const id = String((await params).id);
 

@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface PaginationControlsProps {
-  list_id: number;
+  list_id: string;
   hasNextPage: boolean;
   hasPrevPage: boolean;
 }
