@@ -16,9 +16,10 @@ export default async function ReviewListPage({
   searchParams,
 }: {
   params: Promise<{ id: string | number }>;
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }) {
   const id = String((await params).id);
+  const searchParamsResolved = await searchParams;
 
   const show = await api.tvShows.getTVShowById(id);
 
@@ -26,7 +27,7 @@ export default async function ReviewListPage({
 
   if (!show) return <NotFound />;
 
-  const page = searchParams.page ?? "1";
+  const page = searchParamsResolved.page ?? "1";
   const per_page = 6;
 
   const start = (Number(page) - 1) * Number(per_page); // 0, 5, 10 ...
