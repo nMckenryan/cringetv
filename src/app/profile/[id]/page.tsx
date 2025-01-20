@@ -44,7 +44,7 @@ export default async function ProfilePage({
         </p>
         <EditBio user={user} />
 
-        <ReviewList reviewList={reviews} />
+        <ReviewList reviewList={reviews.slice(0, 10)} />
       </UICard>
     </main>
   );

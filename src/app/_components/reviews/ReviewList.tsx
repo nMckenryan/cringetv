@@ -19,7 +19,7 @@ export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
           <p className="p-10 text-center text-lg">No Reviews Yet.</p>
         ) : (
           <div className="flex flex-col items-center gap-1">
-            <div className="grid w-[90vw] grid-cols-1 gap-1 md:w-full lg:grid-cols-2">
+            <div className="grid w-[90vw] grid-cols-1 gap-1 sm:grid-cols-2 md:w-full">
               {reviewList.map((rev) => (
                 <ReviewView review={rev} key={rev.review_id} />
               ))}

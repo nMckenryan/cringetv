@@ -33,13 +33,14 @@ export default async function ReviewListPage({
             src={show.poster_link ?? noPoster}
             alt={`${show.name} poster`}
             className="rounded-xl shadow-xl"
-            width={100}
-            height={100}
+            width={50}
+            height={50}
           />
           <div className="m-2 flex flex-col align-middle">
-            <p>{show.name}</p>{" "}
-            <p className="flex flex-row align-middle">
+            <p>{show.name}</p>
+            <p className="flex flex-row items-center justify-center gap-1 align-middle">
               {getRatingIcon(show.aggregate_cringe_rating)}
+
               {getRatingText(show.aggregate_cringe_rating)}
             </p>
             <p>Reviews: {show.reviews.length}</p>
@@ -47,17 +48,7 @@ export default async function ReviewListPage({
         </div>
       </UICard>
       <UICard>
-        <ReviewList reviewList={reviewList} />
-        {reviewList.length > 6 && (
-          <Link
-            className="btn btn-primary btn-sm"
-            href={`/reviews/[id]`}
-            rel="preload"
-            as={`/reviews/${(await params).id}`}
-          >
-            View More
-          </Link>
-        )}
+        <ReviewList reviewList={reviewList.slice(0, 10)} />
       </UICard>
     </>
   );

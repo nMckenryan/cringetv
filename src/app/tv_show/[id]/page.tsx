@@ -1,3 +1,4 @@
+import Link from "next/link";
 import TVShowCard from "~/app/_components/TVShowCard";
 
 import UICard from "~/app/_components/UICard";
@@ -47,7 +48,17 @@ export default async function TVShowPage({
       )}
 
       <UICard>
-        <ReviewList reviewList={reviewList} />
+        <ReviewList reviewList={reviewList.slice(0, 6)} />
+        {reviewList.length > 6 && (
+          <Link
+            className="btn btn-primary btn-sm"
+            href={`/reviews/[id]`}
+            rel="preload"
+            as={`/reviews/${(await params).id}`}
+          >
+            View More
+          </Link>
+        )}
       </UICard>
     </>
   );
