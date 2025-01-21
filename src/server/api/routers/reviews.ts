@@ -11,6 +11,29 @@ export const reviewRouter = createTRPCRouter({
       where: {
         tvdb_id: input.tvdb_id,
       },
+      select: {
+        televisionShow: {
+          select: {
+            name: true
+          }
+        },
+        user: {
+          select: {
+            name: true,
+            image: true
+          }
+        },
+        review_id: true,
+        review_content: true,
+        userId: true,
+        tvdb_id: true,
+        cringe_score_vote: true,
+        date_created: true,
+        date_updated: true
+      },
+      orderBy: {
+        date_created: 'desc'
+      }
     });
   }),
 

@@ -1,10 +1,9 @@
-import Link from "next/link";
 import TVShowCard from "~/app/_components/TVShowCard";
 
 import UICard from "~/app/_components/UICard";
 import ReviewForm from "~/app/_components/reviews/ReviewForm";
+import TVReviewList from "~/app/tv_show/[id]/tvReviewList";
 
-import ReviewList from "~/app/_components/reviews/ReviewList";
 import NotFound from "~/app/not-found";
 import { auth } from "~/server/auth";
 
@@ -47,19 +46,7 @@ export default async function TVShowPage({
         </UICard>
       )}
 
-      <UICard>
-        <ReviewList reviewList={reviewList.slice(0, 6)} />
-        {reviewList.length > 6 && (
-          <Link
-            className="btn btn-primary btn-sm"
-            href={`/reviews/[id]`}
-            rel="preload"
-            as={`/reviews/${(await params).id}`}
-          >
-            View More
-          </Link>
-        )}
-      </UICard>
+      <TVReviewList tv_id={show?.tvdb_id} />
     </>
   );
 }

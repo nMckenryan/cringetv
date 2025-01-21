@@ -38,3 +38,12 @@ export async function getTVNameById(reviewId: number) {
         return null;
     }
 }
+
+export async function getReviewListFromTVID(reviewId: number) {
+    try {
+        const reviews = await api.reviews.getReviewsByTVId({ tvdb_id: reviewId });
+        return reviews;
+    } catch (error) {
+        console.error("Failed to fetch reviews", error);
+    }
+}

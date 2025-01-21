@@ -9,6 +9,18 @@ export type Review = {
     date_updated: Date | null
 }
 
+export type ReviewViewType = {
+    review_id: number
+    review_content: string
+    userId: string
+    tvdb_id: number
+    televisionShow: { name: string; };
+    user: { name: string | null; image: string | null; };
+    cringe_score_vote: number
+    date_created: Date
+    date_updated: Date | null
+}
+
 
 // 0.0 - 0.25 Safe 
 // 0.26 - 0.5 Caution
