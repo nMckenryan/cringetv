@@ -1,10 +1,10 @@
 import ReviewView from "./ReviewView";
-import { type ReviewViewType } from "~/types";
+import { type ReviewViewTypeExtended } from "~/types";
 
 export default function ReviewList({
   reviewList,
 }: {
-  reviewList: ReviewViewType[];
+  reviewList: ReviewViewTypeExtended[];
 }) {
   return (
     <div className="flex w-full flex-col gap-2">
@@ -12,7 +12,10 @@ export default function ReviewList({
         <p className="p-10 text-center text-lg">No Reviews Yet.</p>
       ) : (
         <div className="flex flex-col items-center gap-1">
-          <div className="grid w-[90vw] grid-cols-1 gap-1 sm:grid-cols-2 md:w-full">
+          <div
+            id="review-grid"
+            className="grid w-[90vw] grid-cols-1 gap-1 sm:grid-cols-2 md:w-full"
+          >
             {reviewList.map((rev) => (
               <ReviewView review={rev} key={rev.review_id} />
             ))}

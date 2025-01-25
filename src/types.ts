@@ -9,17 +9,29 @@ export type Review = {
     date_updated: Date | null
 }
 
-export type ReviewViewType = {
-    review_id: number
-    review_content: string
-    userId: string
-    tvdb_id: number
-    televisionShow: { name: string; };
-    user: { name: string | null; image: string | null; };
-    cringe_score_vote: number
-    date_created: Date
-    date_updated: Date | null
+export interface ReviewViewType extends Review {
+    televisionShow: { name: string; tvdb_id: number; };
+    user: { id: string; name: string | null; image: string | null; };
 }
+
+export type ReviewViewTypeExtended = {
+    televisionShow: {
+        name: string;
+        tvdb_id: number;
+        aggregate_cringe_rating: number | null;
+        poster_link: string | null;
+    };
+    user: {
+        id: string;
+        name: string | null;
+        image: string | null;
+    };
+    review_id: number;
+    review_content: string;
+    cringe_score_vote: number;
+    date_created: Date;
+    date_updated: Date | null;
+};
 
 
 // 0.0 - 0.25 Safe 

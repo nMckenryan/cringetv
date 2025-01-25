@@ -1,15 +1,15 @@
 import UICard from "~/app/_components/UICard";
-import Image from "next/image";
 import NotFound from "~/app/not-found";
 import noPoster from "../../../../public/noPoster.png";
+import Image from "next/image";
 
-import { api } from "~/trpc/server";
-import { type Review } from "~/types";
 import BackButton from "~/app/_components/BackButton";
 import { getRatingIcon, getRatingText } from "~/app/_components/RatingIcon";
 import PaginationControls from "./PaginationControls";
 import ReviewView from "~/app/_components/reviews/ReviewView";
 import { type SearchParams } from "next/dist/server/request/search-params";
+import { getReviewListFromTVIDForReviewListPage } from "~/app/actions";
+import Link from "next/link";
 
 export default async function ReviewListPage({
   params,
@@ -21,19 +21,27 @@ export default async function ReviewListPage({
   const id = String((await params).id);
   const searchParamsResolved = await searchParams;
 
-  const show = await api.tvShows.getTVShowById(id);
+  const reviewList =
+    (await getReviewListFromTVIDForReviewListPage(Number(id))) ?? [];
 
-  const reviewList: Review[] = show?.reviews ?? [];
+  const showInformation = reviewList[0]?.televisionShow;
 
-  if (!show) return <NotFound />;
+  if (!reviewList || !showInformation) {
+    return <NotFound />;
+  }
 
-  const page = searchParamsResolved.page ?? "1";
+  const page = Number(searchParamsResolved.page) || 1;
   const per_page = 6;
 
-  const start = (Number(page) - 1) * Number(per_page); // 0, 5, 10 ...
-  const end = start + per_page;
+  //START AND END OF PAGINATION LIST
+  const start = (Number(page) - 1) * Number(per_page);
+  const end = start + Number(per_page);
 
   const entries = reviewList.slice(start, end);
+
+  if (page > end) {
+    return <NotFound />;
+  }
 
   return (
     <>
@@ -43,21 +51,23 @@ export default async function ReviewListPage({
           id="tv-card-col1-image"
           className="relative flex flex-row items-center justify-items-stretch"
         >
-          <Image
-            src={show.poster_link ?? noPoster}
-            alt={`${show.name} poster`}
-            className="rounded-xl shadow-xl"
-            width={50}
-            height={50}
-          />
+          <Link href={`/tv_show/${id}`}>
+            <Image
+              src={showInformation.poster_link ?? noPoster}
+              alt={`${showInformation.name} poster`}
+              className="rounded-xl shadow-xl"
+              width={50}
+              height={50}
+            />
+          </Link>
           <div className="m-2 flex flex-col align-middle">
-            <p>{show.name}</p>
+            <p>{showInformation.name}</p>
             <p className="flex flex-row items-center justify-center gap-1 align-middle">
               Average Rating:
-              {getRatingIcon(show.aggregate_cringe_rating)}
-              {getRatingText(show.aggregate_cringe_rating)}
+              {getRatingIcon(showInformation.aggregate_cringe_rating)}
+              {getRatingText(showInformation.aggregate_cringe_rating)}
             </p>
-            <p>Reviews: {show.reviews.length}</p>
+            <p>Reviews: {reviewList.length}</p>
           </div>
         </div>
         <div className="flex flex-col items-center gap-1">

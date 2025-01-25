@@ -2,13 +2,12 @@ import TVShowCard from "~/app/_components/TVShowCard";
 
 import UICard from "~/app/_components/UICard";
 import ReviewForm from "~/app/_components/reviews/ReviewForm";
-import TVReviewList from "~/app/tv_show/[id]/tvReviewList";
 
 import NotFound from "~/app/not-found";
 import { auth } from "~/server/auth";
 
 import { api } from "~/trpc/server";
-import { type Review } from "~/types";
+import TVReviewList from "./TVReviewList";
 
 export default async function TVShowPage({
   params,
@@ -16,21 +15,17 @@ export default async function TVShowPage({
   params: Promise<{ id: string }>;
 }) {
   const show = await api.tvShows.getTVShowById((await params).id);
-
   const session = await auth();
-  const reviewList: Review[] = show?.reviews ?? [];
+  let canLeaveReview = false;
 
-  const hasLeftReviewIndex = reviewList.findIndex(
-    (rev) => rev.userId === session?.user?.id,
-  );
+  if (session?.user && show) {
+    const res = await api.reviews.hasCurrentUserLeftReview({
+      userId: session?.user?.id,
+      tvdb_id: show?.tvdb_id,
+    });
 
-  if (hasLeftReviewIndex > 0) {
-    // if the user has left a review, move it to the top of the list (if it isn't already)
-    const userReview = reviewList.splice(hasLeftReviewIndex, 1)[0]!;
-    reviewList.unshift(userReview);
+    canLeaveReview = res ? false : true;
   }
-
-  const canLeaveReview = session?.user && hasLeftReviewIndex === -1;
 
   if (!show) return <NotFound />;
 
