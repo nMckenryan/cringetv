@@ -1,17 +1,18 @@
 'use server';
+import { auth } from "~/server/auth";
 import { api } from "~/trpc/server";
 import { type TV_Show } from "~/types";
 
-
-export async function getUserById(userId: string) {
+export async function getSession() {
     try {
-        const user = await api.users.getUserById(userId);
-        return user;
+        const session = await auth();
+        return session;
     } catch (error) {
-        console.error(error);
+        console.error("Could not get session", error);
         return null;
     }
 }
+
 
 export async function search(searchTerm: string) {
     let results: TV_Show[] = [];
@@ -27,4 +28,20 @@ export async function search(searchTerm: string) {
         console.error("Error searching for TV shows:", error);
     }
     return results;
+}
+
+export async function getReviewListFromTVID(reviewId: number) {
+    try {
+        return await api.reviews.getReviewsByTVId({ tvdb_id: reviewId });
+    } catch (error) {
+        console.error("Failed to fetch reviews", error);
+    }
+}
+
+export async function getReviewListFromTVIDForReviewListPage(reviewId: number) {
+    try {
+        return await api.reviews.getReviewListFromTVIDForReviewListPage({ tvdb_id: reviewId });
+    } catch (error) {
+        console.error("Failed to fetch reviews", error);
+    }
 }

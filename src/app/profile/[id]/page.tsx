@@ -1,28 +1,30 @@
+"use client";
+
 import React from "react";
-import { db } from "~/server/db";
 import UICard from "~/app/_components/UICard";
-import NotFound from "~/app/not-found";
 
 import EditBio from "~/app/_components/EditBio";
 import ReviewList from "~/app/_components/reviews/ReviewList";
 import BackButton from "~/app/_components/BackButton";
 
-export default async function ProfilePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const user = await db.user.findUnique({ where: { id: (await params).id } });
+import { useParams } from "next/navigation";
+import { api } from "~/trpc/react";
+import { type ReviewViewTypeExtended } from "~/types";
 
-  const reviews = await db.review.findMany({
-    where: {
-      userId: (await params).id,
-    },
-  });
+export default function ProfilePage() {
+  const params = useParams();
+  const userID = params.id as string;
 
-  if (!user) {
-    return <NotFound />;
-  }
+  const user = api.users.getUserById.useQuery({
+    userId: userID,
+  }).data;
+
+  const { data: reviews, isLoading } =
+    api.reviews.getReviewListFromUserId.useQuery({
+      userId: userID,
+    }) as { data: ReviewViewTypeExtended[]; isLoading: boolean };
+
+  if (isLoading) return <span>Loading...</span>;
 
   return (
     <main className="mt-3 flex flex-col gap-3">
@@ -31,7 +33,7 @@ export default async function ProfilePage({
         <div className="avatar">
           <div className="w-24 rounded-full">
             <picture>
-              <img src={user.image ? user.image : "none"} alt="profile_pic" />
+              <img src={user?.image ?? "none"} alt="profile_pic" />
             </picture>
           </div>
         </div>
@@ -42,7 +44,7 @@ export default async function ProfilePage({
         <p className="w-72 text-wrap break-all text-center text-sm">
           Bio: {user?.userBio ?? "No bio provided"}
         </p>
-        <EditBio user={user} />
+        <EditBio user={user!} />
 
         <ReviewList reviewList={reviews} />
       </UICard>

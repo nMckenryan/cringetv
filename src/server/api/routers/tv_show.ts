@@ -31,6 +31,17 @@ export const tvShowRouter = createTRPCRouter({
   }),
 
 
+  getTVNameById: publicProcedure.input(z.object({ tvdb_id: z.number() })).query(({ ctx, input }) => {
+    return ctx.db.televisionShow.findFirst({
+      where: {
+        tvdb_id: input.tvdb_id,
+      },
+      select: {
+        name: true
+      }
+    });
+  }),
+
   recalculateAverageCringeRating: publicProcedure.input(z.number()).mutation(async ({ ctx, input }) => {
 
     const hasReviews = await ctx.db.review.count({

@@ -1,3 +1,5 @@
+"use client";
+
 import { X } from "lucide-react";
 import React from "react";
 export function Modal({
@@ -9,6 +11,10 @@ export function Modal({
   icon: React.ReactNode;
   modalIdentifier: string;
 }) {
+  const handleModalOpen = () => {
+    (document.getElementById(modalIdentifier) as HTMLDialogElement).showModal();
+  };
+
   return (
     <>
       <dialog
@@ -26,14 +32,7 @@ export function Modal({
         </div>
       </dialog>
 
-      <button
-        className="my-5"
-        onClick={() =>
-          (
-            document.getElementById(modalIdentifier) as HTMLDialogElement
-          ).showModal()
-        }
-      >
+      <button className="my-5" onClick={handleModalOpen}>
         {icon}
       </button>
     </>

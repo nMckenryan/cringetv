@@ -17,7 +17,7 @@ export default function TVShowCard({ show }: { show: TV_Show }) {
       <BackButton className="absolute left-1 top-1 p-2" />{" "}
       <div
         id="tv-card-col1-image"
-        className="aspect-poster relative mx-2 flex flex-col items-center"
+        className="relative mx-2 flex aspect-poster flex-col items-center"
       >
         <Image
           src={show.poster_link ?? noPoster}

@@ -24,15 +24,12 @@ export const userRouter = createTRPCRouter({
       },
     });
   }),
-  getUserById: publicProcedure.input(z.string()).query(({ ctx, input }) => {
+
+  getUserById: publicProcedure.input(z.object({ userId: z.string() })).query(({ ctx, input }) => {
     return ctx.db.user.findUnique({
       where: {
-        id: input,
-      },
-      select: {
-        name: true,
-        image: true
-      },
+        id: input.userId,
+      }
     });
   }),
 });

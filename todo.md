@@ -45,10 +45,9 @@
 - [] SEARCH
   - [x] Search form
   - [x] Search results
-  - [] debounce
+  - [x] debounce
 
-- [ ] FILM SELECT PAGE
-
+- [x] FILM SELECT PAGE
   - [x] Build UI
   - [x] Route by ID
   - [x] Review insert section
@@ -68,17 +67,17 @@
   - [x] Calculate consensus rating
   - [] trigger update once action complete
 
-- [] PROFILE PAGE
+- [x] PROFILE PAGE
   - [x] Route by user id
   - [x] Name,
   - [x] Implement Bio
   - [x] Bio edit page
   - [x] Account age
   - [x] List of reviews
-    - [] Paginate
+    - [x] Paginate
 
 - [] PUBLISH
   - [] Clean render bugs
-  - [] Sort mobile responsiveness
+  - [x] Sort mobile responsiveness
   - [] clean up db/migrations
   - [] Merge w/ main

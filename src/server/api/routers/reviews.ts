@@ -11,8 +11,111 @@ export const reviewRouter = createTRPCRouter({
       where: {
         tvdb_id: input.tvdb_id,
       },
+      select: {
+        televisionShow: {
+          select: {
+            name: true
+          }
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            image: true
+          }
+        },
+        review_id: true,
+        review_content: true,
+        cringe_score_vote: true,
+        date_created: true,
+        date_updated: true
+      },
+      orderBy: {
+        date_created: 'desc'
+      }
     });
   }),
+
+
+  hasCurrentUserLeftReview: publicProcedure.input(z.object({ tvdb_id: z.number(), userId: z.string() })).query(({ ctx, input }) => {
+    return ctx.db.review.findFirst({
+      where: {
+        tvdb_id: input.tvdb_id,
+        userId: input.userId
+      }
+    })
+  }),
+
+  getReviewListFromTVIDForReviewListPage: publicProcedure.input(z.object({ tvdb_id: z.number() })).query(({ ctx, input }) => {
+    return ctx.db.review.findMany({
+      take: 7,
+      where: {
+        tvdb_id: input.tvdb_id,
+      },
+      select: {
+        televisionShow: {
+          select: {
+            name: true,
+            tvdb_id: true,
+            aggregate_cringe_rating: true,
+            poster_link: true
+          }
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            image: true
+          }
+        },
+        review_id: true,
+        review_content: true,
+        cringe_score_vote: true,
+        date_created: true,
+        date_updated: true
+      },
+      orderBy: {
+        date_created: 'desc'
+      }
+    });
+  }),
+
+
+  getReviewListFromUserId: publicProcedure.input(z.object({ userId: z.string() })).query(({ ctx, input }) => {
+    return ctx.db.review.findMany({
+      take: 7,
+      where: {
+        userId: input.userId,
+      },
+      select: {
+        televisionShow: {
+          select: {
+            name: true,
+            tvdb_id: true,
+            aggregate_cringe_rating: true,
+            poster_link: true
+          }
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            image: true
+          }
+        },
+        review_id: true,
+        review_content: true,
+        cringe_score_vote: true,
+        date_created: true,
+        date_updated: true
+      },
+      orderBy: {
+        date_created: 'desc'
+      }
+    });
+  }),
+
+
 
   getReviewsByUserId: publicProcedure.input(z.object({ userId: z.string() })).query(({ ctx, input }) => {
     return ctx.db.review.findMany({
@@ -21,6 +124,7 @@ export const reviewRouter = createTRPCRouter({
       },
     });
   }),
+
 
   createNewReview: protectedProcedure
     .input(z.object({

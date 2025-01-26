@@ -54,7 +54,6 @@ export default function RatingIcon({ reviewScore }: { reviewScore: number }) {
   return (
     <div className="flex flex-col items-center text-xs">
       {getRatingIcon(reviewScore)}
-      <p className="md:text-baseline text-sm">{getRatingText(reviewScore)}</p>
     </div>
   );
 }
