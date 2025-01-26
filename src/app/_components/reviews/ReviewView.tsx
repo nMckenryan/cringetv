@@ -1,21 +1,14 @@
 import { type ReviewViewTypeExtended } from "~/types";
-
 import Image from "next/image";
-
 import RatingIcon from "../RatingIcon";
-
 import { CircleHelp } from "lucide-react";
 import ReviewActionsBar from "./ReviewActionsBar";
 
-import { getSession } from "~/app/actions";
-
-export default async function ReviewView({
+export default function ReviewView({
   review,
 }: {
   review: ReviewViewTypeExtended;
 }) {
-  const session = await getSession();
-
   return (
     <div
       className="card h-full w-full bg-primary-blue-light pt-3 shadow-xl"
@@ -23,9 +16,8 @@ export default async function ReviewView({
     >
       <div className="card-body h-full items-center text-center">
         <>
-          {session?.user.id == review.user.id ? (
-            <ReviewActionsBar review={review} />
-          ) : null}
+          <ReviewActionsBar review={review} />
+
           <div className="flex flex-col gap-2">
             <div className="flex flex-row items-center justify-between gap-3">
               {review.user.image ? (

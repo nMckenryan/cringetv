@@ -3,7 +3,6 @@
 import { Edit, Trash } from "lucide-react";
 import { Modal } from "../Modal";
 import ReviewForm from "./ReviewForm";
-
 import { api } from "~/trpc/react";
 import { type ReviewViewTypeExtended } from "~/types";
 
@@ -12,6 +11,7 @@ export default function ReviewActionsBar({
 }: {
   review: ReviewViewTypeExtended;
 }) {
+  const session = api.users.me.useQuery();
   const { mutate } = api.reviews.deleteReview.useMutation();
 
   const updateAvgCringeRating =
@@ -23,6 +23,10 @@ export default function ReviewActionsBar({
     (document.getElementById("delete-modal") as HTMLDialogElement).close();
     window.location.reload();
   };
+
+  if (session.data?.id != review.user.id) {
+    return null;
+  }
 
   return (
     <div className="center-1 absolute top-1 flex flex-row gap-2">
