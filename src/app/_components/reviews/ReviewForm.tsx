@@ -3,7 +3,7 @@ import RatingIcon from "../RatingIcon";
 
 import { useForm } from "react-hook-form";
 import { api } from "~/trpc/react";
-import { RatingCode, ReviewViewTypeExtended, type Review } from "~/types";
+import { RatingCode, type ReviewViewTypeExtended } from "~/types";
 import { Eraser, Send } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";

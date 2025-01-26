@@ -1,7 +1,7 @@
 'use server';
 import { auth } from "~/server/auth";
 import { api } from "~/trpc/server";
-import { ReviewViewType, type TV_Show } from "~/types";
+import { type TV_Show } from "~/types";
 
 export async function getSession() {
     try {

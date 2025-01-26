@@ -2,7 +2,6 @@
 
 import React from "react";
 import UICard from "~/app/_components/UICard";
-import NotFound from "~/app/not-found";
 
 import EditBio from "~/app/_components/EditBio";
 import ReviewList from "~/app/_components/reviews/ReviewList";
@@ -45,7 +44,7 @@ export default function ProfilePage() {
         <p className="w-72 text-wrap break-all text-center text-sm">
           Bio: {user?.userBio ?? "No bio provided"}
         </p>
-        <EditBio user={user} />
+        <EditBio user={user!} />
 
         <ReviewList reviewList={reviews} />
       </UICard>
