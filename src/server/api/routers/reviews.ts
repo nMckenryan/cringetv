@@ -80,6 +80,43 @@ export const reviewRouter = createTRPCRouter({
     });
   }),
 
+
+  getReviewListFromUserId: publicProcedure.input(z.object({ userId: z.string() })).query(({ ctx, input }) => {
+    return ctx.db.review.findMany({
+      take: 7,
+      where: {
+        userId: input.userId,
+      },
+      select: {
+        televisionShow: {
+          select: {
+            name: true,
+            tvdb_id: true,
+            aggregate_cringe_rating: true,
+            poster_link: true
+          }
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            image: true
+          }
+        },
+        review_id: true,
+        review_content: true,
+        cringe_score_vote: true,
+        date_created: true,
+        date_updated: true
+      },
+      orderBy: {
+        date_created: 'desc'
+      }
+    });
+  }),
+
+
+
   getReviewsByUserId: publicProcedure.input(z.object({ userId: z.string() })).query(({ ctx, input }) => {
     return ctx.db.review.findMany({
       where: {
