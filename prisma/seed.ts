@@ -8,12 +8,15 @@ import {
 } from 'obscenity';
 import { readFileSync, writeFileSync } from 'fs';
 
+
+export const cut_off_date = new Date("1980-01-01T00:00:00.000Z");
+
 const matcher = new RegExpMatcher({
     ...englishDataset.build(),
     ...englishRecommendedTransformers,
 });
 
-const tvdb_options = {
+export const tvdb_options = {
     method: "GET",
     headers: {
         accept: "application/json",
@@ -191,7 +194,7 @@ async function seed_genre_and_content_ratings() {
 }
 
 
-async function getTVDBData(tv_id_list: number[]) {
+export async function getTVDBData(tv_id_list: number[]) {
     const omittedGenreIDs = [4, 7, 8, 16, 21, 23, 36];
 
     const processShow = async (id: number) => {
@@ -269,7 +272,7 @@ async function getTVDBData(tv_id_list: number[]) {
     const BATCH_SIZE = 100;
     for (let i = 0; i < tv_id_list.length; i += BATCH_SIZE) {
         const batch = tv_id_list.slice(i, i + BATCH_SIZE);
-        await Promise.all(batch.map(processShow).filter(Boolean));
+        await Promise.allSettled(batch.map(processShow).filter(Boolean));
 
         // small delay between batches to prevent rate limiting
         await new Promise(resolve => setTimeout(resolve, 0));
@@ -278,7 +281,7 @@ async function getTVDBData(tv_id_list: number[]) {
 }
 async function getListOfShows() {
     let tvdb_url = "https://api4.thetvdb.com/v4/series?page=1";
-    const cut_off_date = new Date("1980-01-01T00:00:00.000Z");
+
     const tvdb_list_of_ids: number[] = [];
 
     const start = performance.now();
