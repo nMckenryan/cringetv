@@ -67,7 +67,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // This would be the syncTVShows function we created earlier
 
         const showIds = await syncTVShows();
-        getTVDBData(showIds);
+        await getTVDBData(showIds);
         return res.status(200).json({ message: 'Sync successful' })
     } catch (error) {
         console.error('Cron job failed:', error)
