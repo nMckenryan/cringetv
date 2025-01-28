@@ -16,17 +16,15 @@ export async function getSession() {
 
 export async function search(searchTerm: string) {
     let results: TV_Show[] = [];
-    try {
-        const response = await api.tvShows.searchTVShows(searchTerm);
-        if (response.results) {
-            results = response.results as TV_Show[];
-        } else {
-            results = [];
-        }
-
-    } catch (error) {
-        console.error("Error searching for TV shows:", error);
+    const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+    const response = await api.tvShows.searchTVShows(escapedSearchTerm);
+    if (response.results) {
+        results = response.results as TV_Show[];
+    } else {
+        results = [];
     }
+
+
     return results;
 }
 

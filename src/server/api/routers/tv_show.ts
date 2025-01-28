@@ -7,11 +7,12 @@ import {
 
 export const tvShowRouter = createTRPCRouter({
   searchTVShows: publicProcedure.input(z.string()).query(async ({ ctx, input: searchTerm }) => {
+
     const results = await ctx.db.televisionShow.findMany({
       take: 5,
       where: {
         name: {
-          search: searchTerm,
+          contains: searchTerm,
           mode: 'insensitive',
         },
       },
