@@ -8,12 +8,15 @@ import {
 } from 'obscenity';
 import { readFileSync, writeFileSync } from 'fs';
 
+
+export const cut_off_date = new Date("1980-01-01T00:00:00.000Z");
+
 const matcher = new RegExpMatcher({
     ...englishDataset.build(),
     ...englishRecommendedTransformers,
 });
 
-const tvdb_options = {
+export const tvdb_options = {
     method: "GET",
     headers: {
         accept: "application/json",
@@ -86,7 +89,7 @@ export async function createAdminReview(show: TVDB_Extended, initial_rating: num
 
 
 export async function getAuthToken() {
-    await fetch("https://api4.thetvdb.com/v4/genres", tvdb_options)
+    await fetch("https://api4.thetvdb.com/v4/login", tvdb_options)
         .then((response) => response.json() as Promise<AuthResponse>)
         .then((data) => tvdb_options.headers.Authorization = `Bearer ${data.data.token}`)
         .catch((err) => console.error("auth token not recieved: " + err))
@@ -104,7 +107,6 @@ export function calculateBaseCringeRating(showDetails: TVDB_Extended): number | 
         else {
             return null
         }
-
     }
 
     if (Number(year) <= 1965) {
@@ -150,14 +152,11 @@ async function seed_genre_and_content_ratings() {
         .catch((err) => console.error("Genres not recieved: " + err))
 
     // generate Genres
-
     await fetch("https://api4.thetvdb.com/v4/content/ratings", tvdb_options)
         .then((response) => response.json() as Promise<ContentRatingResponse>)
         .then((data) => contentRating.push
             (...data.data))
         .catch((err) => console.error("Rating not retrieved " + err))
-
-
 
     const start = performance.now();
 
@@ -172,7 +171,6 @@ async function seed_genre_and_content_ratings() {
             }
         })
     }
-
     console.log("genre seeded");
 
     // generate ContentRatings
@@ -196,11 +194,10 @@ async function seed_genre_and_content_ratings() {
 }
 
 
-async function getTVDBData(tv_id_list: number[]) {
-    const omittedGenreName = ["News", "Talk Show", "Children", "Reality"];
+export async function getTVDBData(tv_id_list: number[]) {
+    const omittedGenreIDs = [4, 7, 8, 16, 21, 23, 36];
 
     const processShow = async (id: number) => {
-
         try {
             const extended_response = await fetch(`https://api4.thetvdb.com/v4/series/${id}/extended?short=true`, tvdb_options);
             if (!extended_response.ok) {
@@ -212,7 +209,7 @@ async function getTVDBData(tv_id_list: number[]) {
             const poster = extended_tv_data.image ? extended_tv_data.image : undefined;
             const showName = extended_tv_data.name ?? (extended_tv_data.slug).replace(/-/g, ' ');
 
-            if (genres.some(genre => omittedGenreName.includes(genre.name)) || extended_tv_data.firstAired === null || extended_tv_data.firstAired === "" || showName === null) {
+            if (genres.some(genre => omittedGenreIDs.includes(genre.id)) || extended_tv_data.firstAired === null || extended_tv_data.firstAired === "" || showName === null) {
                 return null;
             }
 
@@ -275,24 +272,25 @@ async function getTVDBData(tv_id_list: number[]) {
     const BATCH_SIZE = 10;
     for (let i = 0; i < tv_id_list.length; i += BATCH_SIZE) {
         const batch = tv_id_list.slice(i, i + BATCH_SIZE);
-        await Promise.all(batch.map(processShow).filter(Boolean));
+        await Promise.allSettled(batch.map(processShow).filter(Boolean));
 
-        // Optional: Add a small delay between batches to prevent rate limiting
+        // small delay between batches to prevent rate limiting
         await new Promise(resolve => setTimeout(resolve, 0));
         console.log(`Processed batch ${Math.floor(i / BATCH_SIZE) + 1} of ${Math.ceil(tv_id_list.length / BATCH_SIZE)}`);
     }
 }
 async function getListOfShows() {
     let tvdb_url = "https://api4.thetvdb.com/v4/series?page=1";
+
     const tvdb_list_of_ids: number[] = [];
 
     const start = performance.now();
-    while (tvdb_url !== "https://api4.thetvdb.com/v4/series?page=5") {
+    while (tvdb_url !== null) {
         await fetch(tvdb_url, tvdb_options)
             .then((response) => response.json() as Promise<TVDB_Response>)
             .then(async (data) => {
                 for (const show of data.data) {
-                    if (show.firstAired != null) {
+                    if (show.firstAired != null && new Date(show.firstAired) < cut_off_date) {
                         tvdb_list_of_ids.push(show.id);
                     }
                 }
@@ -310,6 +308,10 @@ async function getListOfShows() {
 }
 
 async function main() {
+    //PURGE DATABASES
+    // await db.$executeRaw`TRUNCATE TABLE "TelevisionShow" CASCADE;`;
+    // await db.$executeRaw`TRUNCATE TABLE "Review" CASCADE;`;
+
     const getAdmin = await getAdminAccount();
     if (getAdmin === null) {
         await createAdminUser();
@@ -317,17 +319,13 @@ async function main() {
     } else {
         console.log("Admin account exists! Skipping creation");
     }
-    await db.$executeRaw`TRUNCATE TABLE "TelevisionShow" CASCADE;`;
-    await db.$executeRaw`TRUNCATE TABLE "Review" CASCADE;`;
 
-    // await seed_genre_and_content_ratings();
+    await seed_genre_and_content_ratings();
     await getListOfShows();
     const tvdb_list_of_ids = JSON.parse(readFileSync('tvdb_list_of_ids.json', 'utf-8')) as number[];
 
     // const existingIds = await api.tvShows.getAllTVShowIds();
-
     // const filteredList = tvdb_list_of_ids.filter(id => !existingIds.includes(id));
-
 
     await getTVDBData(tvdb_list_of_ids);
 
