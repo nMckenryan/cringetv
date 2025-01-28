@@ -269,7 +269,7 @@ export async function getTVDBData(tv_id_list: number[]) {
     };
 
     // Process in batches to avoid overwhelming the API
-    const BATCH_SIZE = 100;
+    const BATCH_SIZE = 10;
     for (let i = 0; i < tv_id_list.length; i += BATCH_SIZE) {
         const batch = tv_id_list.slice(i, i + BATCH_SIZE);
         await Promise.allSettled(batch.map(processShow).filter(Boolean));
@@ -290,7 +290,7 @@ async function getListOfShows() {
             .then((response) => response.json() as Promise<TVDB_Response>)
             .then(async (data) => {
                 for (const show of data.data) {
-                    if (show.firstAired != null || new Date(show.firstAired) < cut_off_date) {
+                    if (show.firstAired != null && new Date(show.firstAired) < cut_off_date) {
                         tvdb_list_of_ids.push(show.id);
                     }
                 }

@@ -31,7 +31,7 @@ export async function syncTVShows() {
                 .then((response) => response.json() as Promise<TVDB_Response>)
                 .then((data) => {
                     for (const show of data.data) {
-                        if (show.firstAired != null || new Date(show.firstAired) < cut_off_date) {
+                        if (show.firstAired != null && new Date(show.firstAired) < cut_off_date) {
                             showIds.push(show.id);
                         }
                     }
