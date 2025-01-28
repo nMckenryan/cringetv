@@ -17,7 +17,6 @@
   - [x] Finish the links to above
   - [x] Figure out cringe rating system
   - [x] Set default Cringe Rating depending on content rating
-  - [] Set up regular content update (ISR)
   - [x] ERROR: shows stop at 2012 - get new data source
 
 - [x] Fix carousel so it works under mobile
@@ -76,8 +75,9 @@
   - [x] List of reviews
     - [x] Paginate
 
-- [] PUBLISH
-  - [] Clean render bugs
+- [x] PUBLISH
+  - [x] Clean render bugs
   - [x] Sort mobile responsiveness
-  - [] clean up db/migrations
-  - [] Merge w/ main
+  - [x] clean up db/migrations
+  - [x] Merge w/ main
+  - [] Set up regular content update (ISR)
