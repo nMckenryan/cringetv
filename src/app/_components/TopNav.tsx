@@ -30,7 +30,7 @@ export default async function TopNav() {
             >
               <div className="w-10 rounded-full">
                 <Image
-                  src={session.user.image ? session.user.image : "none"}
+                  src={session.user.image ?? "none"}
                   height={30}
                   width={30}
                   alt="profile_pic"
