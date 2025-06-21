@@ -31,9 +31,7 @@ CringeTV is a community driven platform where users can share reviews for TV sho
   </div>
 </div>
 
-
 ## Built with:
-
 
 [![Typescript][Typescript]][TypescriptURL]
 [![React][React.js]][React-url]
@@ -50,8 +48,8 @@ CringeTV is a community driven platform where users can share reviews for TV sho
 [![Vercel][Vercel]][VercelURL]
 [![Docker][Docker]][DockerURL]
 
-
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -60,33 +58,33 @@ If you have a suggestion that would make this better, please fork the repo and c
 Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+2. Set up your DB of choice (I'm using Supabase at the moment.) and run 'pnpm run db:generate' to run the migrations.
+3. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+4. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+5. Push to the Branch (`git push origin feature/AmazingFeature`)
+6. Open a Pull Request
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
+
 ## Contact
 
-Nigel Mckenzie-Ryan  - n.mckenryan@gmail.com
+Nigel Mckenzie-Ryan - n.mckenryan@gmail.com
 
 Project Link: [https://github.com/nmckenryan/cringetv](https://github.com/nmckenryan/cringetv)
 
 <!-- ACKNOWLEDGMENTS -->
+
 ## Acknowledgments
 
-* [TheTVDB](https://www.thetvdb.com)
-* [Best-README-Template](https://github.com/othneildrew/Best-README-Template/)
-* [EmblaCarousel](https://www.embla-carousel.com/)
-
-
-
-
+- [TheTVDB](https://www.thetvdb.com)
+- [Best-README-Template](https://github.com/othneildrew/Best-README-Template/)
+- [EmblaCarousel](https://www.embla-carousel.com/)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/nmckenryan/cringetv.svg?style=for-the-badge
 [contributors-url]: https://github.com/nMckenryan/cringetv/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/nmckenryan/cringetv.svg?style=for-the-badge
@@ -97,56 +95,36 @@ Project Link: [https://github.com/nmckenryan/cringetv](https://github.com/nmcken
 [issues-url]: https://github.com/nMckenryan/cringetv/issues
 [license-shield]: https://img.shields.io/github/license/nmckenryan/cringetv.svg?style=for-the-badge
 [license-url]: https://github.com/nMckenryan/cringetv/blob/main/LICENSE.txt
-
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/nmckenryan
 [product-screenshot]: images/screenshot.png
-
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
-
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=white&color=%2361DAFB
 [React-url]: https://reactjs.org/
-
 [ReactQuery]: https://img.shields.io/badge/ReactQuery-000000?style=for-the-badge&logo=reactquery&logoColor=white&color=%23FF4154
 [ReactQueryURL]: https://react-query.tanstack.com
-
-
 [ReactHookForm]: https://img.shields.io/badge/React%20Hook%20Form-000000?style=for-the-badge&logo=reacthookform&logoColor=white&color=%23EC5990
 [ReactHookFormURL]: https://react-hook-form.com/
-
 [ReactQuery]: https://img.shields.io/badge/ReactQuery-000000?style=for-the-badge&logo=reactquery&logoColor=white&color=%23FF4154
 [ReactQueryURL]: https://react-query.tanstack.com
-
 [Daisy.UI]: https://img.shields.io/badge/DaisyUI-0000?style=for-the-badge&logo=daisyui&logoColor=white&color=%231AD1A5
 [Daisy.UIURL]: https://daisyui.com/
-
 [NextAuth.js]: https://img.shields.io/badge/NextAuth-000000?style=for-the-badge&logo=nextdotjs&logoColor=white&color=%23ab26dc
-[NextAuth.jsURL]: https://next-auth.js.org 
-
+[NextAuth.jsURL]: https://next-auth.js.org
 [Auth0]: https://img.shields.io/badge/Auth0-000000?style=for-the-badge&logo=auth0&logoColor=white&color=%23EB5424
 [Auth0URL]: https://auth0.com/
-
 [PostgreSql]: https://img.shields.io/badge/postgres-00000?style=for-the-badge&logo=postgresql&logoColor=white&color=%234169E1
 [PostgreSqlURL]: https://postgresql.org
-
 [Prisma]: https://img.shields.io/badge/Prisma-000000?style=for-the-badge&logo=prisma&logoColor=white&color=%232D3748
 [PrismaURL]: https://prisma.io
-
 [TailwindCSS]: https://img.shields.io/badge/tailwind-00000?style=for-the-badge&logo=tailwindcss&logoColor=white&color=%2306B6D4
-
-
 [TailwindCSSURL]: https://tailwindcss.com
-
 [tRPC]: https://img.shields.io/badge/tRPC-000000?style=for-the-badge&logo=tRPC&logoColor=white&color=%232596BE
 [tRPCURL]: https://trpc.io
-
 [Typescript]: https://img.shields.io/badge/Typescript-000000?style=for-the-badge&logo=typescript&logoColor=white&color=%233178C6
 [TypescriptURL]: https://typescriptlang.org
-
 [Vercel]: https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white&color=%23000000
 [VercelURL]: https://vercel.com
-
 [Docker]: https://img.shields.io/badge/Docker-000000?style=for-the-badge&logo=docker&logoColor=white&color=%232496ED
 [DockerURL]: https://www.docker.com
-
